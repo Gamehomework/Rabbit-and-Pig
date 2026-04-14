@@ -84,6 +84,24 @@ export interface LogEntry {
   timestamp: string;
 }
 
+export interface StockQuote {
+  symbol: string;
+  name: string;
+  price: number | null;
+  change: number | null;
+  changePercent: number | null;
+  open: number | null;
+  previousClose: number | null;
+  dayHigh: number | null;
+  dayLow: number | null;
+  marketCap: number | null;
+  peRatio: number | null;
+  high52w: number | null;
+  low52w: number | null;
+  volume: number | null;
+  currency: string | null;
+}
+
 // --- API Functions ---
 
 export interface SearchResult {
@@ -105,6 +123,10 @@ export async function screenStocks(params: StockScreenParams = {}): Promise<Stoc
   if (params.limit != null) query.set("limit", String(params.limit));
   const qs = query.toString();
   return fetchApi<Stock[]>(`/api/stocks/screen${qs ? `?${qs}` : ""}`);
+}
+
+export async function getStockQuote(symbol: string): Promise<StockQuote> {
+  return fetchApi<StockQuote>(`/api/stocks/${encodeURIComponent(symbol)}/quote`);
 }
 
 export async function getStockChart(symbol: string, range = "1mo"): Promise<OHLCVData[]> {

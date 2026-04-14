@@ -26,6 +26,10 @@ async function loadTool(name: string): Promise<Tool | undefined> {
         const m = await import("../agent/tools/news.js");
         return m.newsTool as Tool;
       }
+      case "quote": {
+        const m = await import("../agent/tools/quote.js");
+        return m.quoteTool as Tool;
+      }
     }
   } catch {
     return undefined;
@@ -120,6 +124,29 @@ export async function stockRoutes(app: FastifyInstance) {
     } catch (err) {
       const message = err instanceof Error ? err.message : "Chart fetch failed";
       request.log.error(err, "Chart error");
+      return reply.status(500).send({ error: message, statusCode: 500 });
+    }
+  });
+
+  // GET /api/stocks/:symbol/quote
+  app.get<{
+    Params: { symbol: string };
+  }>("/api/stocks/:symbol/quote", async (request, reply) => {
+    const tool = await loadTool("quote");
+    if (!tool) {
+      return reply.status(503).send({
+        error: "Quote tool is not available yet",
+        statusCode: 503,
+      });
+    }
+
+    try {
+      const { symbol } = request.params;
+      const result = await tool.execute({ symbol });
+      return result;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Quote fetch failed";
+      request.log.error(err, "Quote error");
       return reply.status(500).send({ error: message, statusCode: 500 });
     }
   });

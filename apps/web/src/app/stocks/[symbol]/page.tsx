@@ -7,10 +7,28 @@ import ReactMarkdown from "react-markdown";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
   getNotificationChannels, sendNotification, streamAgentAnalysis,
+  getStockQuote,
   type OHLCVData, type NewsItem, type Note, type NotificationChannel,
+  type StockQuote,
 } from "@/lib/api";
 
 const RANGES = ["1d", "1mo", "3mo", "6mo", "1y"] as const;
+
+function formatMarketCap(value: number | null): string {
+  if (value == null) return "—";
+  if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
+  if (value >= 1e9) return `$${(value / 1e9).toFixed(1)}B`;
+  if (value >= 1e6) return `$${(value / 1e6).toFixed(1)}M`;
+  return `$${value.toLocaleString()}`;
+}
+
+function formatVolume(value: number | null): string {
+  if (value == null) return "—";
+  if (value >= 1e9) return `${(value / 1e9).toFixed(2)}B`;
+  if (value >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
+  if (value >= 1e3) return `${(value / 1e3).toFixed(1)}K`;
+  return value.toLocaleString();
+}
 
 type ChatMessage =
   | { role: "user"; content: string }
@@ -50,6 +68,11 @@ export default function StockDetailPage() {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const chatBottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+
+  // Quote
+  const [quote, setQuote] = useState<StockQuote | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteError, setQuoteError] = useState(false);
 
   // Send Alert modal
   const [alertOpen, setAlertOpen] = useState(false);
@@ -93,12 +116,25 @@ export default function StockDetailPage() {
     finally { setNotesLoading(false); }
   }, [symbol]);
 
+  const loadQuote = useCallback(async () => {
+    setQuoteLoading(true);
+    setQuoteError(false);
+    try {
+      setQuote(await getStockQuote(symbol));
+    } catch {
+      setQuoteError(true);
+    } finally {
+      setQuoteLoading(false);
+    }
+  }, [symbol]);
+
   useEffect(() => {
     if (!symbol) return;
     loadChart(chartRange);
     loadNews();
     loadNotes();
-  }, [symbol, chartRange, loadChart, loadNews, loadNotes]);
+    loadQuote();
+  }, [symbol, chartRange, loadChart, loadNews, loadNotes, loadQuote]);
 
   async function handleCreateNote(e: React.FormEvent) {
     e.preventDefault();
@@ -252,7 +288,26 @@ export default function StockDetailPage() {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold">{symbol}</h1>
-            <p className="text-gray-500">Stock Detail</p>
+            {quoteLoading ? (
+              <div className="mt-1 flex items-center gap-3">
+                <div className="h-4 w-32 animate-pulse rounded bg-gray-200" />
+                <div className="h-6 w-20 animate-pulse rounded bg-gray-200" />
+                <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
+              </div>
+            ) : quote ? (
+              <div className="mt-1 flex items-center gap-3">
+                <p className="text-gray-500">{quote.name}</p>
+                <span className="text-xl font-semibold">
+                  {quote.currency === "USD" ? "$" : ""}{quote.price?.toFixed(2) ?? "—"}
+                </span>
+                <span className={`text-sm font-medium ${(quote.change ?? 0) >= 0 ? "text-green-600" : "text-red-600"}`}>
+                  {(quote.change ?? 0) > 0 ? "+" : ""}{quote.change?.toFixed(2) ?? "0.00"}{" "}
+                  ({(quote.change ?? 0) > 0 ? "+" : ""}{quote.changePercent?.toFixed(2) ?? "0.00"}%)
+                </span>
+              </div>
+            ) : (
+              <p className="text-gray-500">Stock Detail</p>
+            )}
           </div>
           <div className="flex gap-2">
             <button onClick={() => router.push(`/stocks/${symbol}/deep-analysis`)}
@@ -269,6 +324,46 @@ export default function StockDetailPage() {
             </button>
           </div>
         </div>
+
+        {/* Key Stats */}
+        {quoteLoading && (
+          <div className="grid grid-cols-5 gap-4">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="rounded-lg border bg-white p-4 shadow-sm">
+                <div className="h-3 w-16 animate-pulse rounded bg-gray-200 mb-2" />
+                <div className="h-5 w-24 animate-pulse rounded bg-gray-200" />
+              </div>
+            ))}
+          </div>
+        )}
+        {!quoteLoading && !quoteError && quote && (
+          <div className="grid grid-cols-5 gap-4">
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <p className="text-xs text-gray-500">Market Cap</p>
+              <p className="mt-1 text-lg font-semibold">{formatMarketCap(quote.marketCap)}</p>
+            </div>
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <p className="text-xs text-gray-500">P/E Ratio</p>
+              <p className="mt-1 text-lg font-semibold">{quote.peRatio != null ? quote.peRatio.toFixed(2) : "—"}</p>
+            </div>
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <p className="text-xs text-gray-500">Day Range</p>
+              <p className="mt-1 text-lg font-semibold">
+                {quote.dayLow?.toFixed(2) ?? "—"} – {quote.dayHigh?.toFixed(2) ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <p className="text-xs text-gray-500">52W Range</p>
+              <p className="mt-1 text-lg font-semibold">
+                {quote.low52w?.toFixed(2) ?? "—"} – {quote.high52w?.toFixed(2) ?? "—"}
+              </p>
+            </div>
+            <div className="rounded-lg border bg-white p-4 shadow-sm">
+              <p className="text-xs text-gray-500">Volume</p>
+              <p className="mt-1 text-lg font-semibold">{formatVolume(quote.volume)}</p>
+            </div>
+          </div>
+        )}
 
       {/* Alert Modal */}
       {alertOpen && (
