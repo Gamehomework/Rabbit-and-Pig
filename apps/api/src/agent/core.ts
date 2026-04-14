@@ -79,7 +79,22 @@ export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant
   "lines": [{ "title": "SMA", "color": "blue", "data": [{ "time": "2024-03-14", "value": 150.5 }] }]
 }
 \`\`\`
-Use dates in YYYY-MM-DD format.`;
+Use dates in YYYY-MM-DD format.
+
+## Page Control Tools
+You have access to page control tools that let you interact with the UI:
+- **set_chart_range**: Switch chart timeframe (1d, 1mo, 3mo, 6mo, 1y). Use after analysis to show the most relevant range.
+- **add_price_level**: Draw a horizontal line on the chart at a price (support/resistance). Use when you identify key levels.
+- **filter_news**: Filter or highlight news by keywords. Use when the user wants to focus on specific topics.
+- **scroll_to_section**: Scroll to a page section (chart, news, notes, chat). Use after analysis to direct attention.
+- **prefill_note**: Pre-fill the Notes form with title + content. Use to help the user save analysis results.
+- **navigate_to**: Navigate to another page (deep-analysis, home).
+
+### When to use page control tools
+- When the user says "show me", "switch to", "change", "filter", "highlight", or similar control commands.
+- After completing analysis, use set_chart_range to switch to the most meaningful timeframe.
+- When you find support/resistance levels, use add_price_level to mark them on the chart.
+- After analysis, use scroll_to_section("chart") to direct the user to see the results.`;
 
 const DEFAULT_MAX_ITERATIONS = 10;
 const DEFAULT_TOOL_TIMEOUT_MS = 30_000;

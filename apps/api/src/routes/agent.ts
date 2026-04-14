@@ -83,6 +83,12 @@ export async function agentRoutes(app: FastifyInstance) {
           const { sendMessageTool } = await import("../agent/tools/send-message.js");
           registry.register(sendMessageTool);
         } catch { /* tool not available yet */ }
+        try {
+          const { pageControlTools } = await import("../agent/tools/page-control.js");
+          for (const tool of pageControlTools) {
+            registry.register(tool);
+          }
+        } catch { /* tool not available yet */ }
 
         // Pre-load stock context if a symbol was provided (Option A: context stuffing).
         // Fetch quote + 30-day chart summary + news headlines in parallel, then inject
@@ -191,6 +197,12 @@ export async function agentRoutes(app: FastifyInstance) {
         try {
           const { sendMessageTool } = await import("../agent/tools/send-message.js");
           registry.register(sendMessageTool);
+        } catch { /* tool not available yet */ }
+        try {
+          const { pageControlTools } = await import("../agent/tools/page-control.js");
+          for (const tool of pageControlTools) {
+            registry.register(tool);
+          }
         } catch { /* tool not available yet */ }
 
         // Register multi-agent specific tools in the shared pool for specialist agents
