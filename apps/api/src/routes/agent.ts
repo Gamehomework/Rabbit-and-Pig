@@ -208,26 +208,58 @@ export async function agentRoutes(app: FastifyInstance) {
           "X-Accel-Buffering": "no",
         });
 
-        // Helper to write an SSE event
-        const sendEvent = (event: AgentStreamEvent) => {
-          reply.raw.write(`event: ${event.type}\ndata: ${JSON.stringify(event.data)}\n\n`);
+        // Helper to write a flat SSE data-only event that the frontend can parse.
+        // The frontend parser only reads `data:` lines and expects a JSON object
+        // with a `type` field plus the event-specific fields at the top level.
+        const sendSSE = (payload: Record<string, unknown>) => {
+          reply.raw.write(`data: ${JSON.stringify(payload)}\n\n`);
         };
 
         // Send initial session info
-        reply.raw.write(`event: session\ndata: ${JSON.stringify({ sessionId })}\n\n`);
+        sendSSE({ type: "session", sessionId });
 
-        // Stream agent events
+        // Stream agent events, flattening { type, data } into { type, ...data }
         for await (const event of agent.runStream(query)) {
-          sendEvent(event);
+          if (event.type === "step") {
+            // Map backend step → frontend AgentStreamEvent "step"
+            sendSSE({
+              type: "step",
+              iteration: event.data.iteration,
+              thought: event.data.thought,
+              toolName: event.data.toolName ?? null,
+              toolInput: event.data.toolInput ?? null,
+            });
+          } else if (event.type === "tool_result") {
+            // Map backend tool_result → frontend AgentStreamEvent "step" with toolResult
+            sendSSE({
+              type: "step",
+              iteration: event.data.iteration,
+              toolName: event.data.toolName,
+              toolResult: event.data.result,
+            });
+          } else if (event.type === "answer") {
+            sendSSE({
+              type: "answer",
+              answer: event.data.answer,
+            });
+          } else if (event.type === "error") {
+            sendSSE({
+              type: "error",
+              error: event.data.message,
+            });
+          }
         }
 
+        // Send done sentinel so frontend onDone fires
+        reply.raw.write(`data: [DONE]\n\n`);
         reply.raw.end();
       } catch (err) {
         const message = err instanceof Error ? err.message : "Agent stream failed";
         request.log.error(err, "Agent stream error");
         // If headers already sent, try to send error event then close
         if (reply.raw.headersSent) {
-          reply.raw.write(`event: error\ndata: ${JSON.stringify({ message })}\n\n`);
+          reply.raw.write(`data: ${JSON.stringify({ type: "error", error: message })}\n\n`);
+          reply.raw.write(`data: [DONE]\n\n`);
           reply.raw.end();
         } else {
           return reply.status(500).send({ error: message, statusCode: 500 });
