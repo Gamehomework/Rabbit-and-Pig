@@ -106,7 +106,7 @@ export default function StockDetailPage() {
     setAiLoading(true);
     setChatMessages((prev) => [...prev, { role: "user", content: q }]);
     try {
-      const res = await queryAgent(`${q} (regarding stock ${symbol})`);
+      const res = await queryAgent(q, symbol);
 
       // Build all new messages: steps first, then final answer
       const newMsgs: ChatMessage[] = [];

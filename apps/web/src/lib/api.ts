@@ -103,10 +103,10 @@ export async function getStockNews(symbol: string, limit = 10): Promise<NewsItem
   return fetchApi<NewsItem[]>(`/api/stocks/${encodeURIComponent(symbol)}/news?limit=${limit}`);
 }
 
-export async function queryAgent(query: string): Promise<AgentResponse> {
+export async function queryAgent(query: string, stockSymbol?: string): Promise<AgentResponse> {
   return fetchApi<AgentResponse>("/api/agent/query", {
     method: "POST",
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, ...(stockSymbol ? { stockSymbol } : {}) }),
   });
 }
 

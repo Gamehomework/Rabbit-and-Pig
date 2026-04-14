@@ -2,7 +2,7 @@
  * Agent system barrel exports.
  */
 
-export { Agent } from "./core.js";
+export { Agent, DEFAULT_SYSTEM_PROMPT } from "./core.js";
 export type { AgentConfig, AgentRunResult, AgentStep } from "./core.js";
 export { ToolRegistry, echoTool, newsTool, notesTool } from "./tools/index.js";
 export type { Tool, ToolResult, FunctionDefinition, JsonSchema } from "./tools/index.js";

@@ -3,12 +3,13 @@
  */
 
 import type { FastifyInstance } from "fastify";
-import { Agent, ToolRegistry, echoTool } from "../agent/index.js";
+import { Agent, ToolRegistry, echoTool, DEFAULT_SYSTEM_PROMPT } from "../agent/index.js";
 import { db, schema } from "../db/index.js";
+import { buildStockContext } from "../agent/context/stockContextLoader.js";
 
 export async function agentRoutes(app: FastifyInstance) {
   app.post<{
-    Body: { query: string; sessionId?: number };
+    Body: { query: string; sessionId?: number; stockSymbol?: string };
   }>("/api/agent/query", {
     schema: {
       body: {
@@ -17,11 +18,12 @@ export async function agentRoutes(app: FastifyInstance) {
         properties: {
           query: { type: "string", minLength: 1 },
           sessionId: { type: "number" },
+          stockSymbol: { type: "string" },
         },
       },
     },
     handler: async (request, reply) => {
-      const { query, sessionId: existingSessionId } = request.body;
+      const { query, sessionId: existingSessionId, stockSymbol } = request.body;
       const startTime = performance.now();
 
       try {
@@ -53,7 +55,10 @@ export async function agentRoutes(app: FastifyInstance) {
         const registry = new ToolRegistry();
         registry.register(echoTool);
 
-        // Try to load other tools if available (built by other agents)
+        try {
+          const { quoteTool } = await import("../agent/tools/quote.js");
+          registry.register(quoteTool);
+        } catch { /* tool not available yet */ }
         try {
           const { screenerTool } = await import("../agent/tools/screener.js");
           registry.register(screenerTool);
@@ -71,7 +76,21 @@ export async function agentRoutes(app: FastifyInstance) {
           registry.register(notesTool);
         } catch { /* tool not available yet */ }
 
-        const agent = new Agent(registry);
+        // Pre-load stock context if a symbol was provided (Option A: context stuffing).
+        // Fetch quote + 30-day chart summary + news headlines in parallel, then inject
+        // into the system prompt so the LLM has immediate data awareness.
+        let stockContextBlock = "";
+        if (stockSymbol) {
+          try {
+            stockContextBlock = await buildStockContext(stockSymbol);
+          } catch { /* context loading is best-effort */ }
+        }
+
+        const systemPrompt = stockContextBlock
+          ? `${stockContextBlock}\n\n${DEFAULT_SYSTEM_PROMPT}`
+          : DEFAULT_SYSTEM_PROMPT;
+
+        const agent = new Agent(registry, { systemPrompt });
         const result = await agent.run(query);
 
         const totalLatencyMs = Math.round(performance.now() - startTime);
