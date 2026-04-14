@@ -42,7 +42,7 @@ export default function AnalyticsPage() {
   const [period, setPeriod] = useState<string>("day");
   const [sortKey, setSortKey] = useState<SortKey>("count");
   const [sortDir, setSortDir] = useState<SortDir>("desc");
-  const [expandedSession, setExpandedSession] = useState<string | null>(null);
+  const [expandedSession, setExpandedSession] = useState<number | null>(null);
   const [sessionDetail, setSessionDetail] = useState<SessionDetail | null>(null);
   const [autoRefresh, setAutoRefresh] = useState(false);
   const [exportOpen, setExportOpen] = useState(false);
@@ -92,7 +92,7 @@ export default function AnalyticsPage() {
     else { setSortKey(key); setSortDir("desc"); }
   };
 
-  const handleSessionClick = async (id: string) => {
+  const handleSessionClick = async (id: number) => {
     if (expandedSession === id) { setExpandedSession(null); return; }
     setExpandedSession(id);
     try { setSessionDetail(await getAnalyticsSessionDetail(id)); } catch { setSessionDetail(null); }
@@ -363,7 +363,7 @@ export default function AnalyticsPage() {
               {sessions.map(s => (
                 <React.Fragment key={s.id}>
                   <tr className="border-b cursor-pointer hover:bg-gray-50 transition-colors" onClick={() => handleSessionClick(s.id)}>
-                    <td className="px-3 py-2 font-mono text-xs">{s.id.slice(0, 8)}…</td>
+                    <td className="px-3 py-2 font-mono text-xs">#{s.id}</td>
                     <td className="px-3 py-2">{new Date(s.createdAt).toLocaleString()}</td>
                     <td className="px-3 py-2">
                       <span className={`inline-block rounded-full px-2 py-0.5 text-xs font-medium ${s.status === "active" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-600"}`}>

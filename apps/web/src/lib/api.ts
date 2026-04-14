@@ -325,7 +325,7 @@ export interface ToolStats {
 }
 
 export interface SessionSummary {
-  id: string;
+  id: number;
   createdAt: string;
   status: string;
   queryCount: number;
@@ -379,8 +379,8 @@ export async function getAnalyticsSessions(limit = 20, offset = 0): Promise<Sess
   return fetchApi<SessionSummary[]>(`/api/analytics/sessions?limit=${limit}&offset=${offset}`);
 }
 
-export async function getAnalyticsSessionDetail(id: string): Promise<SessionDetail> {
-  return fetchApi<SessionDetail>(`/api/analytics/sessions/${encodeURIComponent(id)}`);
+export async function getAnalyticsSessionDetail(id: number): Promise<SessionDetail> {
+  return fetchApi<SessionDetail>(`/api/analytics/sessions/${id}`);
 }
 
 export async function getAnalyticsNotifications(from: string, to: string): Promise<NotificationStats[]> {
