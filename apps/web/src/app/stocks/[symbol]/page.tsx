@@ -432,9 +432,11 @@ export default function StockDetailPage() {
             ))}
           </div>
         </div>
-        {chartLoading && <p className="py-8 text-center text-gray-500">Loading chart…</p>}
+        {/* Show spinner only on first load (no data yet) */}
+        {chartLoading && chartData.length === 0 && <p className="py-8 text-center text-gray-500">Loading chart…</p>}
         {chartError && <p className="py-8 text-center text-red-600">{chartError}</p>}
-        {!chartLoading && !chartError && chartData.length > 0 && (
+        {/* Keep chart mounted during background polling — unmounting causes flash */}
+        {!chartError && chartData.length > 0 && (
           <TradingViewChart
             data={chartData}
             markers={chartMarkers}
