@@ -7,7 +7,7 @@ import {
 } from "recharts";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
-  getNotificationChannels, sendNotification,
+  getNotificationChannels, sendNotification, streamAgentAnalysis,
   type OHLCVData, type NewsItem, type Note, type NotificationChannel,
 } from "@/lib/api";
 
@@ -43,8 +43,10 @@ export default function StockDetailPage() {
   // AI chat history
   const [aiQuery, setAiQuery] = useState("");
   const [aiLoading, setAiLoading] = useState(false);
+  const [isRunning, setIsRunning] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
   // Send Alert modal
   const [alertOpen, setAlertOpen] = useState(false);
@@ -147,6 +149,49 @@ export default function StockDetailPage() {
     }
   }
 
+  function handleRunAnalysis() {
+    if (isRunning) return;
+    setIsRunning(true);
+
+    const prompt = `Perform a comprehensive autonomous analysis of ${symbol}. Include current price, recent trends, key news, and a summary outlook.`;
+    setChatMessages((prev) => [...prev, { role: "user", content: `🚀 Run Autonomous Analysis` }]);
+
+    abortRef.current = streamAgentAnalysis(
+      prompt,
+      symbol,
+      (event) => {
+        if (event.type === "step" && event.toolName) {
+          setChatMessages((prev) => [
+            ...prev,
+            { role: "step", toolName: event.toolName!, thought: event.thought ?? null },
+          ]);
+        } else if (event.type === "answer" && event.answer) {
+          setChatMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: event.answer! },
+          ]);
+        } else if (event.type === "error") {
+          setChatMessages((prev) => [
+            ...prev,
+            { role: "assistant", content: `⚠️ ${event.error ?? "Stream error"}` },
+          ]);
+        }
+        setTimeout(() => chatBottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      },
+      (err) => {
+        setChatMessages((prev) => [
+          ...prev,
+          { role: "assistant", content: `⚠️ ${err.message}` },
+        ]);
+        setIsRunning(false);
+      },
+      () => {
+        setIsRunning(false);
+        abortRef.current = null;
+      },
+    );
+  }
+
   async function openAlertModal() {
     setAlertOpen(true);
     setAlertResult(null);
@@ -175,10 +220,16 @@ export default function StockDetailPage() {
             <h1 className="text-3xl font-bold">{symbol}</h1>
             <p className="text-gray-500">Stock Detail</p>
           </div>
-          <button onClick={openAlertModal}
-            className="rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
-            🔔 Send Alert
-          </button>
+          <div className="flex gap-2">
+            <button onClick={handleRunAnalysis} disabled={isRunning}
+              className="rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50">
+              {isRunning ? "⏳ Running…" : "▶ Run Autonomous Analysis"}
+            </button>
+            <button onClick={openAlertModal}
+              className="rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
+              🔔 Send Alert
+            </button>
+          </div>
         </div>
 
       {/* Alert Modal */}
@@ -370,10 +421,10 @@ export default function StockDetailPage() {
                 </div>
               );
             })}
-            {aiLoading && (
+            {(aiLoading || isRunning) && (
               <div className="flex justify-start">
                 <div className="rounded-lg bg-gray-100 px-3 py-2 text-sm text-gray-500 animate-pulse">
-                  Thinking…
+                  {isRunning ? "Running analysis…" : "Thinking…"}
                 </div>
               </div>
             )}
@@ -384,14 +435,15 @@ export default function StockDetailPage() {
           <form onSubmit={handleAskAI} className="border-t p-3 flex gap-2">
             <input
               type="text"
-              placeholder={`Ask about ${symbol}…`}
+              placeholder={isRunning ? "Analysis in progress…" : `Ask about ${symbol}…`}
               value={aiQuery}
               onChange={(e) => setAiQuery(e.target.value)}
-              className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+              disabled={isRunning}
+              className="flex-1 rounded border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:outline-none disabled:bg-gray-50 disabled:text-gray-400"
             />
             <button
               type="submit"
-              disabled={aiLoading || !aiQuery.trim()}
+              disabled={aiLoading || isRunning || !aiQuery.trim()}
               className="rounded bg-green-600 px-3 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50"
             >
               Send

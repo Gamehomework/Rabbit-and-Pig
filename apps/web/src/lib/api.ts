@@ -352,3 +352,86 @@ export function getAnalyticsExportUrl(format: "csv" | "json", type: "queries" | 
   return `${BASE_URL}/api/analytics/export?format=${format}&type=${type}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
 }
 
+// --- Agent Streaming ---
+
+export interface AgentStreamEvent {
+  type: "step" | "answer" | "error" | "done";
+  thought?: string | null;
+  toolName?: string | null;
+  toolInput?: unknown;
+  toolResult?: unknown;
+  iteration?: number;
+  answer?: string;
+  error?: string;
+}
+
+/**
+ * Stream agent analysis via SSE (POST /api/agent/stream).
+ * Calls `onEvent` for each parsed SSE event.
+ * Returns an AbortController so the caller can cancel.
+ */
+export function streamAgentAnalysis(
+  query: string,
+  stockSymbol: string,
+  onEvent: (event: AgentStreamEvent) => void,
+  onError?: (err: Error) => void,
+  onDone?: () => void,
+): AbortController {
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/agent/stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, stockSymbol }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`API error ${res.status}: ${body}`);
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response body");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        // Parse SSE lines
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? ""; // keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6).trim();
+            if (data === "[DONE]") {
+              onDone?.();
+              return;
+            }
+            try {
+              const event = JSON.parse(data) as AgentStreamEvent;
+              onEvent(event);
+            } catch {
+              // skip malformed JSON
+            }
+          }
+        }
+      }
+      onDone?.();
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      onError?.(err instanceof Error ? err : new Error(String(err)));
+    }
+  })();
+
+  return controller;
+}
+
