@@ -371,7 +371,7 @@ export function getAnalyticsExportUrl(format: "csv" | "json", type: "queries" | 
 // --- Agent Streaming ---
 
 export interface AgentStreamEvent {
-  type: "step" | "answer" | "error" | "done";
+  type: "step" | "answer" | "error" | "done" | "agent_start" | "agent_result";
   thought?: string | null;
   toolName?: string | null;
   toolInput?: unknown;
@@ -379,6 +379,13 @@ export interface AgentStreamEvent {
   iteration?: number;
   answer?: string;
   error?: string;
+  // Agent OS fields (agent_start / agent_result events)
+  role?: string;
+  displayName?: string;
+  agentSummary?: string;
+  agentSuccess?: boolean;
+  agentConfidence?: number;
+  agentLatencyMs?: number;
 }
 
 // --- Multi-Agent Streaming ---

@@ -7,6 +7,9 @@ import { Agent, ToolRegistry, echoTool, DEFAULT_SYSTEM_PROMPT } from "../agent/i
 import type { AgentStreamEvent } from "../agent/index.js";
 import { db, schema } from "../db/index.js";
 import { buildStockContext } from "../agent/context/stockContextLoader.js";
+import { createInvokeAgentTool } from "../agents/invoke-agent-tool.js";
+import { registerSharedTool } from "../agents/pool.js";
+import type { MultiAgentStreamEvent } from "../agents/types.js";
 
 export async function agentRoutes(app: FastifyInstance) {
   app.post<{
@@ -164,18 +167,22 @@ export async function agentRoutes(app: FastifyInstance) {
         try {
           const { quoteTool } = await import("../agent/tools/quote.js");
           registry.register(quoteTool);
+          registerSharedTool(quoteTool);
         } catch { /* tool not available yet */ }
         try {
           const { screenerTool } = await import("../agent/tools/screener.js");
           registry.register(screenerTool);
+          registerSharedTool(screenerTool);
         } catch { /* tool not available yet */ }
         try {
           const { chartTool } = await import("../agent/tools/chart.js");
           registry.register(chartTool);
+          registerSharedTool(chartTool);
         } catch { /* tool not available yet */ }
         try {
           const { newsTool } = await import("../agent/tools/news.js");
           registry.register(newsTool);
+          registerSharedTool(newsTool);
         } catch { /* tool not available yet */ }
         try {
           const { notesTool } = await import("../agent/tools/notes.js");
@@ -186,6 +193,31 @@ export async function agentRoutes(app: FastifyInstance) {
           registry.register(sendMessageTool);
         } catch { /* tool not available yet */ }
 
+        // Register multi-agent specific tools in the shared pool for specialist agents
+        try {
+          const { crawlUrlTool } = await import("../agents/tools/crawl-url.js");
+          registerSharedTool(crawlUrlTool);
+        } catch { /* tool not available yet */ }
+        try {
+          const { getFinancialsTool } = await import("../agents/tools/get-financials.js");
+          registerSharedTool(getFinancialsTool);
+        } catch { /* tool not available yet */ }
+        try {
+          const { calcIndicatorsTool } = await import("../agents/tools/calc-indicators.js");
+          registerSharedTool(calcIndicatorsTool);
+        } catch { /* tool not available yet */ }
+        try {
+          const { calcRiskTool } = await import("../agents/tools/calc-risk.js");
+          registerSharedTool(calcRiskTool);
+        } catch { /* tool not available yet */ }
+
+        // Register invoke_agent tool with event callback for streaming agent events
+        const pendingAgentEvents: MultiAgentStreamEvent[] = [];
+        const onAgentEvent = (event: MultiAgentStreamEvent) => {
+          pendingAgentEvents.push(event);
+        };
+        registry.register(createInvokeAgentTool(onAgentEvent));
+
         // Pre-load stock context
         let stockContextBlock = "";
         if (stockSymbol) {
@@ -194,11 +226,43 @@ export async function agentRoutes(app: FastifyInstance) {
           } catch { /* context loading is best-effort */ }
         }
 
-        const systemPrompt = stockContextBlock
-          ? `${stockContextBlock}\n\n${DEFAULT_SYSTEM_PROMPT}`
-          : DEFAULT_SYSTEM_PROMPT;
+        const UPGRADED_SYSTEM_PROMPT = `${DEFAULT_SYSTEM_PROMPT}
 
-        const agent = new Agent(registry, { systemPrompt });
+## Autonomous Agent Orchestration
+You also have access to an **invoke_agent** tool that delegates work to specialist agents for deeper analysis.
+
+### When to use invoke_agent
+- **Simple questions** (price, quote, news): Use get_quote, chart_data, get_news directly. Do NOT invoke_agent.
+- **Complex / autonomous analysis** (comprehensive research, multi-factor analysis, risk assessment): Use invoke_agent to delegate to specialist agents.
+
+### Available specialist agents (via invoke_agent)
+- **fundamental**: Deep financial analysis — earnings, revenue, balance sheet, valuation ratios
+- **quant**: Technical/quantitative analysis — indicators, patterns, statistical metrics
+- **news_crawler**: In-depth news research — crawls URLs, aggregates sentiment from multiple sources
+- **strategist**: Investment strategy synthesis — combines fundamental + quant + news into actionable advice
+- **decision_maker**: Final investment recommendation with confidence scoring
+- **visualizer**: Generates structured data for charts and visualizations
+
+### Orchestration Strategy
+For a comprehensive autonomous analysis:
+1. Start with get_quote for current data
+2. invoke_agent(role="fundamental") for financial deep-dive
+3. invoke_agent(role="quant") for technical analysis
+4. invoke_agent(role="news_crawler") for news sentiment
+5. invoke_agent(role="strategist", context=previous results) for synthesis
+6. invoke_agent(role="decision_maker", context=all results) for final recommendation
+
+You can run agents in any order and pass context between them. Always use invoke_agent for autonomous/comprehensive analysis requests.`;
+
+        const systemPrompt = stockContextBlock
+          ? `${stockContextBlock}\n\n${UPGRADED_SYSTEM_PROMPT}`
+          : UPGRADED_SYSTEM_PROMPT;
+
+        const agent = new Agent(registry, {
+          systemPrompt,
+          maxIterations: 15,
+          toolTimeoutMs: 120_000, // 2 min timeout for invoke_agent calls
+        });
 
         // Set SSE headers (must include CORS since reply.raw bypasses Fastify hooks)
         const origin = request.headers.origin;
@@ -224,8 +288,31 @@ export async function agentRoutes(app: FastifyInstance) {
         // Send initial session info
         sendSSE({ type: "session", sessionId });
 
-        // Stream agent events, flattening { type, data } into { type, ...data }
+        // Stream agent events, flushing pending agent events before each core event
         for await (const event of agent.runStream(query)) {
+          // Flush any pending agent events (agent_start / agent_result) to SSE
+          while (pendingAgentEvents.length > 0) {
+            const agentEvent = pendingAgentEvents.shift()!;
+            if (agentEvent.type === "agent_start") {
+              sendSSE({
+                type: "agent_start",
+                role: agentEvent.data.role,
+                displayName: agentEvent.data.displayName,
+              });
+            } else if (agentEvent.type === "agent_result") {
+              const result = agentEvent.data;
+              sendSSE({
+                type: "agent_result",
+                role: result.role,
+                displayName: result.displayName,
+                agentSummary: result.summary,
+                agentSuccess: result.success,
+                agentConfidence: result.confidence,
+                agentLatencyMs: result.latencyMs,
+              });
+            }
+          }
+
           if (event.type === "step") {
             // Map backend step → frontend AgentStreamEvent "step"
             sendSSE({
@@ -244,6 +331,28 @@ export async function agentRoutes(app: FastifyInstance) {
               toolResult: event.data.result,
             });
           } else if (event.type === "answer") {
+            // Flush remaining agent events before sending final answer
+            while (pendingAgentEvents.length > 0) {
+              const agentEvent = pendingAgentEvents.shift()!;
+              if (agentEvent.type === "agent_start") {
+                sendSSE({
+                  type: "agent_start",
+                  role: agentEvent.data.role,
+                  displayName: agentEvent.data.displayName,
+                });
+              } else if (agentEvent.type === "agent_result") {
+                const result = agentEvent.data;
+                sendSSE({
+                  type: "agent_result",
+                  role: result.role,
+                  displayName: result.displayName,
+                  agentSummary: result.summary,
+                  agentSuccess: result.success,
+                  agentConfidence: result.confidence,
+                  agentLatencyMs: result.latencyMs,
+                });
+              }
+            }
             sendSSE({
               type: "answer",
               answer: event.data.answer,
