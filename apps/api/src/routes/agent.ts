@@ -75,6 +75,10 @@ export async function agentRoutes(app: FastifyInstance) {
           const { notesTool } = await import("../agent/tools/notes.js");
           registry.register(notesTool);
         } catch { /* tool not available yet */ }
+        try {
+          const { sendMessageTool } = await import("../agent/tools/send-message.js");
+          registry.register(sendMessageTool);
+        } catch { /* tool not available yet */ }
 
         // Pre-load stock context if a symbol was provided (Option A: context stuffing).
         // Fetch quote + 30-day chart summary + news headlines in parallel, then inject

@@ -72,6 +72,35 @@ export const toolWhitelist = sqliteTable("tool_whitelist", {
   addedAt: text("added_at").default(sql`(datetime('now'))`).notNull(),
 });
 
+// --- Messaging tables ---
+
+export const notificationChannels = sqliteTable("notification_channels", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  channelType: text("channel_type").notNull(),
+  config: text("config").notNull(), // JSON text
+  isDefault: integer("is_default", { mode: "boolean" }).notNull().default(false),
+  createdAt: text("created_at").default(sql`(datetime('now'))`).notNull(),
+  updatedAt: text("updated_at").default(sql`(datetime('now'))`).notNull(),
+});
+
+export const notificationHistory = sqliteTable(
+  "notification_history",
+  {
+    id: integer("id").primaryKey({ autoIncrement: true }),
+    channelType: text("channel_type").notNull(),
+    recipient: text("recipient").notNull(),
+    subject: text("subject"),
+    message: text("message").notNull(),
+    status: text("status").notNull(), // "sent" | "failed" | "rate_limited"
+    error: text("error"),
+    sentAt: text("sent_at").default(sql`(datetime('now'))`).notNull(),
+  },
+  (table) => [
+    index("notification_history_channel_type_idx").on(table.channelType),
+    index("notification_history_sent_at_idx").on(table.sentAt),
+  ],
+);
+
 // --- Logging tables ---
 
 export const queryLogs = sqliteTable(
