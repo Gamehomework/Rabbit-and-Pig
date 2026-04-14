@@ -50,6 +50,28 @@ export const agentMessages = sqliteTable(
   ],
 );
 
+// --- Plugin tables ---
+
+export const plugins = sqliteTable("plugins", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  version: text("version").notNull(),
+  source: text("source").notNull(), // "npm" | "remote" | "local"
+  sourceUri: text("source_uri").notNull(),
+  status: text("status").notNull().default("installed"), // "installed" | "enabled" | "disabled" | "error"
+  config: text("config"), // JSON text
+  installedAt: text("installed_at").default(sql`(datetime('now'))`).notNull(),
+  updatedAt: text("updated_at").default(sql`(datetime('now'))`).notNull(),
+});
+
+export const toolWhitelist = sqliteTable("tool_whitelist", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  toolName: text("tool_name").notNull().unique(),
+  allowed: integer("allowed", { mode: "boolean" }).notNull().default(true),
+  addedAt: text("added_at").default(sql`(datetime('now'))`).notNull(),
+});
+
 // --- Logging tables ---
 
 export const queryLogs = sqliteTable(

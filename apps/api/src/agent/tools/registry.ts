@@ -30,6 +30,11 @@ export class ToolRegistry {
     return this.tools.has(name);
   }
 
+  /** Unregister a tool by name. Returns true if the tool was found and removed. */
+  unregister(name: string): boolean {
+    return this.tools.delete(name);
+  }
+
   /** Convert all registered tools to OpenAI-compatible function definitions (DeepSeek format). */
   toFunctionDefinitions(): FunctionDefinition[] {
     return this.list().map((tool) => ({
