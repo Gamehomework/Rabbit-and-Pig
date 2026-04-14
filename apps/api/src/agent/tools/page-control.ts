@@ -191,17 +191,22 @@ export const addIndicatorLinesTool: Tool = {
     },
     required: ["lines"],
   },
-  async execute(input: {
-    lines: Array<{
-      title: string;
-      color: string;
-      data: Array<{ time: string; value: number }>;
-    }>;
-  }) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async execute(rawInput: unknown) {
+    // The LLM sometimes double-encodes the JSON for large payloads.
+    // Handle: rawInput is a string OR rawInput.lines is a string.
+    let parsed = rawInput as { lines: Array<{ title: string; color: string; data: Array<{ time: string; value: number }> }> };
+    if (typeof rawInput === 'string') {
+      try { parsed = JSON.parse(rawInput as string); } catch { /* keep */ }
+    }
+    if (parsed && typeof (parsed as any).lines === 'string') {
+      try { parsed = { ...parsed, lines: JSON.parse((parsed as any).lines) }; } catch { /* keep */ }
+    }
+    const lines = parsed?.lines ?? [];
     return {
       success: true,
-      command: { type: "add_indicator_lines", lines: input.lines },
-      message: `Added ${input.lines.length} indicator line(s): ${input.lines.map((l) => l.title).join(", ")}`,
+      command: { type: "add_indicator_lines", lines },
+      message: `Added ${lines.length} indicator line(s): ${lines.map((l: any) => l.title).join(", ")}`,
     };
   },
 };
