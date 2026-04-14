@@ -76,6 +76,7 @@ export default function StockDetailPage() {
   const [isRunning, setIsRunning] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+  const chatScrollRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   // Quote
@@ -286,7 +287,10 @@ export default function StockDetailPage() {
       ]);
     } finally {
       setAiLoading(false);
-      setTimeout(() => chatBottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+      setTimeout(() => {
+        const el = chatScrollRef.current;
+        if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+      }, 50);
     }
   }
 
@@ -338,7 +342,10 @@ export default function StockDetailPage() {
             { role: "assistant", content: `⚠️ ${event.error ?? "Stream error"}` },
           ]);
         }
-        setTimeout(() => chatBottomRef.current?.scrollIntoView({ behavior: "smooth" }), 50);
+        setTimeout(() => {
+          const el = chatScrollRef.current;
+          if (el) el.scrollTo({ top: el.scrollHeight, behavior: "smooth" });
+        }, 50);
       },
       (err) => {
         setChatMessages((prev) => [
@@ -631,7 +638,7 @@ export default function StockDetailPage() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
+          <div ref={chatScrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {chatMessages.length === 0 && (
               <p className="text-center text-sm text-gray-400 mt-8">
                 Ask anything about {symbol}…
