@@ -218,3 +218,137 @@ export async function uninstallPlugin(name: string): Promise<void> {
   await fetchApi<unknown>(`/api/plugins/${encodeURIComponent(name)}`, { method: "DELETE" });
 }
 
+// --- Optimizer Types & API ---
+
+export interface PerformanceMetric {
+  date: string;
+  avgLatencyMs: number;
+  avgIterations: number;
+  successRate: number;
+  queryCount: number;
+}
+
+export interface PromptSuggestion {
+  area: string;
+  current: string;
+  suggested: string;
+  reasoning: string;
+}
+
+export interface ToolRecommendation {
+  toolName: string;
+  score: number;
+  frequency: number;
+  successRate: number;
+  avgLatency: number;
+  reason: string;
+}
+
+export interface UserPreferences {
+  watchedStocks: string[];
+  preferredTools: string[];
+  commonQueryTypes: string[];
+  [key: string]: unknown;
+}
+
+export async function getPerformanceTrends(days = 30): Promise<PerformanceMetric[]> {
+  const res = await fetchApi<{ trends: PerformanceMetric[] }>(`/api/optimizer/performance?days=${days}`);
+  return res.trends;
+}
+
+export async function analyzePrompt(): Promise<PromptSuggestion[]> {
+  const res = await fetchApi<{ suggestions: PromptSuggestion[] }>("/api/optimizer/analyze-prompt", { method: "POST" });
+  return res.suggestions;
+}
+
+export async function getToolRecommendations(): Promise<ToolRecommendation[]> {
+  const res = await fetchApi<{ recommendations: ToolRecommendation[] }>("/api/optimizer/tool-recommendations");
+  return res.recommendations;
+}
+
+export async function getPersonalization(): Promise<UserPreferences> {
+  const res = await fetchApi<{ preferences: UserPreferences }>("/api/optimizer/personalization");
+  return res.preferences;
+}
+
+export async function savePersonalization(data: { key?: string; value?: unknown; watchedStocks?: string[]; preferredTools?: string[] }): Promise<UserPreferences> {
+  const res = await fetchApi<{ preferences: UserPreferences }>("/api/optimizer/personalization", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+  return res.preferences;
+}
+
+// --- Analytics Types & API ---
+
+export interface AnalyticsOverview {
+  totalQueries: number;
+  avgLatencyMs: number;
+  successRate: number;
+  activeSessions: number;
+  totalNotifications: number;
+}
+
+export interface QueryDataPoint {
+  timestamp: string;
+  count: number;
+}
+
+export interface ToolStats {
+  toolName: string;
+  count: number;
+  avgLatencyMs: number;
+  successRate: number;
+}
+
+export interface SessionSummary {
+  id: string;
+  createdAt: string;
+  status: string;
+  queryCount: number;
+  toolCalls: number;
+  avgLatency: number;
+}
+
+export interface SessionDetail {
+  session: SessionSummary;
+  queries: unknown[];
+  decisions: unknown[];
+  toolExecutions: unknown[];
+}
+
+export interface NotificationStats {
+  channel: string;
+  sent: number;
+  failed: number;
+  rateLimited: number;
+}
+
+export async function getAnalyticsOverview(from: string, to: string): Promise<AnalyticsOverview> {
+  return fetchApi<AnalyticsOverview>(`/api/analytics/overview?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+}
+
+export async function getAnalyticsQueries(period: string, from: string, to: string): Promise<QueryDataPoint[]> {
+  return fetchApi<QueryDataPoint[]>(`/api/analytics/queries?period=${encodeURIComponent(period)}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+}
+
+export async function getAnalyticsTools(from: string, to: string): Promise<ToolStats[]> {
+  return fetchApi<ToolStats[]>(`/api/analytics/tools?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+}
+
+export async function getAnalyticsSessions(limit = 20, offset = 0): Promise<SessionSummary[]> {
+  return fetchApi<SessionSummary[]>(`/api/analytics/sessions?limit=${limit}&offset=${offset}`);
+}
+
+export async function getAnalyticsSessionDetail(id: string): Promise<SessionDetail> {
+  return fetchApi<SessionDetail>(`/api/analytics/sessions/${encodeURIComponent(id)}`);
+}
+
+export async function getAnalyticsNotifications(from: string, to: string): Promise<NotificationStats[]> {
+  return fetchApi<NotificationStats[]>(`/api/analytics/notifications?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
+}
+
+export function getAnalyticsExportUrl(format: "csv" | "json", type: "queries" | "tools" | "sessions", from: string, to: string): string {
+  return `${BASE_URL}/api/analytics/export?format=${format}&type=${type}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
+}
+

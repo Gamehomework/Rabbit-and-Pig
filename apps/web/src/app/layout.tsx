@@ -33,6 +33,12 @@ export default function RootLayout({
               <Link href="/plugins" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
                 Plugins
               </Link>
+              <Link href="/optimizer" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
+                Optimizer
+              </Link>
+              <Link href="/analytics" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
+                Analytics
+              </Link>
             </nav>
           </div>
         </header>
