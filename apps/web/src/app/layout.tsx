@@ -27,6 +27,12 @@ export default function RootLayout({
               <Link href="/notes" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
                 Notes
               </Link>
+              <Link href="/alerts" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
+                Alerts
+              </Link>
+              <Link href="/plugins" className="rounded px-3 py-1.5 hover:bg-gray-700 transition-colors">
+                Plugins
+              </Link>
             </nav>
           </div>
         </header>

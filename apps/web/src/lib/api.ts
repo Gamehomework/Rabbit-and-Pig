@@ -145,3 +145,76 @@ export async function getLogs(): Promise<LogEntry[]> {
   return fetchApi<LogEntry[]>("/api/logs");
 }
 
+// --- Notification Types & API ---
+
+export interface NotificationChannel {
+  channelType: string;
+  config: Record<string, string>;
+  isDefault?: boolean;
+}
+
+export interface NotificationHistoryItem {
+  id: number;
+  channel: string;
+  recipient: string;
+  message: string;
+  status: "sent" | "failed" | "rate_limited";
+  timestamp: string;
+}
+
+export async function getNotificationChannels(): Promise<NotificationChannel[]> {
+  return fetchApi<NotificationChannel[]>("/api/notifications/channels");
+}
+
+export async function saveNotificationChannel(channel: NotificationChannel): Promise<NotificationChannel> {
+  return fetchApi<NotificationChannel>("/api/notifications/channels", {
+    method: "POST",
+    body: JSON.stringify(channel),
+  });
+}
+
+export async function sendNotification(data: { channel: string; message: string; recipient: string }): Promise<{ success: boolean }> {
+  return fetchApi<{ success: boolean }>("/api/notifications/send", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function getNotificationHistory(limit = 50): Promise<NotificationHistoryItem[]> {
+  return fetchApi<NotificationHistoryItem[]>(`/api/notifications/history?limit=${limit}`);
+}
+
+// --- Plugin Types & API ---
+
+export interface Plugin {
+  name: string;
+  description?: string;
+  version?: string;
+  status: "enabled" | "disabled" | "installed" | "error";
+  source?: string;
+  sourceUri?: string;
+}
+
+export async function getPlugins(): Promise<Plugin[]> {
+  return fetchApi<Plugin[]>("/api/plugins");
+}
+
+export async function installPlugin(data: { name: string; source?: string; sourceUri?: string }): Promise<Plugin> {
+  return fetchApi<Plugin>("/api/plugins/install", {
+    method: "POST",
+    body: JSON.stringify(data),
+  });
+}
+
+export async function enablePlugin(name: string): Promise<Plugin> {
+  return fetchApi<Plugin>(`/api/plugins/${encodeURIComponent(name)}/enable`, { method: "POST" });
+}
+
+export async function disablePlugin(name: string): Promise<Plugin> {
+  return fetchApi<Plugin>(`/api/plugins/${encodeURIComponent(name)}/disable`, { method: "POST" });
+}
+
+export async function uninstallPlugin(name: string): Promise<void> {
+  await fetchApi<unknown>(`/api/plugins/${encodeURIComponent(name)}`, { method: "DELETE" });
+}
+

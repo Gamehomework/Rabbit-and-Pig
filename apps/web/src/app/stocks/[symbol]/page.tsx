@@ -7,7 +7,8 @@ import {
 } from "recharts";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
-  type OHLCVData, type NewsItem, type Note,
+  getNotificationChannels, sendNotification,
+  type OHLCVData, type NewsItem, type Note, type NotificationChannel,
 } from "@/lib/api";
 
 const RANGES = ["1d", "1mo", "3mo", "6mo", "1y"] as const;
@@ -44,6 +45,15 @@ export default function StockDetailPage() {
   const [aiLoading, setAiLoading] = useState(false);
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const chatBottomRef = useRef<HTMLDivElement>(null);
+
+  // Send Alert modal
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertChannels, setAlertChannels] = useState<NotificationChannel[]>([]);
+  const [alertChannel, setAlertChannel] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertRecipient, setAlertRecipient] = useState("");
+  const [alertSending, setAlertSending] = useState(false);
+  const [alertResult, setAlertResult] = useState<{ ok: boolean; text: string } | null>(null);
 
   const loadChart = useCallback(async (range: string) => {
     setChartLoading(true);
@@ -137,15 +147,79 @@ export default function StockDetailPage() {
     }
   }
 
+  async function openAlertModal() {
+    setAlertOpen(true);
+    setAlertResult(null);
+    setAlertMessage(`Alert: ${symbol} - Price update`);
+    try { setAlertChannels(await getNotificationChannels()); } catch { /* empty */ }
+  }
+
+  async function handleSendAlert(e: React.FormEvent) {
+    e.preventDefault();
+    setAlertSending(true); setAlertResult(null);
+    try {
+      await sendNotification({ channel: alertChannel, message: alertMessage, recipient: alertRecipient });
+      setAlertResult({ ok: true, text: "Alert sent!" });
+    } catch (err) {
+      setAlertResult({ ok: false, text: err instanceof Error ? err.message : "Send failed" });
+    } finally { setAlertSending(false); }
+  }
+
   return (
     <div className="flex gap-6 items-start">
       {/* ── Left: main content ── */}
       <div className="min-w-0 flex-1 space-y-6">
         {/* Header */}
-        <div>
-          <h1 className="text-3xl font-bold">{symbol}</h1>
-          <p className="text-gray-500">Stock Detail</p>
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">{symbol}</h1>
+            <p className="text-gray-500">Stock Detail</p>
+          </div>
+          <button onClick={openAlertModal}
+            className="rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600">
+            🔔 Send Alert
+          </button>
         </div>
+
+      {/* Alert Modal */}
+      {alertOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40" onClick={() => setAlertOpen(false)}>
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-lg font-semibold">Send Alert for {symbol}</h3>
+              <button onClick={() => setAlertOpen(false)} className="text-gray-400 hover:text-gray-600">✕</button>
+            </div>
+            <form onSubmit={handleSendAlert} className="space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Channel</label>
+                <select value={alertChannel} onChange={(e) => setAlertChannel(e.target.value)} required
+                  className="w-full rounded border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none">
+                  <option value="">Select channel…</option>
+                  {alertChannels.map((c) => <option key={c.channelType} value={c.channelType}>{c.channelType}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Message</label>
+                <textarea value={alertMessage} onChange={(e) => setAlertMessage(e.target.value)} rows={3}
+                  className="w-full rounded border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none" />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Recipient</label>
+                <input type="text" value={alertRecipient} onChange={(e) => setAlertRecipient(e.target.value)}
+                  placeholder="user/id" required
+                  className="w-full rounded border border-gray-300 px-3 py-1.5 text-sm focus:border-blue-500 focus:outline-none" />
+              </div>
+              <button type="submit" disabled={alertSending || !alertChannel}
+                className="w-full rounded bg-orange-500 px-4 py-2 text-sm font-medium text-white hover:bg-orange-600 disabled:opacity-50">
+                {alertSending ? "Sending…" : "Send Alert"}
+              </button>
+            </form>
+            {alertResult && (
+              <p className={`mt-2 text-sm ${alertResult.ok ? "text-green-600" : "text-red-600"}`}>{alertResult.text}</p>
+            )}
+          </div>
+        </div>
+      )}
 
       {/* Price Chart */}
       <section className="rounded-lg border bg-white p-4 shadow-sm">
