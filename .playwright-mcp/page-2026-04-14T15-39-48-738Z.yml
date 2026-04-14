@@ -1,0 +1,56 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - heading "TEM" [level=1] [ref=e17]
+          - generic [ref=e22]:
+            - button "🧠 Deep Analysis" [ref=e23]
+            - button "▶ Run Autonomous Analysis" [ref=e24]
+            - button "🔔 Send Alert" [ref=e25]
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Price Chart" [level=2] [ref=e44]
+            - generic [ref=e45]:
+              - button "1d" [ref=e46]
+              - button "1mo" [ref=e47]
+              - button "3mo" [ref=e48]
+              - button "6mo" [ref=e49]
+              - button "1y" [ref=e50]
+          - paragraph [ref=e51]: Loading chart…
+        - generic [ref=e52]:
+          - heading "Recent News" [level=2] [ref=e54]
+          - paragraph [ref=e55]: Loading news…
+          - list
+        - generic [ref=e56]:
+          - heading "Notes" [level=2] [ref=e57]
+          - generic [ref=e58]:
+            - textbox "Note title" [ref=e59]
+            - textbox "Note content…" [ref=e60]
+            - button "Add Note" [disabled] [ref=e61]
+      - generic [ref=e63]:
+        - heading "Ask AI about TEM" [level=2] [ref=e65]
+        - paragraph [ref=e67]: Ask anything about TEM…
+        - generic [ref=e68]:
+          - textbox "Ask about TEM…" [ref=e69]
+          - button "Send" [disabled] [ref=e70]
+  - button "Open Next.js Dev Tools" [ref=e76] [cursor=pointer]:
+    - img [ref=e77]
+  - alert [ref=e80]

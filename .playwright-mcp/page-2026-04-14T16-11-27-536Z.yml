@@ -1,0 +1,129 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - generic [ref=e52]:
+              - paragraph [ref=e53]: Tempus AI, Inc.
+              - generic [ref=e54]: $49.04
+              - generic [ref=e55]: +3.06 (+6.66%)
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e21]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e56]:
+          - generic [ref=e57]:
+            - paragraph [ref=e58]: Market Cap
+            - paragraph [ref=e59]: $8.8B
+          - generic [ref=e60]:
+            - paragraph [ref=e61]: P/E Ratio
+            - paragraph [ref=e62]: —
+          - generic [ref=e63]:
+            - paragraph [ref=e64]: Day Range
+            - paragraph [ref=e65]: 47.62 – 49.45
+          - generic [ref=e66]:
+            - paragraph [ref=e67]: 52W Range
+            - paragraph [ref=e68]: 39.01 – 104.32
+          - generic [ref=e69]:
+            - paragraph [ref=e70]: Volume
+            - paragraph [ref=e71]: 3.74M
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - table [ref=e75]:
+            - row [ref=e76]:
+              - cell
+              - cell [ref=e77]:
+                - link "Charting by TradingView" [ref=e81] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/TEM
+                  - img [ref=e82]
+              - cell [ref=e86]
+            - row [ref=e90]:
+              - cell
+              - cell [ref=e91]
+              - cell [ref=e95]
+        - generic [ref=e33]:
+          - heading "Recent News" [level=2] [ref=e35]
+          - list [ref=e98]:
+            - listitem [ref=e99]:
+              - link "Tempus Announces 31 Abstracts for Presentation at the American Association for Cancer Research Annual Meeting 2026" [ref=e100] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-31-abstracts-presentation-123000142.html?.tsrc=rss
+              - paragraph [ref=e101]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e102]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e103] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e104]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e105]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e106] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e107]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e108]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e109] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e110]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e111]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e112] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e113]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e114]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e115] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e116]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e117]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e118] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e119]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e120]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e121] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e122]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e123]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e124] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e125]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e126]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e127] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e128]: Yahoo Finance · 4/3/2026
+        - generic [ref=e37]:
+          - heading "Notes" [level=2] [ref=e38]
+          - generic [ref=e39]:
+            - textbox "Note title" [ref=e40]
+            - textbox "Note content…" [ref=e41]
+            - button "Add Note" [disabled] [ref=e42]
+      - generic [ref=e44]:
+        - heading "Ask AI about TEM" [level=2] [ref=e46]
+        - generic [ref=e47]:
+          - generic [ref=e140]: Add Bollinger Bands to the chart
+          - generic [ref=e142]: Thinking…
+        - generic [ref=e49]:
+          - textbox "Ask about TEM…" [active] [ref=e50]
+          - button "Send" [disabled] [ref=e51]
+  - button "Open Next.js Dev Tools" [ref=e134] [cursor=pointer]:
+    - img [ref=e135]
+  - alert [ref=e138]

@@ -16,14 +16,14 @@ An AI-powered stock research assistant that combines real-time market data, inte
 ## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Frontend | [Next.js 15](https://nextjs.org/) · React 19 · Tailwind CSS 4 |
-| Backend | [Fastify 5](https://fastify.dev/) · TypeScript |
-| AI | [OpenAI SDK](https://github.com/openai/openai-node) · ReAct Agent with tool-use |
-| Database | SQLite via [Drizzle ORM](https://orm.drizzle.team/) |
-| Market Data | [Yahoo Finance](https://github.com/nicehash/yahoo-finance2) |
-| Notifications | [Twilio](https://www.twilio.com/) |
-| Monorepo | [Turborepo](https://turbo.build/) · pnpm workspaces |
+| --- | --- |
+| Frontend | Next.js 15 · React 19 · Tailwind CSS 4 |
+| Backend | Fastify 5 · TypeScript |
+| AI | OpenAI SDK · ReAct Agent with tool-use |
+| Database | SQLite via Drizzle ORM |
+| Market Data | Yahoo Finance |
+| Notifications | Twilio |
+| Monorepo | Turborepo · pnpm workspaces |
 
 ## Project Structure
 
@@ -103,14 +103,13 @@ Available agent tools include: `get_quote`, `get_news`, `draw_indicators`, `calc
 ## Scripts
 
 | Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps in development mode |
-| `pnpm build` | Build all apps and packages |
-| `pnpm lint` | Lint the entire monorepo |
-| `pnpm typecheck` | Run TypeScript type checking |
-| `pnpm clean` | Remove build artifacts |
+| --- | --- |
+| pnpm dev | Start all apps in development mode |
+| pnpm build | Build all apps and packages |
+| pnpm lint | Lint the entire monorepo |
+| pnpm typecheck | Run TypeScript type checking |
+| pnpm clean | Remove build artifacts |
 
 ## License
 
 [MIT](./LICENSE) © 2026 Gamehomework
-

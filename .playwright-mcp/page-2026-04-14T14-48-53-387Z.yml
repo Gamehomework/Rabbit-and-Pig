@@ -1,0 +1,115 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - generic [ref=e52]:
+              - paragraph [ref=e143]: Tempus AI, Inc.
+              - generic [ref=e144]: $48.91
+              - generic [ref=e145]: +2.92 (+6.36%)
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e21]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - paragraph [ref=e148]: Market Cap
+            - paragraph [ref=e149]: $8.8B
+          - generic [ref=e150]:
+            - paragraph [ref=e151]: P/E Ratio
+            - paragraph [ref=e152]: —
+          - generic [ref=e153]:
+            - paragraph [ref=e154]: Day Range
+            - paragraph [ref=e155]: 47.62 – 49.40
+          - generic [ref=e156]:
+            - paragraph [ref=e157]: 52W Range
+            - paragraph [ref=e158]: 39.01 – 104.32
+          - generic [ref=e159]:
+            - paragraph [ref=e160]: Volume
+            - paragraph [ref=e161]: 2.52M
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - table [ref=e163]:
+            - row [ref=e164]:
+              - cell
+              - cell [ref=e165]:
+                - link "Charting by TradingView" [ref=e169] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/TEM
+                  - img [ref=e170]
+              - cell [ref=e174]
+            - row [ref=e178]:
+              - cell
+              - cell [ref=e179]
+              - cell [ref=e183]
+        - generic [ref=e33]:
+          - generic [ref=e34]:
+            - heading "Recent News" [level=2] [ref=e35]
+            - 'button "Filter: FDA, clinical trial, clinical trials, trial, regulatory, approval ✕" [ref=e197]':
+              - text: "Filter: FDA, clinical trial, clinical trials, trial, regulatory, approval"
+              - generic [ref=e198]: ✕
+          - list [ref=e98]:
+            - listitem [ref=e99]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e199] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e101]: Yahoo Finance · 4/3/2026
+        - generic [ref=e37]:
+          - heading "Notes" [level=2] [ref=e38]
+          - generic [ref=e39]:
+            - textbox "Note title" [ref=e40]
+            - textbox "Note content…" [ref=e41]
+            - button "Add Note" [disabled] [ref=e42]
+      - generic [ref=e44]:
+        - heading "Ask AI about TEM" [level=2] [ref=e46]
+        - generic [ref=e47]:
+          - generic [ref=e140]: Switch to the 3-month chart view
+          - generic [ref=e186]:
+            - generic [ref=e187]: ⚙
+            - generic [ref=e188]:
+              - text: set_chart_range
+              - generic [ref=e189]: — I'll switch the chart to the 3-month view for you.
+          - paragraph [ref=e192]: Done! I've switched the chart to show the 3-month timeframe. This will give you a broader view of Tempus AI's price action over the last quarter, which should help you analyze medium-term trends and patterns.
+          - generic [ref=e194]: Filter news about FDA or clinical trials
+          - generic [ref=e200]:
+            - generic [ref=e201]: ⚙
+            - generic [ref=e202]:
+              - text: filter_news
+              - generic [ref=e203]: — I'll filter the news for TEM to show only articles related to FDA or clinical trials.
+          - generic [ref=e205]:
+            - paragraph [ref=e206]: I've filtered the news for TEM to show only articles containing keywords related to FDA or clinical trials. The news list will now display only headlines that mention FDA, clinical trials, regulatory matters, or approvals.
+            - paragraph [ref=e207]: "Based on the pre-loaded data, I can see one relevant news item from April 14, 2026:"
+            - list [ref=e208]:
+              - listitem [ref=e209]: "\"Tempus Announces 31 Abstracts for Presentation at the American Association for Cancer Research Annual Meeting 2026\""
+            - paragraph [ref=e210]: This is related to clinical research presentations, which falls under the clinical trials/research category. The other news items about analyst calls and automated services have been filtered out.
+            - paragraph [ref=e211]: If you'd like to see all news again or adjust the filtering, just let me know!
+        - generic [ref=e49]:
+          - textbox "Ask about TEM…" [active] [ref=e50]
+          - button "Send" [disabled] [ref=e51]
+  - button "Open Next.js Dev Tools" [ref=e134] [cursor=pointer]:
+    - img [ref=e135]
+  - alert [ref=e138]

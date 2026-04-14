@@ -1,0 +1,150 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - generic [ref=e18]:
+              - paragraph [ref=e161]: Tempus AI, Inc.
+              - generic [ref=e162]: $49.26
+              - generic [ref=e163]: +3.28 (+7.13%)
+          - generic [ref=e22]:
+            - button "🧠 Deep Analysis" [ref=e23]
+            - button "▶ Run Autonomous Analysis" [ref=e24]
+            - button "🔔 Send Alert" [ref=e25]
+        - generic [ref=e164]:
+          - generic [ref=e165]:
+            - paragraph [ref=e166]: Market Cap
+            - paragraph [ref=e167]: $8.8B
+          - generic [ref=e168]:
+            - paragraph [ref=e169]: P/E Ratio
+            - paragraph [ref=e170]: —
+          - generic [ref=e171]:
+            - paragraph [ref=e172]: Day Range
+            - paragraph [ref=e173]: 47.62 – 49.45
+          - generic [ref=e174]:
+            - paragraph [ref=e175]: 52W Range
+            - paragraph [ref=e176]: 39.01 – 104.32
+          - generic [ref=e177]:
+            - paragraph [ref=e178]: Volume
+            - paragraph [ref=e179]: 3.45M
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Price Chart" [level=2] [ref=e44]
+            - generic [ref=e45]:
+              - button "1d" [ref=e46]
+              - button "1mo" [ref=e47]
+              - button "3mo" [ref=e48]
+              - button "6mo" [ref=e49]
+              - button "1y" [ref=e50]
+          - table [ref=e181]:
+            - row [ref=e182]:
+              - cell
+              - cell [ref=e183]:
+                - link "Charting by TradingView" [ref=e187] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/TEM
+                  - img [ref=e188]
+              - cell [ref=e192]
+            - row [ref=e196]:
+              - cell
+              - cell [ref=e197]
+              - cell [ref=e201]
+        - generic [ref=e52]:
+          - heading "Recent News" [level=2] [ref=e54]
+          - list [ref=e126]:
+            - listitem [ref=e127]:
+              - link "Tempus Announces 31 Abstracts for Presentation at the American Association for Cancer Research Annual Meeting 2026" [ref=e128] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-31-abstracts-presentation-123000142.html?.tsrc=rss
+              - paragraph [ref=e129]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e130]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e131] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e132]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e133]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e134] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e135]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e136]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e137] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e138]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e139]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e140] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e141]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e142]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e143] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e144]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e145]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e146] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e147]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e148]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e149] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e150]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e151]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e152] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e153]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e154]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e155] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e156]: Yahoo Finance · 4/3/2026
+        - generic [ref=e56]:
+          - heading "Notes" [level=2] [ref=e57]
+          - generic [ref=e58]:
+            - textbox "Note title" [ref=e59]
+            - textbox "Note content…" [ref=e60]
+            - button "Add Note" [disabled] [ref=e61]
+      - generic [ref=e63]:
+        - heading "Ask AI about TEM" [level=2] [ref=e65]
+        - generic [ref=e66]:
+          - generic [ref=e158]: Add Bollinger Bands to the chart
+          - generic [ref=e204]:
+            - generic [ref=e205]: ⚙
+            - generic [ref=e206]:
+              - text: calc_indicator_series
+              - generic [ref=e207]: — I'll add Bollinger Bands to the TEM chart for you. First, I need to calculate the Bollinger Bands indicator series, then I'll draw them on the chart.
+          - generic [ref=e208]:
+            - generic [ref=e209]: ⚙
+            - generic [ref=e210]:
+              - text: add_indicator_lines
+              - generic [ref=e211]: "— Now I'll add these Bollinger Bands to the chart:"
+          - generic [ref=e212]:
+            - generic [ref=e213]: ⚙
+            - generic [ref=e214]:
+              - text: set_chart_range
+              - generic [ref=e215]: "— Perfect! I've successfully added Bollinger Bands to the TEM chart. Here's what I've done: **Bollinger Bands Added:** - **Upper Band (gray)**: Currently at $51.29 - **Middle Band (blue-gray)**: Currently at $46.71 (20-day SMA) - **Lower Band (gray)**: Currently at $42.13 **Current Price Context:** Based on the pre-loaded data, TEM is trading at $49.40 today. Looking at the Bollinger Bands: - The current price ($49.40) is between the middle band ($46.71) and upper band ($51.29) - This suggests the stock is in the upper half of its recent volatility range - The bands appear to be narrowing, which typically indicates decreasing volatility **Technical Interpretation:** 1. **Band Width**: The distance between upper and lower bands is approximately $9.16, showing moderate volatility 2. **Price Position**: Trading above the middle band suggests bullish momentum in the short term 3. **Recent Trend**: The bands have been trending downward over the 6-month period, consistent with TEM's price decline from over $100 to current levels I've also switched the chart to show the 6-month timeframe to give you a good view of the Bollinger Bands pattern. You can now see how the price has interacted with the bands over time, which can help identify potential support/resistance levels and volatility changes."
+          - generic [ref=e217]:
+            - paragraph [ref=e218]: "The Bollinger Bands are now visible on your TEM chart. You can use these bands to:"
+            - list [ref=e219]:
+              - listitem [ref=e220]: Identify overbought/oversold conditions (price touching upper/lower bands)
+              - listitem [ref=e221]: Spot volatility contractions (band narrowing) that often precede significant moves
+              - listitem [ref=e222]: Use the middle band as a dynamic support/resistance level
+            - paragraph [ref=e223]: Would you like me to add any other technical indicators or analyze specific aspects of the Bollinger Bands pattern?
+        - generic [ref=e68]:
+          - textbox "Ask about TEM…" [ref=e69]
+          - button "Send" [disabled] [ref=e70]
+  - button "Open Next.js Dev Tools" [ref=e76] [cursor=pointer]:
+    - img [ref=e77]
+  - alert [ref=e80]
