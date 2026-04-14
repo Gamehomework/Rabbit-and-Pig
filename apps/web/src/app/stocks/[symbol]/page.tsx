@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
-import TradingViewChart, { type ChartMarker, type ChartLine } from "@/components/TradingViewChart";
+import TradingViewChart, { type ChartMarker, type ChartLine, type TradingViewChartHandle } from "@/components/TradingViewChart";
 import ReactMarkdown from "react-markdown";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
@@ -50,6 +50,7 @@ export default function StockDetailPage() {
   const symbol = (params.symbol ?? "").toUpperCase();
 
   // Chart
+  const chartRef = useRef<TradingViewChartHandle>(null);
   const [chartData, setChartData] = useState<OHLCVData[]>([]);
   const [chartRange, setChartRange] = useState<string>("1mo");
   const [chartLoading, setChartLoading] = useState(false);
@@ -159,14 +160,22 @@ export default function StockDetailPage() {
     loadQuote();
   }, [symbol, chartRange, loadChart, loadNews, loadNotes, loadQuote]);
 
-  // Auto-poll chart every 60s when viewing 1d range
+  // Auto-poll chart every 5s when viewing 1d range.
+  // Uses imperative updateLatestCandle() to avoid React re-rendering the chart component.
   useEffect(() => {
     if (chartRange !== "1d") return;
-    const timer = setInterval(() => {
-      loadChart("1d");
+    const timer = setInterval(async () => {
+      try {
+        const data = await getStockChart(symbol, "1d");
+        if (data.length > 0 && chartRef.current) {
+          chartRef.current.updateLatestCandle(data[data.length - 1]);
+        }
+      } catch {
+        // silently ignore polling errors
+      }
     }, 5_000);
     return () => clearInterval(timer);
-  }, [chartRange, loadChart]);
+  }, [chartRange, symbol]);
 
   // --- Page Command Bus ---
   function dispatchPageCommand(command: PageCommand) {
@@ -512,6 +521,7 @@ export default function StockDetailPage() {
         {/* Keep chart mounted during background polling — unmounting causes flash */}
         {!chartError && chartData.length > 0 && (
           <TradingViewChart
+            ref={chartRef}
             data={chartData}
             markers={chartMarkers}
             lines={chartLines}
