@@ -201,6 +201,10 @@ export class Agent {
         } catch {
           toolInput = toolCall.function.arguments;
         }
+        // Handle double-encoded JSON (LLM sometimes wraps large payloads in a string)
+        if (typeof toolInput === 'string') {
+          try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
+        }
 
         const toolResult = await this.executeTool(toolName, toolInput);
 
@@ -310,6 +314,10 @@ export class Agent {
             toolInput = JSON.parse(toolCall.function.arguments);
           } catch {
             toolInput = toolCall.function.arguments;
+          }
+          // Handle double-encoded JSON (LLM sometimes wraps large payloads in a string)
+          if (typeof toolInput === 'string') {
+            try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
           }
 
           const thought = typeof assistantMessage.content === "string"

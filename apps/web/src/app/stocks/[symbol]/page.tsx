@@ -316,8 +316,9 @@ export default function StockDetailPage() {
           ]);
           // Extract and dispatch page commands from streaming tool results
           if (event.toolResult) {
-            const output = event.toolResult as Record<string, unknown> | undefined;
-            const cmd = output?.command as PageCommand | undefined;
+            const toolResultObj = event.toolResult as Record<string, unknown> | undefined;
+            const toolOutput = toolResultObj?.output as Record<string, unknown> | undefined;
+            const cmd = toolOutput?.command as PageCommand | undefined;
             if (cmd) dispatchPageCommand(cmd);
           }
         } else if (event.type === "answer" && event.answer) {
