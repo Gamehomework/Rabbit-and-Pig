@@ -136,6 +136,15 @@ export default function StockDetailPage() {
     loadQuote();
   }, [symbol, chartRange, loadChart, loadNews, loadNotes, loadQuote]);
 
+  // Auto-poll chart every 60s when viewing 1d range
+  useEffect(() => {
+    if (chartRange !== "1d") return;
+    const timer = setInterval(() => {
+      loadChart("1d");
+    }, 60_000);
+    return () => clearInterval(timer);
+  }, [chartRange, loadChart]);
+
   async function handleCreateNote(e: React.FormEvent) {
     e.preventDefault();
     if (!noteTitle.trim()) return;
