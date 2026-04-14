@@ -9,6 +9,8 @@ import { notesRoutes } from "./notes.js";
 import { logsRoutes } from "./logs.js";
 import { pluginRoutes } from "./plugins.js";
 import { notificationRoutes } from "./notifications.js";
+import { analyticsRoutes } from "./analytics.js";
+import { optimizerRoutes } from "./optimizer.js";
 
 export async function registerRoutes(app: FastifyInstance) {
   await app.register(agentRoutes);
@@ -17,5 +19,7 @@ export async function registerRoutes(app: FastifyInstance) {
   await app.register(logsRoutes);
   await app.register(pluginRoutes);
   await app.register(notificationRoutes);
+  await app.register(analyticsRoutes);
+  await app.register(optimizerRoutes);
 }
 
