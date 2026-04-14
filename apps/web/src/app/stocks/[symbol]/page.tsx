@@ -15,7 +15,8 @@ const RANGES = ["1d", "1mo", "3mo", "6mo", "1y"] as const;
 type ChatMessage =
   | { role: "user"; content: string }
   | { role: "assistant"; content: string }
-  | { role: "step"; toolName: string; thought: string | null };
+  | { role: "step"; toolName: string; thought: string | null }
+  | { role: "agent_card"; agentRole: string; displayName: string; status: "thinking" | "done" | "error"; summary?: string; confidence?: number; latencyMs?: number };
 
 export default function StockDetailPage() {
   const params = useParams<{ symbol: string }>();
@@ -189,6 +190,20 @@ export default function StockDetailPage() {
             ...prev,
             { role: "assistant", content: finalAnswer },
           ]);
+        } else if (event.type === "agent_start") {
+          setChatMessages(prev => [...prev, {
+            role: "agent_card",
+            agentRole: event.role!,
+            displayName: event.displayName ?? event.role!,
+            status: "thinking"
+          }]);
+        } else if (event.type === "agent_result") {
+          const newStatus: "done" | "error" = event.agentSuccess ? "done" : "error";
+          setChatMessages(prev => prev.map(m =>
+            m.role === "agent_card" && m.agentRole === event.role
+              ? { ...m, status: newStatus, summary: event.agentSummary, confidence: event.agentConfidence, latencyMs: event.agentLatencyMs }
+              : m
+          ));
         } else if (event.type === "error") {
           setChatMessages((prev) => [
             ...prev,
@@ -420,6 +435,31 @@ export default function StockDetailPage() {
                         <span className="ml-1 italic">— {msg.thought}</span>
                       )}
                     </div>
+                  </div>
+                );
+              }
+              if (msg.role === "agent_card") {
+                return (
+                  <div key={i} className="rounded-lg border px-3 py-2 text-sm bg-indigo-50 border-indigo-200">
+                    <div className="flex items-center gap-2">
+                      {msg.status === "thinking" ? (
+                        <span className="inline-block h-3.5 w-3.5 animate-spin rounded-full border-2 border-indigo-400 border-t-transparent" />
+                      ) : msg.status === "done" ? (
+                        <span>✅</span>
+                      ) : (
+                        <span>❌</span>
+                      )}
+                      <span className="font-medium text-indigo-800">{msg.displayName}</span>
+                      {msg.status === "done" && msg.confidence != null && (
+                        <span className="ml-auto text-xs text-indigo-500">{Math.round(msg.confidence * 100)}%</span>
+                      )}
+                      {msg.status === "done" && msg.latencyMs != null && (
+                        <span className="text-xs text-gray-400">{(msg.latencyMs / 1000).toFixed(1)}s</span>
+                      )}
+                    </div>
+                    {msg.status !== "thinking" && msg.summary && (
+                      <p className="mt-1 text-xs text-gray-600 line-clamp-2">{msg.summary}</p>
+                    )}
                   </div>
                 );
               }
