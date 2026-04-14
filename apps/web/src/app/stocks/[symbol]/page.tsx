@@ -2,9 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
-import {
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-} from "recharts";
+import TradingViewChart, { type ChartMarker, type ChartLine } from "@/components/TradingViewChart";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
   getNotificationChannels, sendNotification, streamAgentAnalysis,
@@ -28,6 +26,8 @@ export default function StockDetailPage() {
   const [chartRange, setChartRange] = useState<string>("1mo");
   const [chartLoading, setChartLoading] = useState(false);
   const [chartError, setChartError] = useState<string | null>(null);
+  const [chartMarkers, setChartMarkers] = useState<ChartMarker[]>([]);
+  const [chartLines, setChartLines] = useState<ChartLine[]>([]);
 
   // News
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -111,6 +111,21 @@ export default function StockDetailPage() {
     finally { setNoteSaving(false); }
   }
 
+  function parseAnnotations(text: string) {
+    const match = text.match(/```chart_annotations\n([\s\S]*?)\n```/);
+    if (match) {
+      try {
+        const parsed = JSON.parse(match[1]);
+        if (parsed.markers) setChartMarkers(prev => [...prev, ...parsed.markers]);
+        if (parsed.lines) setChartLines(prev => [...prev, ...parsed.lines]);
+        return text.replace(match[0], "\n*[Chart updated with agent analysis]*\n");
+      } catch (err) {
+        console.error("Failed to parse chart annotations", err);
+      }
+    }
+    return text;
+  }
+
   async function handleAskAI(e: React.FormEvent) {
     e.preventDefault();
     const q = aiQuery.trim();
@@ -132,9 +147,10 @@ export default function StockDetailPage() {
           });
         }
       }
+      const finalAnswer = parseAnnotations(res.answer ?? "No answer returned.");
       newMsgs.push({
         role: "assistant",
-        content: res.answer ?? "No answer returned.",
+        content: finalAnswer,
       });
 
       setChatMessages((prev) => [...prev, ...newMsgs]);
@@ -167,9 +183,10 @@ export default function StockDetailPage() {
             { role: "step", toolName: event.toolName!, thought: event.thought ?? null },
           ]);
         } else if (event.type === "answer" && event.answer) {
+          const finalAnswer = parseAnnotations(event.answer!);
           setChatMessages((prev) => [
             ...prev,
-            { role: "assistant", content: event.answer! },
+            { role: "assistant", content: finalAnswer },
           ]);
         } else if (event.type === "error") {
           setChatMessages((prev) => [
@@ -298,15 +315,11 @@ export default function StockDetailPage() {
         {chartLoading && <p className="py-8 text-center text-gray-500">Loading chart…</p>}
         {chartError && <p className="py-8 text-center text-red-600">{chartError}</p>}
         {!chartLoading && !chartError && chartData.length > 0 && (
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={chartData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" tick={{ fontSize: 11 }} />
-              <YAxis domain={["auto", "auto"]} tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Line type="monotone" dataKey="close" stroke="#2563eb" dot={false} strokeWidth={2} />
-            </LineChart>
-          </ResponsiveContainer>
+          <TradingViewChart
+            data={chartData}
+            markers={chartMarkers}
+            lines={chartLines}
+          />
         )}
         {!chartLoading && !chartError && chartData.length === 0 && (
           <p className="py-8 text-center text-gray-400">No chart data available</p>

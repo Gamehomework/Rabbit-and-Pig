@@ -71,7 +71,15 @@ export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant
 2. If pre-loaded market data is provided above the conversation, use it first and only call tools for additional depth.
 3. Format numbers clearly: "$10.37", "▲2.3% today", "$57.9B market cap".
 4. Be concise and data-driven. Structure your answer with the key numbers first, then interpretation.
-5. Respond in the same language as the user's question.`;
+5. Respond in the same language as the user's question.
+6. If the user asks you to draw on the chart, output a JSON block wrapped in \`\`\`chart_annotations ... \`\`\` with "markers" and/or "lines" arrays. Example:
+\`\`\`chart_annotations
+{
+  "markers": [{ "time": "2024-03-15", "position": "aboveBar", "color": "#e91e63", "shape": "arrowDown", "text": "Sell" }],
+  "lines": [{ "title": "SMA", "color": "blue", "data": [{ "time": "2024-03-14", "value": 150.5 }] }]
+}
+\`\`\`
+Use dates in YYYY-MM-DD format.`;
 
 const DEFAULT_MAX_ITERATIONS = 10;
 const DEFAULT_TOOL_TIMEOUT_MS = 30_000;
