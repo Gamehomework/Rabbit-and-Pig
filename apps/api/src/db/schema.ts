@@ -159,3 +159,12 @@ export const agentDecisionLogs = sqliteTable(
   ],
 );
 
+// --- Optimizer tables ---
+
+export const userPreferences = sqliteTable("user_preferences", {
+  id: integer("id").primaryKey({ autoIncrement: true }),
+  key: text("key").notNull().unique(),
+  value: text("value").notNull(),
+  updatedAt: text("updated_at").default(sql`(datetime('now'))`).notNull(),
+});
+
