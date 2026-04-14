@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - heading "NOK" [level=1] [ref=e11]
+        - paragraph [ref=e12]: Stock Detail
+      - generic [ref=e13]:
+        - generic [ref=e14]:
+          - heading "Price Chart" [level=2] [ref=e15]
+          - generic [ref=e16]:
+            - button "1d" [ref=e17]
+            - button "1mo" [ref=e18]
+            - button "3mo" [ref=e19]
+            - button "6mo" [ref=e20]
+            - button "1y" [ref=e21]
+        - paragraph [ref=e22]: Loading chart…
+      - generic [ref=e23]:
+        - heading "Recent News" [level=2] [ref=e24]
+        - paragraph [ref=e25]: Loading news…
+        - list
+      - generic [ref=e26]:
+        - heading "Notes" [level=2] [ref=e27]
+        - generic [ref=e28]:
+          - textbox "Note title" [ref=e29]
+          - textbox "Note content…" [ref=e30]
+          - button "Add Note" [disabled] [ref=e31]
+      - generic [ref=e32]:
+        - heading "Ask AI" [level=2] [ref=e33]
+        - generic [ref=e34]:
+          - textbox "Ask about NOK…" [ref=e35]
+          - button "Ask" [disabled] [ref=e36]
+  - button "Open Next.js Dev Tools" [ref=e42] [cursor=pointer]:
+    - img [ref=e43]
+  - alert [ref=e46]

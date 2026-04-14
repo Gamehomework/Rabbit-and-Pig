@@ -1,0 +1,98 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - heading "NOK" [level=1] [ref=e12]
+          - paragraph [ref=e13]: Stock Detail
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - heading "Price Chart" [level=2] [ref=e16]
+            - generic [ref=e17]:
+              - button "1d" [ref=e18]
+              - button "1mo" [ref=e19]
+              - button "3mo" [ref=e20]
+              - button "6mo" [ref=e21]
+              - button "1y" [ref=e22]
+          - application [ref=e44]:
+            - generic [ref=e60]:
+              - generic [ref=e61]:
+                - generic [ref=e63]: 2026-03-23T13:30:00.000Z
+                - generic [ref=e65]: 2026-03-31T13:30:00.000Z
+                - generic [ref=e67]: 2026-04-13T13:30:00.000Z
+              - generic [ref=e68]:
+                - generic [ref=e70]: "7.8"
+                - generic [ref=e72]: "8.45"
+                - generic [ref=e74]: "9.1"
+                - generic [ref=e76]: "9.75"
+                - generic [ref=e78]: "10.4"
+        - generic [ref=e24]:
+          - heading "Recent News" [level=2] [ref=e25]
+          - list [ref=e79]:
+            - listitem [ref=e80]:
+              - 'link "Stock Market Today, April 13: Nokia Surges After Bank of America Upgrade Highlights Optical and AI Networking Demand" [ref=e81] [cursor=pointer]':
+                - /url: https://www.fool.com/coverage/stock-market-today/2026/04/13/stock-market-today-april-13-nokia-surges-after-bank-of-america-upgrade-highlights-optical-and-ai-networking-demand/?.tsrc=rss
+              - paragraph [ref=e82]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e83]:
+              - 'link "Tech, Media &amp; Telecom Roundup: Market Talk" [ref=e84] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/m/0bf9f2a1-37fe-32d3-9c62-fc4e8dc6b884/tech%2C-media-%26-telecom.html?.tsrc=rss
+              - paragraph [ref=e85]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e86]:
+              - link "Why Nokia Stock Is Skyrocketing Today" [ref=e87] [cursor=pointer]:
+                - /url: https://www.fool.com/investing/2026/04/13/why-nokia-stock-is-skyrocketing-today/?.tsrc=rss
+              - paragraph [ref=e88]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e89]:
+              - link "Nokia Stock Just Hit a New 52-Week High. Should You Chase the Rally Here?" [ref=e90] [cursor=pointer]:
+                - /url: https://www.barchart.com/story/news/1280152/nokia-stock-just-hit-a-new-52-week-high-should-you-chase-the-rally-here?.tsrc=rss
+              - paragraph [ref=e91]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e92]:
+              - link "European Equities Traded in the US as American Depositary Receipts Start Week on Flat Note in Monday Trading" [ref=e93] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/world-indices/articles/european-equities-traded-us-american-150439767.html?.tsrc=rss
+              - paragraph [ref=e94]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e95]:
+              - link "BofA upgrades Nokia to Buy on optical and hyperscaler growth; shares rise" [ref=e96] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/bofa-upgrades-nokia-buy-optical-121054767.html?.tsrc=rss
+              - paragraph [ref=e97]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e98]:
+              - link "RUCKUS Networks and Nokia Announce Early Access Availability for their Combined Solution—an Integrated Wi-Fi 7 and Fiber Optical LAN Solution" [ref=e99] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/ruckus-networks-nokia-announce-early-120000230.html?.tsrc=rss
+              - paragraph [ref=e100]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e101]:
+              - link "Demand for European patents exceeds 200 000 for first time, confirming Europe's competitiveness as a global tech hub" [ref=e102] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/demand-european-patents-exceeds-200-100600291.html?.tsrc=rss
+              - paragraph [ref=e103]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e104]:
+              - link "Nokia’s 5G And AI Moves Test Whether Share Momentum Can Last" [ref=e105] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/nokia-5g-ai-moves-test-121102031.html?.tsrc=rss
+              - paragraph [ref=e106]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e107]:
+              - link "T-Mobile (TMUS), Nvidia (NVDA) Integrate AI Applications on AI-RAN Infrastructure" [ref=e108] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/t-mobile-tmus-nvidia-nvda-050321718.html?.tsrc=rss
+              - paragraph [ref=e109]: Yahoo Finance · 4/10/2026
+        - generic [ref=e27]:
+          - heading "Notes" [level=2] [ref=e28]
+          - generic [ref=e29]:
+            - textbox "Note title" [ref=e30]
+            - textbox "Note content…" [ref=e31]
+            - button "Add Note" [disabled] [ref=e32]
+      - generic [ref=e34]:
+        - heading "Ask AI about NOK" [level=2] [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e122]: 分析NOK近期表現
+          - generic [ref=e126]: "根據預先加載的數據，我來為您分析NOK（諾基亞）的近期表現： ## NOK近期表現分析 ### 📈 當前股價表現 - **當前價格**: $10.37 USD - **今日漲幅**: ▲ 0.91 (9.62%) - **日內區間**: $9.69 – $10.48 - **52週區間**: $4.00 – $10.48 - **市值**: $57.9B - **本益比**: 79.77 - **成交量**: 147,859,968股 ### 📊 30天價格歷史總結 - **期間**: 2026-03-16 → 2026-04-13 - **30天漲幅**: **19.88%** (從$8.65漲至$10.37) - **30天高點**: $10.48 - **30天低點**: $7.79 - **平均日成交量**: 69,924,370股 ### 📰 近期新聞要點 1. **4/14/2026**: 諾基亞股價因美國銀行升級評級而飆升，強調光學和AI網絡需求 2. **4/14/2026**: 諾基亞股價今日為何飆升 3. **4/14/2026**: 諾基亞股價剛創52週新高，是否應該追漲？ ### 🔍 關鍵觀察 1. **強勁上漲趨勢**: 過去30天上漲近20%，今日單日漲幅達9.62% 2. **創52週新高**: 股價達到$10.48的52週高點 3. **高成交量**: 今日成交量1.48億股，遠高於30天平均的7,000萬股 4. **分析師看好**: 美國銀行升級評級，看好光學和AI網絡需求 ### ⚠️ 風險提示 - **高本益比**: 79.77的本益比相對較高 - **波動性**: 從$7.79到$10.48的30天區間顯示較大波動 - **追漲風險**: 股價已創52週新高，短期可能面臨獲利了結壓力 **總結**: NOK近期表現強勁，受分析師升級和AI網絡需求預期推動，但投資者需注意高估值和短期波動風險。"
+        - generic [ref=e39]:
+          - textbox "Ask about NOK…" [active] [ref=e40]
+          - button "Send" [disabled] [ref=e41]
+  - button "Open Next.js Dev Tools" [ref=e115] [cursor=pointer]:
+    - img [ref=e116]
+  - alert [ref=e119]
+  - generic [ref=e120]: "7.8"

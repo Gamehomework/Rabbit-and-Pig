@@ -1,0 +1,111 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Stock Detail
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e21]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - application [ref=e53]:
+            - generic [ref=e69]:
+              - generic [ref=e70]:
+                - generic [ref=e72]: 2026-03-23T13:30:00.000Z
+                - generic [ref=e74]: 2026-03-31T13:30:00.000Z
+                - generic [ref=e76]: 2026-04-13T13:30:00.000Z
+              - generic [ref=e77]:
+                - generic [ref=e79]: "42"
+                - generic [ref=e81]: "45"
+                - generic [ref=e83]: "48"
+                - generic [ref=e85]: "51"
+                - generic [ref=e87]: "54"
+        - generic [ref=e33]:
+          - heading "Recent News" [level=2] [ref=e34]
+          - list [ref=e88]:
+            - listitem [ref=e89]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e90] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e91]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e92]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e93] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e94]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e95]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e96] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e97]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e98]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e99] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e100]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e101]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e102] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e103]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e104]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e105] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e106]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e107]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e108] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e109]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e110]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e111] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e112]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e113]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e114] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e115]: Yahoo Finance · 4/3/2026
+            - listitem [ref=e116]:
+              - link "Assessing Tempus AI (TEM) Valuation After ALERT Cardiology Trial Results And Expanded Merck Collaboration" [ref=e117] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/assessing-tempus-ai-tem-valuation-200806307.html?.tsrc=rss
+              - paragraph [ref=e118]: Yahoo Finance · 4/2/2026
+        - generic [ref=e36]:
+          - heading "Notes" [level=2] [ref=e37]
+          - generic [ref=e38]:
+            - textbox "Note title" [ref=e39]
+            - textbox "Note content…" [ref=e40]
+            - button "Add Note" [disabled] [ref=e41]
+      - generic [ref=e43]:
+        - heading "Ask AI about TEM" [level=2] [ref=e45]
+        - generic [ref=e46]:
+          - generic [ref=e131]: 🚀 Run Autonomous Analysis
+          - generic [ref=e133]: ⚠️ Failed to fetch
+        - generic [ref=e48]:
+          - textbox "Ask about TEM…" [ref=e49]
+          - button "Send" [disabled] [ref=e50]
+  - button "Open Next.js Dev Tools" [ref=e124] [cursor=pointer]:
+    - img [ref=e125]
+  - alert [ref=e128]
+  - generic [ref=e129]: "42"

@@ -1,0 +1,89 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - link "← AAPL" [ref=e17] [cursor=pointer]:
+            - /url: /stocks/AAPL
+          - heading "🧠 Deep Analysis — AAPL" [level=1] [ref=e18]
+          - paragraph [ref=e19]: Multi-agent AI analysis with 6 specialist agents
+        - button "🚀 Start Deep Analysis" [ref=e87]
+      - generic [ref=e22]:
+        - heading "📎 News URLs (optional)" [level=2] [ref=e23]
+        - textbox "Paste news article URLs here, one per line... https://example.com/article-1 https://example.com/article-2" [ref=e24]:
+          - /placeholder: "Paste news article URLs here, one per line...\nhttps://example.com/article-1\nhttps://example.com/article-2"
+      - generic [ref=e88]: network error
+      - generic [ref=e25]:
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]:
+              - generic [ref=e29]: 📰
+              - heading "News Crawler" [level=3] [ref=e30]
+            - generic [ref=e31]: ❌
+          - paragraph [ref=e79]: No response from agent.
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - generic [ref=e34]:
+              - generic [ref=e35]: 📊
+              - heading "Fundamental Analyst" [level=3] [ref=e36]
+            - generic [ref=e37]: ✅
+          - generic [ref=e81]:
+            - paragraph [ref=e82]: Apple demonstrates exceptional financial strength with robust profitability metrics and solid revenue growth, but trades at premium valuation multiples. The company maintains strong cash generation capabilities and impressive margins, though its high P/E ratio and elevated debt-to-equity ratio warrant attention. Apple's balance sheet shows significant cash reserves but also substantial debt, creating a mixed picture of financial health.
+            - generic [ref=e83]:
+              - generic [ref=e84]: "Confidence: 50%"
+              - generic [ref=e85]: 38.1s
+        - generic [ref=e38]:
+          - generic [ref=e39]:
+            - generic [ref=e40]:
+              - generic [ref=e41]: 🔢
+              - heading "Quant Analyst" [level=3] [ref=e42]
+            - generic [ref=e43]: ✅
+          - generic [ref=e89]:
+            - paragraph [ref=e90]: AAPL shows mixed technical signals with current price ($259.20) trading above SMA20 ($253.74) but below SMA50 ($260.90). RSI at 61.5 indicates neutral-to-bullish momentum. MACD shows positive but weak momentum with histogram at 0.014. Price is near the middle Bollinger Band, suggesting consolidation. Risk metrics show strong Sharpe ratio (1.03) but recent volatility and max drawdown of -13.8% indicate elevated risk.
+            - generic [ref=e91]:
+              - generic [ref=e92]: "Confidence: 50%"
+              - generic [ref=e93]: 60.5s
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e47]: 🎯
+            - heading "Strategy Maker" [level=3] [ref=e48]
+          - generic [ref=e49]: ⏳
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]: ⚖️
+            - heading "Decision Maker" [level=3] [ref=e54]
+          - generic [ref=e55]: ⏳
+        - generic [ref=e57]:
+          - generic [ref=e58]:
+            - generic [ref=e59]: 📈
+            - heading "Visualizer" [level=3] [ref=e60]
+          - generic [ref=e61]: ⏳
+      - generic [ref=e73]:
+        - heading "🧠 Coordinator Thoughts" [level=2] [ref=e74]
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: I'll perform a comprehensive deep analysis of AAPL by invoking multiple specialist agents. Let me start by getting the latest quote and then proceed with the analysis.
+          - paragraph [ref=e77]: "Now let me get recent news to provide context for the news crawler:"
+          - paragraph [ref=e78]: "Now I'll begin the comprehensive analysis by invoking multiple specialist agents. Let me start with the news crawler to analyze recent news sentiment:"
+          - paragraph [ref=e80]: "Now let me invoke the fundamental analyst to examine Apple's financial health and valuation:"
+          - paragraph [ref=e86]: "Now let me invoke the quant analyst for technical analysis and risk metrics:"
+          - paragraph [ref=e94]: "Now let me invoke the strategist to develop a comprehensive trading strategy:"
+  - button "Open Next.js Dev Tools" [ref=e67] [cursor=pointer]:
+    - img [ref=e68]
+  - alert [ref=e71]

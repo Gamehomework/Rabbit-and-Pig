@@ -1,0 +1,135 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Stock Detail
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e157]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - application [ref=e55]:
+            - generic [ref=e71]:
+              - generic [ref=e72]:
+                - generic [ref=e74]: 2026-03-23T13:30:00.000Z
+                - generic [ref=e76]: 2026-03-31T13:30:00.000Z
+                - generic [ref=e78]: 2026-04-13T13:30:00.000Z
+              - generic [ref=e79]:
+                - generic [ref=e81]: "42"
+                - generic [ref=e83]: "45"
+                - generic [ref=e85]: "48"
+                - generic [ref=e87]: "51"
+                - generic [ref=e89]: "54"
+        - generic [ref=e33]:
+          - heading "Recent News" [level=2] [ref=e34]
+          - list [ref=e90]:
+            - listitem [ref=e91]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e92] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e93]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e94]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e95] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e96]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e97]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e98] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e99]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e100]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e101] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e102]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e103]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e104] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e105]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e106]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e107] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e108]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e109]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e110] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e111]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e112]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e113] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e114]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e115]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e116] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e117]: Yahoo Finance · 4/3/2026
+            - listitem [ref=e118]:
+              - link "Assessing Tempus AI (TEM) Valuation After ALERT Cardiology Trial Results And Expanded Merck Collaboration" [ref=e119] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/assessing-tempus-ai-tem-valuation-200806307.html?.tsrc=rss
+              - paragraph [ref=e120]: Yahoo Finance · 4/2/2026
+        - generic [ref=e36]:
+          - heading "Notes" [level=2] [ref=e37]
+          - generic [ref=e38]:
+            - textbox "Note title" [ref=e39]
+            - textbox "Note content…" [ref=e40]
+            - button "Add Note" [disabled] [ref=e41]
+      - generic [ref=e43]:
+        - heading "Ask AI about TEM" [level=2] [ref=e45]
+        - generic [ref=e46]:
+          - generic [ref=e122]: 🚀 Run Autonomous Analysis
+          - generic [ref=e123]:
+            - generic [ref=e124]: ⚙
+            - generic [ref=e125]:
+              - text: get_quote
+              - generic [ref=e126]: — I'll perform a comprehensive analysis of Tempus AI (TEM) using the available tools. Let me start by getting the current quote and then gather additional data for a complete picture.
+          - generic [ref=e127]:
+            - generic [ref=e128]: ⚙
+            - generic [ref=e129]: get_quote
+          - generic [ref=e143]:
+            - generic [ref=e144]: ⚙
+            - generic [ref=e145]:
+              - text: chart_data
+              - generic [ref=e146]: "— Now let me get the recent price history to analyze trends:"
+          - generic [ref=e147]:
+            - generic [ref=e148]: ⚙
+            - generic [ref=e149]: chart_data
+          - generic [ref=e150]:
+            - generic [ref=e151]: ⚙
+            - generic [ref=e152]:
+              - text: get_news
+              - generic [ref=e153]: "— Now let me get the latest news to understand recent developments:"
+          - generic [ref=e154]:
+            - generic [ref=e155]: ⚙
+            - generic [ref=e156]: get_news
+          - generic [ref=e159]: "# Comprehensive Analysis: Tempus AI, Inc. (TEM) ## Current Market Position **Price:** $45.98 USD ▲ $3.04 (+7.08%) today **Market Cap:** $8.25 billion **Today's Range:** $42.54 - $46.54 **Volume:** 5.68 million shares ## Recent Performance Analysis ### 3-Month Price Trend (Jan 14 - Apr 13, 2026) - **Starting Price (Jan 14):** $69.28 - **Current Price (Apr 13):** $45.98 - **3-Month Decline:** -33.6% - **3-Month High:** $73.26 (Feb 19) - **3-Month Low:** $41.73 (Mar 30) ### Key Price Movements: 1. **January Peak:** Stock traded around $69-73 range in mid-January 2. **Sharp Decline:** Significant drop from late January through February, bottoming around $50 3. **Further Weakness:** Continued decline in March, hitting 3-month low of $41.73 4. **Recent Recovery:** Bounced from April lows, showing 7.08% gain today ## Technical Observations - **52-Week Range:** $39.01 - $104.32 (currently near lower end) - **Current vs 52-Week High:** -55.9% below peak - **Support Level:** $42-43 range appears to be holding - **Resistance:** $46-47 level being tested today ## Recent News & Catalysts ### Positive Developments: 1. **New Service Launch (Apr 13):** Tempus launched automated \"Active Follow-Up\" service to support guideline-concordant care 2. **Strategic Collaboration (Apr 9):** Partnership with Gilead to advance oncology R&D through real-world evidence 3. **Conference Participation (Apr 8):** Scheduled to present at 25th Annual Needham Virtual Healthcare Conference 4. **ALERT Trial Results (Apr 2):** Positive cardiology trial results announced 5. **Merck Collaboration Expansion (Apr 1):** Expanded collaboration with Merck ### Market Sentiment: - Recent articles suggest TEM may be at a \"compelling entry point\" after recent weakness - Stock gained 17.9% over the past year despite recent pullback - Analyst coverage appears active with multiple research calls ## Financial Metrics - **P/E Ratio:** N/A (company likely not profitable yet) - **Trading Volume:** Above average today (5.68M vs typical ~4.6M) - **Liquidity:** Healthy trading volume indicates good market interest ## Outlook Summary ### Bullish Factors: 1. **Strong Today's Performance:** +7.08% gain on above-average volume 2. **Product Innovation:** New service launches and expanded collaborations 3. **Strategic Partnerships:** Gilead and Merck collaborations validate technology 4. **Oversold Condition:** Significant decline from highs may present buying opportunity 5. **Healthcare AI Growth:** Positioned in high-growth healthcare AI/analytics sector ### Bearish Factors: 1. **Significant Decline:** Down 33.6% over 3 months, 55.9% from 52-week high 2. **Profitability Concerns:** No P/E ratio suggests lack of profitability 3. **Volatility:** High beta stock with substantial price swings 4. **Market Sentiment:** Healthcare/AI sector facing valuation pressures ### Risk Assessment: - **High Risk/High Reward:** Typical for growth-stage healthcare AI company - **Valuation Sensitivity:** Highly sensitive to growth expectations and funding environment - **Execution Risk:** Dependent on successful commercialization of AI platform ## Investment Considerations **For Risk-Tolerant Investors:** Current levels may represent attractive entry point given: - Strong strategic partnerships - Innovative product pipeline - Oversold technical condition - Growing healthcare AI market **For Conservative Investors:** Exercise caution due to: - Lack of profitability - High volatility - Sector headwinds - Need for continued capital investment **Price Targets:** - **Near-term resistance:** $47-48 (recent highs) - **Support levels:** $42-43 (recent lows), $39 (52-week low) - **Recovery potential:** $50-55 range achievable with positive catalysts **Recommendation:** TEM appears to be at an inflection point with today's strong bounce. The combination of new product launches, strategic partnerships, and oversold technical conditions suggests potential for near-term recovery. However, investors should be prepared for continued volatility and monitor upcoming earnings/guidance closely."
+        - generic [ref=e48]:
+          - textbox "Ask about TEM…" [ref=e160]
+          - button "Send" [disabled] [ref=e50]
+  - button "Open Next.js Dev Tools" [ref=e138] [cursor=pointer]:
+    - img [ref=e139]
+  - alert [ref=e51]
+  - generic [ref=e142]: "42"

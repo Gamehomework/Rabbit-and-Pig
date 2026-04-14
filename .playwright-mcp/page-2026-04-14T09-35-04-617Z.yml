@@ -1,0 +1,46 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - heading "Stock Discovery" [level=1] [ref=e10]
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic:
+            - img
+          - textbox "Search by name or symbol (e.g. Nokia, AAPL)…" [ref=e13]
+        - button "Search" [ref=e14]
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: Sector
+          - combobox [ref=e19]:
+            - option "All Sectors" [selected]
+            - option "Technology"
+            - option "Healthcare"
+            - option "Financial Services"
+            - option "Consumer Cyclical"
+            - option "Industrials"
+            - option "Communication Services"
+            - option "Consumer Defensive"
+            - option "Energy"
+            - option "Utilities"
+            - option "Real Estate"
+            - option "Basic Materials"
+        - generic [ref=e20]:
+          - generic [ref=e21]: Min Cap ($B)
+          - spinbutton [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]: Max Cap ($B)
+          - spinbutton [ref=e25]
+        - generic [ref=e26]:
+          - generic [ref=e27]: Limit
+          - spinbutton [ref=e28]: "20"
+        - button "Screen" [ref=e29]
+  - alert [ref=e30]

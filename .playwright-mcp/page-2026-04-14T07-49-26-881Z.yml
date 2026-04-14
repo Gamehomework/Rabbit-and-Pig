@@ -1,0 +1,43 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - heading "NOK" [level=1] [ref=e12]
+          - paragraph [ref=e13]: Stock Detail
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - heading "Price Chart" [level=2] [ref=e16]
+            - generic [ref=e17]:
+              - button "1d" [ref=e18]
+              - button "1mo" [ref=e19]
+              - button "3mo" [ref=e20]
+              - button "6mo" [ref=e21]
+              - button "1y" [ref=e22]
+          - paragraph [ref=e23]: Loading chart…
+        - generic [ref=e24]:
+          - heading "Recent News" [level=2] [ref=e25]
+          - paragraph [ref=e26]: Loading news…
+          - list
+        - generic [ref=e27]:
+          - heading "Notes" [level=2] [ref=e28]
+          - generic [ref=e29]:
+            - textbox "Note title" [ref=e30]
+            - textbox "Note content…" [ref=e31]
+            - button "Add Note" [disabled] [ref=e32]
+      - generic [ref=e34]:
+        - heading "Ask AI about NOK" [level=2] [ref=e36]
+        - paragraph [ref=e38]: Ask anything about NOK…
+        - generic [ref=e39]:
+          - textbox "Ask about NOK…" [ref=e40]
+          - button "Send" [disabled] [ref=e41]
+  - alert [ref=e42]

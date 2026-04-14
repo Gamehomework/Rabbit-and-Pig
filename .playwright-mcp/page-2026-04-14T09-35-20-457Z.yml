@@ -1,0 +1,60 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - heading "Stock Discovery" [level=1] [ref=e10]
+      - generic [ref=e11]:
+        - generic [ref=e12]:
+          - generic:
+            - img
+          - textbox "Search by name or symbol (e.g. Nokia, AAPL)…" [active] [ref=e13]: Nokia
+        - button "Search" [ref=e14]
+        - button "Clear" [ref=e40]
+      - table [ref=e42]:
+        - rowgroup [ref=e43]:
+          - row "Symbol Name Exchange" [ref=e44]:
+            - columnheader "Symbol" [ref=e45]
+            - columnheader "Name" [ref=e46]
+            - columnheader "Exchange" [ref=e47]
+        - rowgroup [ref=e48]:
+          - row "NOK Nokia Corporation Sponsored NYSE" [ref=e49]:
+            - cell "NOK" [ref=e50]:
+              - link "NOK" [ref=e51] [cursor=pointer]:
+                - /url: /stocks/NOK
+            - cell "Nokia Corporation Sponsored" [ref=e52]
+            - cell "NYSE" [ref=e53]
+          - row "NOKIA.HE Nokia Corporation HEL" [ref=e54]:
+            - cell "NOKIA.HE" [ref=e55]:
+              - link "NOKIA.HE" [ref=e56] [cursor=pointer]:
+                - /url: /stocks/NOKIA.HE
+            - cell "Nokia Corporation" [ref=e57]
+            - cell "HEL" [ref=e58]
+          - row "TYRES.HE Nokian Tyres Plc HEL" [ref=e59]:
+            - cell "TYRES.HE" [ref=e60]:
+              - link "TYRES.HE" [ref=e61] [cursor=pointer]:
+                - /url: /stocks/TYRES.HE
+            - cell "Nokian Tyres Plc" [ref=e62]
+            - cell "HEL" [ref=e63]
+          - row "NOKI.VI NOKIA OYJ Vienna" [ref=e64]:
+            - cell "NOKI.VI" [ref=e65]:
+              - link "NOKI.VI" [ref=e66] [cursor=pointer]:
+                - /url: /stocks/NOKI.VI
+            - cell "NOKIA OYJ" [ref=e67]
+            - cell "Vienna" [ref=e68]
+          - row "NOKIA-SEK.ST Nokia Corporation Stockholm" [ref=e69]:
+            - cell "NOKIA-SEK.ST" [ref=e70]:
+              - link "NOKIA-SEK.ST" [ref=e71] [cursor=pointer]:
+                - /url: /stocks/NOKIA-SEK.ST
+            - cell "Nokia Corporation" [ref=e72]
+            - cell "Stockholm" [ref=e73]
+  - button "Open Next.js Dev Tools" [ref=e36] [cursor=pointer]:
+    - img [ref=e37]
+  - alert [ref=e30]
