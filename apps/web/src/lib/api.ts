@@ -381,6 +381,32 @@ export interface AgentStreamEvent {
   error?: string;
 }
 
+// --- Multi-Agent Streaming ---
+
+export interface MultiAgentEvent {
+  type: "session" | "coordinator_thought" | "agent_start" | "agent_result" | "agent_step" | "agent_tool_result" | "final_report" | "error";
+  sessionId?: number;
+  role?: string;
+  displayName?: string;
+  query?: string;
+  iteration?: number;
+  thought?: string;
+  summary?: string;
+  data?: Record<string, unknown>;
+  confidence?: number;
+  success?: boolean;
+  agentOutputs?: unknown[];
+  totalLatencyMs?: number;
+  message?: string;
+  error?: string;
+  toolName?: string;
+  toolInput?: unknown;
+  output?: unknown;
+  sources?: string[];
+  steps?: unknown[];
+  latencyMs?: number;
+}
+
 /**
  * Stream agent analysis via SSE (POST /api/agent/stream).
  * Calls `onEvent` for each parsed SSE event.
@@ -451,3 +477,72 @@ export function streamAgentAnalysis(
   return controller;
 }
 
+
+
+/**
+ * Stream multi-agent analysis via SSE (POST /api/agent/multi-stream).
+ * Returns an AbortController so the caller can cancel.
+ */
+export function streamMultiAgentAnalysis(
+  query: string,
+  options: { stockSymbol?: string; urls?: string[] },
+  onEvent: (event: MultiAgentEvent) => void,
+  onError?: (err: Error) => void,
+  onDone?: () => void,
+): AbortController {
+  const controller = new AbortController();
+
+  (async () => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/agent/multi-stream`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query, ...options }),
+        signal: controller.signal,
+      });
+
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`API error ${res.status}: ${body}`);
+      }
+
+      const reader = res.body?.getReader();
+      if (!reader) throw new Error("No response body");
+
+      const decoder = new TextDecoder();
+      let buffer = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+
+        const lines = buffer.split("\n");
+        buffer = lines.pop() ?? "";
+
+        for (const line of lines) {
+          if (line.startsWith("data: ")) {
+            const data = line.slice(6).trim();
+            if (data === "[DONE]") {
+              onDone?.();
+              return;
+            }
+            try {
+              const event = JSON.parse(data) as MultiAgentEvent;
+              onEvent(event);
+            } catch {
+              // skip malformed JSON
+            }
+          }
+        }
+      }
+      onDone?.();
+    } catch (err) {
+      if ((err as Error).name === "AbortError") return;
+      onError?.(err instanceof Error ? err : new Error(String(err)));
+    }
+  })();
+
+  return controller;
+}

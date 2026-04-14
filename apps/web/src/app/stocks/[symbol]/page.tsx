@@ -1,6 +1,6 @@
 "use client";
 
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
@@ -20,6 +20,7 @@ type ChatMessage =
 
 export default function StockDetailPage() {
   const params = useParams<{ symbol: string }>();
+  const router = useRouter();
   const symbol = (params.symbol ?? "").toUpperCase();
 
   // Chart
@@ -221,6 +222,10 @@ export default function StockDetailPage() {
             <p className="text-gray-500">Stock Detail</p>
           </div>
           <div className="flex gap-2">
+            <button onClick={() => router.push(`/stocks/${symbol}/deep-analysis`)}
+              className="rounded bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700">
+              🧠 Deep Analysis
+            </button>
             <button onClick={handleRunAnalysis} disabled={isRunning}
               className="rounded bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 disabled:opacity-50">
               {isRunning ? "⏳ Running…" : "▶ Run Autonomous Analysis"}
