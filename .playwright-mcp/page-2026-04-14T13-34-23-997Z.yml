@@ -1,0 +1,301 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Stock Detail
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e137]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - table [ref=e55]:
+            - row [ref=e56]:
+              - cell
+              - cell [ref=e57]:
+                - link "Charting by TradingView" [ref=e61] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/TEM
+                  - img [ref=e62]
+              - cell [ref=e66]
+            - row [ref=e70]:
+              - cell
+              - cell [ref=e71]
+              - cell [ref=e75]
+        - generic [ref=e33]:
+          - heading "Recent News" [level=2] [ref=e34]
+          - list [ref=e78]:
+            - listitem [ref=e79]:
+              - link "Tempus Announces 31 Abstracts for Presentation at the American Association for Cancer Research Annual Meeting 2026" [ref=e80] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-31-abstracts-presentation-123000142.html?.tsrc=rss
+              - paragraph [ref=e81]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e82]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e83] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e84]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e85]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e86] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e87]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e88]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e89] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e90]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e91]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e92] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e93]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e94]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e95] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e96]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e97]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e98] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e99]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e100]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e101] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e102]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e103]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e104] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e105]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e106]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e107] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e108]: Yahoo Finance · 4/3/2026
+        - generic [ref=e36]:
+          - heading "Notes" [level=2] [ref=e37]
+          - generic [ref=e38]:
+            - textbox "Note title" [ref=e39]
+            - textbox "Note content…" [ref=e40]
+            - button "Add Note" [disabled] [ref=e41]
+      - generic [ref=e43]:
+        - heading "Ask AI about TEM" [level=2] [ref=e45]
+        - generic [ref=e46]:
+          - generic [ref=e110]: 🚀 Run Autonomous Analysis
+          - generic [ref=e124]:
+            - generic [ref=e125]: ⚙
+            - generic [ref=e126]:
+              - text: get_quote
+              - generic [ref=e127]: — I'll perform a comprehensive analysis of Tempus AI (TEM) using the available data and tools. Let me start by gathering current information and supplementing the pre-loaded data.
+          - generic [ref=e128]:
+            - generic [ref=e129]: ⚙
+            - generic [ref=e130]: get_quote
+          - generic [ref=e131]:
+            - generic [ref=e132]: ⚙
+            - generic [ref=e133]: chart_data
+          - generic [ref=e134]:
+            - generic [ref=e135]: ⚙
+            - generic [ref=e136]: chart_data
+          - generic [ref=e138]:
+            - generic [ref=e139]: ⚙
+            - generic [ref=e140]: get_news
+          - generic [ref=e141]:
+            - generic [ref=e142]: ⚙
+            - generic [ref=e143]: get_news
+          - generic [ref=e145]:
+            - 'heading "Comprehensive Analysis: Tempus AI, Inc. (TEM)" [level=1] [ref=e146]'
+            - heading "Current Market Position" [level=2] [ref=e147]
+            - paragraph [ref=e148]:
+              - strong [ref=e149]: "Price:"
+              - text: $48.75 USD
+              - strong [ref=e150]: ▲ 6.02% today
+              - text: (up $2.77 from previous close of $45.98)
+              - strong [ref=e151]: "Day Range:"
+              - text: $47.62 - $48.76
+              - strong [ref=e152]: "52-Week Range:"
+              - text: $39.01 - $104.32 (currently near lower end)
+              - strong [ref=e153]: "Market Cap:"
+              - text: $8.75B
+              - strong [ref=e154]: "P/E Ratio:"
+              - text: N/A (company likely not yet profitable)
+              - strong [ref=e155]: "Volume:"
+              - text: 488,286 shares
+            - heading "Recent Price Performance Analysis" [level=2] [ref=e156]
+            - heading "3-Month Trend (Jan 14 - Apr 14, 2026):" [level=3] [ref=e157]
+            - list [ref=e158]:
+              - listitem [ref=e159]:
+                - strong [ref=e160]: "Starting Price:"
+                - text: $69.28 (Jan 14)
+              - listitem [ref=e161]:
+                - strong [ref=e162]: "Current Price:"
+                - text: $48.75
+              - listitem [ref=e163]:
+                - strong [ref=e164]: "3-Month Change:"
+                - strong [ref=e165]: "-29.6%"
+                - text: (significant decline)
+              - listitem [ref=e166]:
+                - strong [ref=e167]: "3-Month High:"
+                - text: $73.26 (Jan 15)
+              - listitem [ref=e168]:
+                - strong [ref=e169]: "3-Month Low:"
+                - text: $41.73 (Mar 30)
+              - listitem [ref=e170]:
+                - strong [ref=e171]: "Current Position:"
+                - text: 22.8% above 3-month low, 33.4% below 3-month high
+            - heading "Key Price Movements:" [level=3] [ref=e172]
+            - list [ref=e173]:
+              - listitem [ref=e174]:
+                - strong [ref=e175]: "January Peak:"
+                - text: Stock reached all-time high of $73.26 in mid-January
+              - listitem [ref=e176]:
+                - strong [ref=e177]: "Steady Decline:"
+                - text: Gradual sell-off through February and March
+              - listitem [ref=e178]:
+                - strong [ref=e179]: "March Bottom:"
+                - text: Hit 3-month low of $41.73 on March 30
+              - listitem [ref=e180]:
+                - strong [ref=e181]: "Recent Recovery:"
+                - text: Bounced from lows, currently up 17% from March bottom
+            - heading "30-Day Performance (from pre-loaded data):" [level=3] [ref=e182]
+            - list [ref=e183]:
+              - listitem [ref=e184]:
+                - strong [ref=e185]: "30-Day Change:"
+                - text: "-4.26% (from $50.88 to $48.72)"
+              - listitem [ref=e186]:
+                - strong [ref=e187]: "30-Day High:"
+                - text: $52.67
+              - listitem [ref=e188]:
+                - strong [ref=e189]: "30-Day Low:"
+                - text: $41.73
+              - listitem [ref=e190]:
+                - strong [ref=e191]: "Avg Daily Volume:"
+                - text: 4.39M (significantly higher than today's volume)
+            - heading "Recent News & Catalysts" [level=2] [ref=e192]
+            - heading "Positive Developments:" [level=3] [ref=e193]:
+              - strong [ref=e194]: "Positive Developments:"
+            - list [ref=e195]:
+              - listitem [ref=e196]:
+                - strong [ref=e197]: AACR 2026 Presentations
+                - text: "(Apr 14): 31 abstracts accepted for presentation at major cancer research conference"
+              - listitem [ref=e198]:
+                - strong [ref=e199]: New Service Launch
+                - text: "(Apr 13): Automated \"Active Follow-Up\" service to support guideline-concordant care"
+              - listitem [ref=e200]:
+                - strong [ref=e201]: Strategic Collaboration
+                - text: "(Apr 9): Partnership with Gilead to advance oncology R&D through real-world evidence"
+              - listitem [ref=e202]:
+                - strong [ref=e203]: Conference Presentation
+                - text: "(Apr 8): Scheduled to present at Needham Virtual Healthcare Conference"
+            - heading "Market Sentiment:" [level=3] [ref=e204]:
+              - strong [ref=e205]: "Market Sentiment:"
+            - list [ref=e206]:
+              - listitem [ref=e207]: Recent articles suggest TEM may be at a "compelling entry point" after recent weakness
+              - listitem [ref=e208]: Stock gained 17.9% over the past year despite recent pullback
+              - listitem [ref=e209]: Positive coverage of ALERT trial results (Apr 2)
+            - heading "Technical Analysis" [level=2] [ref=e210]
+            - heading "Support & Resistance Levels:" [level=3] [ref=e211]:
+              - strong [ref=e212]: "Support & Resistance Levels:"
+            - list [ref=e213]:
+              - listitem [ref=e214]:
+                - strong [ref=e215]: "Immediate Support:"
+                - text: $45.50-$46.00 (recent consolidation area)
+              - listitem [ref=e216]:
+                - strong [ref=e217]: "Strong Support:"
+                - text: $41.73 (March low)
+              - listitem [ref=e218]:
+                - strong [ref=e219]: "Resistance:"
+                - text: $52.67 (30-day high), then $59.96 (Feb high)
+            - heading "Volume Analysis:" [level=3] [ref=e220]:
+              - strong [ref=e221]: "Volume Analysis:"
+            - list [ref=e222]:
+              - listitem [ref=e223]: Today's volume (488K) is below 30-day average (4.39M)
+              - listitem [ref=e224]: Higher volume during declines suggests distribution
+              - listitem [ref=e225]: Recent bounce from lows on moderate volume
+            - heading "Fundamental Outlook" [level=2] [ref=e226]
+            - heading "Strengths:" [level=3] [ref=e227]:
+              - strong [ref=e228]: "Strengths:"
+            - list [ref=e229]:
+              - listitem [ref=e230]:
+                - strong [ref=e231]: "Growth Potential:"
+                - text: Operating in high-growth AI healthcare sector
+              - listitem [ref=e232]:
+                - strong [ref=e233]: "Strategic Partnerships:"
+                - text: Collaboration with Gilead adds credibility
+              - listitem [ref=e234]:
+                - strong [ref=e235]: "Conference Presence:"
+                - text: Strong showing at major medical conferences
+              - listitem [ref=e236]:
+                - strong [ref=e237]: "Service Expansion:"
+                - text: Launching new automated healthcare services
+            - heading "Risks:" [level=3] [ref=e238]:
+              - strong [ref=e239]: "Risks:"
+            - list [ref=e240]:
+              - listitem [ref=e241]:
+                - strong [ref=e242]: "Valuation:"
+                - text: No P/E ratio suggests company may not be profitable
+              - listitem [ref=e243]:
+                - strong [ref=e244]: "Volatility:"
+                - text: Stock down 30% from January highs
+              - listitem [ref=e245]:
+                - strong [ref=e246]: "Market Position:"
+                - text: Trading near lower end of 52-week range
+              - listitem [ref=e247]:
+                - strong [ref=e248]: "Sector Headwinds:"
+                - text: Healthcare/AI stocks facing valuation pressure
+            - heading "Summary Outlook" [level=2] [ref=e249]
+            - paragraph [ref=e250]:
+              - strong [ref=e251]: "Short-term (1-3 months):"
+              - strong [ref=e252]: Cautiously Bullish
+            - list [ref=e253]:
+              - listitem [ref=e254]: Stock showing signs of bottoming after 30% decline
+              - listitem [ref=e255]: Positive news flow with conference presentations and new services
+              - listitem [ref=e256]: Technical support at $41.73 holding strong
+              - listitem [ref=e257]: Today's 6% gain suggests renewed buying interest
+            - paragraph [ref=e258]:
+              - strong [ref=e259]: "Medium-term (3-12 months):"
+              - strong [ref=e260]: Neutral to Positive
+            - list [ref=e261]:
+              - listitem [ref=e262]: Depends on execution of strategic partnerships
+              - listitem [ref=e263]: Healthcare AI adoption trends remain favorable
+              - listitem [ref=e264]: Need to demonstrate path to profitability
+              - listitem [ref=e265]: Current valuation may be more reasonable after correction
+            - paragraph [ref=e266]:
+              - strong [ref=e267]: "Key Levels to Watch:"
+            - list [ref=e268]:
+              - listitem [ref=e269]:
+                - strong [ref=e270]: "Break above $52.67:"
+                - text: Could signal trend reversal
+              - listitem [ref=e271]:
+                - strong [ref=e272]: "Hold above $45.50:"
+                - text: Maintains recent recovery momentum
+              - listitem [ref=e273]:
+                - strong [ref=e274]: "Break below $41.73:"
+                - text: Would be bearish, could test $39.01 (52-week low)
+            - paragraph [ref=e275]:
+              - strong [ref=e276]: "Investment Consideration:"
+              - text: TEM appears to be finding support after a significant correction. The combination of positive news flow, strategic partnerships, and technical support suggests the worst of the selling may be over. However, investors should monitor volume on up days and watch for sustained moves above key resistance levels.
+        - generic [ref=e48]:
+          - textbox "Ask about TEM…" [ref=e277]
+          - button "Send" [disabled] [ref=e50]
+  - button "Open Next.js Dev Tools" [ref=e119] [cursor=pointer]:
+    - img [ref=e120]
+  - alert [ref=e123]

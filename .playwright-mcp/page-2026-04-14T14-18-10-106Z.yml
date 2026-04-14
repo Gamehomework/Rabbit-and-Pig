@@ -1,0 +1,187 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "TEM" [level=1] [ref=e17]
+            - paragraph [ref=e18]: Stock Detail
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "⏳ Running…" [disabled] [ref=e118]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - table [ref=e151]:
+            - row [ref=e152]:
+              - cell
+              - cell [ref=e153]:
+                - link "Charting by TradingView" [ref=e157] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/TEM
+                  - img [ref=e158]
+              - cell [ref=e162]
+            - row [ref=e166]:
+              - cell
+              - cell [ref=e167]
+              - cell [ref=e171]
+        - generic [ref=e33]:
+          - heading "Recent News" [level=2] [ref=e34]
+          - list [ref=e77]:
+            - listitem [ref=e78]:
+              - link "Tempus Announces 31 Abstracts for Presentation at the American Association for Cancer Research Annual Meeting 2026" [ref=e79] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-31-abstracts-presentation-123000142.html?.tsrc=rss
+              - paragraph [ref=e80]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e81]:
+              - 'link "Nike downgraded, Starbucks upgraded: Wall Street''s top analyst calls" [ref=e82] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/news/netflix-resumed-starbucks-downgraded-wall-133343741.html?.tsrc=rss
+              - paragraph [ref=e83]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e84]:
+              - link "Tempus Launches Automated \"Active Follow-Up\" Service to Support Guideline-Concordant Care" [ref=e85] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-launches-automated-active-support-123000147.html?.tsrc=rss
+              - paragraph [ref=e86]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e87]:
+              - 'link "Here Are Monday’s Top Wall Street Analyst Research Calls: Adobe, Best Buy, Bilibili, Constellation Brands, CoreWeave, Nike, Starbucks, T-Mobile, and More" [ref=e88] [cursor=pointer]':
+                - /url: https://247wallst.com/investing/2026/04/13/here-are-mondays-top-wall-street-analyst-research-calls-adobe-best-buy-bilibili-constellation-brands-coreweave-nike-starbucks-t-mobile-and-more/?.tsrc=rss
+              - paragraph [ref=e89]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e90]:
+              - link "Is Tempus AI (TEM) Offering A Compelling Entry Point After Recent Share Price Weakness" [ref=e91] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tempus-ai-tem-offering-compelling-071008112.html?.tsrc=rss
+              - paragraph [ref=e92]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e93]:
+              - 'link "TEM Stock Gains 17.9% in a Year: Time to Buy, Hold or Sell?" [ref=e94] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/markets/stocks/articles/tem-stock-gains-17-9-160200691.html?.tsrc=rss
+              - paragraph [ref=e95]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e96]:
+              - link "Tempus Announces Strategic Collaboration with Gilead to Advance Oncology R&amp;D Through RWE" [ref=e97] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-announces-strategic-collaboration-gilead-123000730.html?.tsrc=rss
+              - paragraph [ref=e98]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e99]:
+              - link "Tempus to Present at the 25th Annual Needham Virtual Healthcare Conference" [ref=e100] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-present-25th-annual-needham-200100126.html?.tsrc=rss
+              - paragraph [ref=e101]: Yahoo Finance · 4/9/2026
+            - listitem [ref=e102]:
+              - link "What's Driving TEM Data and Applications Arm's Robust Growth?" [ref=e103] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/whats-driving-tem-data-applications-182400570.html?.tsrc=rss
+              - paragraph [ref=e104]: Yahoo Finance · 4/8/2026
+            - listitem [ref=e105]:
+              - link "Tempus AI Stock Gains Following the ALERT Trial Result Announcement" [ref=e106] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/healthcare/articles/tempus-ai-stock-gains-following-175600886.html?.tsrc=rss
+              - paragraph [ref=e107]: Yahoo Finance · 4/3/2026
+        - generic [ref=e36]:
+          - heading "Notes" [level=2] [ref=e37]
+          - generic [ref=e38]:
+            - textbox "Note title" [ref=e39]
+            - textbox "Note content…" [ref=e40]
+            - button "Add Note" [disabled] [ref=e41]
+      - generic [ref=e43]:
+        - heading "Ask AI about TEM" [level=2] [ref=e45]
+        - generic [ref=e46]:
+          - generic [ref=e120]: 🚀 Run Autonomous Analysis
+          - generic [ref=e121]:
+            - generic [ref=e122]: ⚙
+            - generic [ref=e123]:
+              - text: get_quote
+              - generic [ref=e124]: — I'll perform a comprehensive autonomous analysis of TEM (Tempus AI, Inc.) by orchestrating multiple specialist agents. Let me start with the current data and then delegate to specialists for deeper analysis.
+          - generic [ref=e125]:
+            - generic [ref=e126]: ⚙
+            - generic [ref=e127]: get_quote
+          - generic [ref=e131]:
+            - generic [ref=e132]: ⚙
+            - generic [ref=e133]:
+              - text: invoke_agent
+              - generic [ref=e134]: "— Now I'll invoke multiple specialist agents to perform a comprehensive analysis:"
+          - generic [ref=e135]:
+            - generic [ref=e136]:
+              - generic [ref=e137]: ✅
+              - generic [ref=e138]: 📊 Fundamental Analyst
+              - generic [ref=e139]: 50%
+              - generic [ref=e140]: 28.4s
+            - paragraph [ref=e141]: Tempus AI is a healthcare technology company focused on precision medicine with strong revenue growth but currently unprofitable. The company operates in the Health Information Services sector with a $8.64B market cap. While showing impressive 83% revenue growth and solid gross margins of 62.7%, the company is in heavy investment mode with significant losses and high debt levels. The business model leverages AI for clinical data analysis but faces challenges in achieving profitability.
+          - generic [ref=e142]:
+            - generic [ref=e143]: ⚙
+            - generic [ref=e144]: invoke_agent
+          - generic [ref=e145]:
+            - generic [ref=e146]: ⚙
+            - generic [ref=e147]: invoke_agent
+          - generic [ref=e174]:
+            - generic [ref=e175]:
+              - generic [ref=e176]: ✅
+              - generic [ref=e177]: 🔢 Quant Analyst
+              - generic [ref=e178]: 50%
+              - generic [ref=e179]: 54.0s
+            - paragraph [ref=e180]: TEM stock exhibits a volatile sideways trend with significant bearish momentum over the past year. The stock has experienced a dramatic decline from highs above $103 to current levels around $48, representing a ~53% drawdown. Technical indicators show oversold conditions but with weak momentum signals. The stock shows high volatility and elevated risk metrics, with a beta of 2.62 indicating it moves more than twice as much as the market.
+          - generic [ref=e181]:
+            - generic [ref=e182]: ⚙
+            - generic [ref=e183]: invoke_agent
+          - generic [ref=e184]:
+            - generic [ref=e185]: ⚙
+            - generic [ref=e186]: invoke_agent
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - generic [ref=e189]: ❌
+              - generic [ref=e190]: 📰 News Crawler
+            - paragraph [ref=e191]: No response from agent.
+          - generic [ref=e192]:
+            - generic [ref=e193]: ⚙
+            - generic [ref=e194]: invoke_agent
+          - generic [ref=e195]:
+            - generic [ref=e196]: ⚙
+            - generic [ref=e197]:
+              - text: invoke_agent
+              - generic [ref=e198]: "— Now let me invoke the strategist agent to synthesize all this information:"
+          - generic [ref=e199]:
+            - generic [ref=e200]:
+              - generic [ref=e201]: ✅
+              - generic [ref=e202]: 🎯 Strategy Maker
+              - generic [ref=e203]: 50%
+              - generic [ref=e204]: 16.5s
+            - paragraph [ref=e205]: Speculative growth play with high risk/reward profile. TEM offers exposure to AI-driven precision medicine with strong revenue growth but significant financial and technical headwinds. Suitable only for risk-tolerant investors with long-term horizon.
+          - generic [ref=e206]:
+            - generic [ref=e207]: ⚙
+            - generic [ref=e208]: invoke_agent
+          - generic [ref=e209]:
+            - generic [ref=e210]: ⚙
+            - generic [ref=e211]:
+              - text: invoke_agent
+              - generic [ref=e212]: "— Finally, let me get a final recommendation from the decision maker:"
+          - generic [ref=e213]:
+            - generic [ref=e214]:
+              - generic [ref=e215]: ✅
+              - generic [ref=e216]: ⚖️ Decision Maker
+              - generic [ref=e217]: 65%
+              - generic [ref=e218]: 21.2s
+            - paragraph [ref=e219]: Tempus AI presents a classic high-risk, high-reward growth investment. While its AI-driven precision medicine platform shows impressive 83% revenue growth and strong industry positioning, the company remains deeply unprofitable with extreme financial leverage and significant technical headwinds. Current valuation appears stretched given the substantial execution risk.
+          - generic [ref=e220]:
+            - generic [ref=e221]: ⚙
+            - generic [ref=e222]: invoke_agent
+          - generic [ref=e129]: Running analysis…
+        - generic [ref=e48]:
+          - textbox "Analysis in progress…" [disabled] [ref=e130]
+          - button "Send" [disabled] [ref=e50]
+  - button "Open Next.js Dev Tools" [ref=e113] [cursor=pointer]:
+    - img [ref=e114]
+  - alert [ref=e117]
