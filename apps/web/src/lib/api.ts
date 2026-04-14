@@ -218,7 +218,8 @@ export interface Plugin {
 }
 
 export async function getPlugins(): Promise<Plugin[]> {
-  return fetchApi<Plugin[]>("/api/plugins");
+  const res = await fetchApi<{ plugins: Plugin[] }>("/api/plugins");
+  return res.plugins ?? [];
 }
 
 export async function installPlugin(data: { name: string; source?: string; sourceUri?: string }): Promise<Plugin> {
