@@ -78,7 +78,8 @@ export async function buildStockContext(symbol: string): Promise<string> {
 
   // ── 30-day chart summary ──
   if (chartResult.status === "fulfilled") {
-    const quotes = chartResult.value.quotes.filter((q) => q.close != null);
+    const chartData = chartResult.value as { quotes: Array<{ date: Date; close?: number | null; high?: number | null; low?: number | null; volume?: number | null }> };
+    const quotes = chartData.quotes.filter((q) => q.close != null);
     if (quotes.length >= 2) {
       const first = quotes[0];
       const last = quotes[quotes.length - 1];

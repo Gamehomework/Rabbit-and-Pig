@@ -39,20 +39,18 @@ export async function stockRoutes(app: FastifyInstance) {
     if (!q) return reply.status(400).send({ error: "q is required", statusCode: 400 });
 
     try {
-      const result = await yf.search(q, { quotesCount: 15, newsCount: 0 }, { validateResult: false });
+      const result = await yf.search(q, { quotesCount: 15, newsCount: 0 }, { validateResult: false }) as { quotes?: Array<Record<string, unknown>> };
       const quotes = (result.quotes ?? [])
-        .filter((item) => {
-          const typed = item as { quoteType?: string; symbol?: string; shortname?: string; longname?: string; exchDisp?: string };
-          return typed.quoteType === "EQUITY" && typed.symbol;
+        .filter((item: Record<string, unknown>) => {
+          return item.quoteType === "EQUITY" && item.symbol;
         })
         .slice(0, 10)
-        .map((item) => {
-          const typed = item as { quoteType?: string; symbol?: string; shortname?: string; longname?: string; exchDisp?: string };
+        .map((item: Record<string, unknown>) => {
           return {
-            symbol: typed.symbol!,
-            name: typed.shortname ?? typed.longname ?? typed.symbol!,
-            exchange: typed.exchDisp ?? "",
-            type: typed.quoteType ?? "EQUITY",
+            symbol: item.symbol as string,
+            name: (item.shortname ?? item.longname ?? item.symbol) as string,
+            exchange: (item.exchDisp ?? "") as string,
+            type: (item.quoteType ?? "EQUITY") as string,
           };
         });
       return quotes;

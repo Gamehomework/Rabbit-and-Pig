@@ -27,6 +27,7 @@ export interface Stock {
   dividendYield: number | null;
   weekHigh52: number | null;
   weekLow52: number | null;
+  price: number | null;
 }
 
 export interface StockScreenParams {
