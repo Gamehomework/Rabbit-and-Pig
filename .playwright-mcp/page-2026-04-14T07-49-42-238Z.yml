@@ -1,0 +1,96 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - heading "NOK" [level=1] [ref=e12]
+          - paragraph [ref=e13]: Stock Detail
+        - generic [ref=e14]:
+          - generic [ref=e15]:
+            - heading "Price Chart" [level=2] [ref=e16]
+            - generic [ref=e17]:
+              - button "1d" [ref=e18]
+              - button "1mo" [ref=e19]
+              - button "3mo" [ref=e20]
+              - button "6mo" [ref=e21]
+              - button "1y" [ref=e22]
+          - application [ref=e45]:
+            - generic [ref=e61]:
+              - generic [ref=e62]:
+                - generic [ref=e64]: 2026-03-23T13:30:00.000Z
+                - generic [ref=e66]: 2026-03-31T13:30:00.000Z
+                - generic [ref=e68]: 2026-04-13T13:30:00.000Z
+              - generic [ref=e69]:
+                - generic [ref=e71]: "7.8"
+                - generic [ref=e73]: "8.45"
+                - generic [ref=e75]: "9.1"
+                - generic [ref=e77]: "9.75"
+                - generic [ref=e79]: "10.4"
+        - generic [ref=e24]:
+          - heading "Recent News" [level=2] [ref=e25]
+          - list [ref=e80]:
+            - listitem [ref=e81]:
+              - 'link "Stock Market Today, April 13: Nokia Surges After Bank of America Upgrade Highlights Optical and AI Networking Demand" [ref=e82] [cursor=pointer]':
+                - /url: https://www.fool.com/coverage/stock-market-today/2026/04/13/stock-market-today-april-13-nokia-surges-after-bank-of-america-upgrade-highlights-optical-and-ai-networking-demand/?.tsrc=rss
+              - paragraph [ref=e83]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e84]:
+              - 'link "Tech, Media &amp; Telecom Roundup: Market Talk" [ref=e85] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/m/0bf9f2a1-37fe-32d3-9c62-fc4e8dc6b884/tech%2C-media-%26-telecom.html?.tsrc=rss
+              - paragraph [ref=e86]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e87]:
+              - link "Why Nokia Stock Is Skyrocketing Today" [ref=e88] [cursor=pointer]:
+                - /url: https://www.fool.com/investing/2026/04/13/why-nokia-stock-is-skyrocketing-today/?.tsrc=rss
+              - paragraph [ref=e89]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e90]:
+              - link "Nokia Stock Just Hit a New 52-Week High. Should You Chase the Rally Here?" [ref=e91] [cursor=pointer]:
+                - /url: https://www.barchart.com/story/news/1280152/nokia-stock-just-hit-a-new-52-week-high-should-you-chase-the-rally-here?.tsrc=rss
+              - paragraph [ref=e92]: Yahoo Finance · 4/14/2026
+            - listitem [ref=e93]:
+              - link "European Equities Traded in the US as American Depositary Receipts Start Week on Flat Note in Monday Trading" [ref=e94] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/world-indices/articles/european-equities-traded-us-american-150439767.html?.tsrc=rss
+              - paragraph [ref=e95]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e96]:
+              - link "BofA upgrades Nokia to Buy on optical and hyperscaler growth; shares rise" [ref=e97] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/bofa-upgrades-nokia-buy-optical-121054767.html?.tsrc=rss
+              - paragraph [ref=e98]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e99]:
+              - link "RUCKUS Networks and Nokia Announce Early Access Availability for their Combined Solution—an Integrated Wi-Fi 7 and Fiber Optical LAN Solution" [ref=e100] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/ruckus-networks-nokia-announce-early-120000230.html?.tsrc=rss
+              - paragraph [ref=e101]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e102]:
+              - link "Demand for European patents exceeds 200 000 for first time, confirming Europe's competitiveness as a global tech hub" [ref=e103] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/demand-european-patents-exceeds-200-100600291.html?.tsrc=rss
+              - paragraph [ref=e104]: Yahoo Finance · 4/13/2026
+            - listitem [ref=e105]:
+              - link "Nokia’s 5G And AI Moves Test Whether Share Momentum Can Last" [ref=e106] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/markets/stocks/articles/nokia-5g-ai-moves-test-121102031.html?.tsrc=rss
+              - paragraph [ref=e107]: Yahoo Finance · 4/10/2026
+            - listitem [ref=e108]:
+              - link "T-Mobile (TMUS), Nvidia (NVDA) Integrate AI Applications on AI-RAN Infrastructure" [ref=e109] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/sectors/technology/articles/t-mobile-tmus-nvidia-nvda-050321718.html?.tsrc=rss
+              - paragraph [ref=e110]: Yahoo Finance · 4/10/2026
+        - generic [ref=e27]:
+          - heading "Notes" [level=2] [ref=e28]
+          - generic [ref=e29]:
+            - textbox "Note title" [ref=e30]
+            - textbox "Note content…" [ref=e31]
+            - button "Add Note" [disabled] [ref=e32]
+      - generic [ref=e34]:
+        - heading "Ask AI about NOK" [level=2] [ref=e36]
+        - paragraph [ref=e38]: Ask anything about NOK…
+        - generic [ref=e39]:
+          - textbox "Ask about NOK…" [ref=e40]
+          - button "Send" [disabled] [ref=e41]
+  - button "Open Next.js Dev Tools" [ref=e116] [cursor=pointer]:
+    - img [ref=e117]
+  - alert [ref=e42]
+  - generic [ref=e120]: "7.8"
