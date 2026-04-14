@@ -45,6 +45,13 @@ export interface AgentRunResult {
   success: boolean;
 }
 
+/** Events emitted during streaming agent execution */
+export type AgentStreamEvent =
+  | { type: "step"; data: { iteration: number; thought: string | null; action: "thought" | "tool_call"; toolName?: string; toolInput?: unknown } }
+  | { type: "tool_result"; data: { iteration: number; toolName: string; result: ToolResult } }
+  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number } }
+  | { type: "error"; data: { message: string } };
+
 export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant with access to real-time and historical market data.
 
 ## Available Tools
@@ -210,6 +217,109 @@ export class Agent {
       totalIterations: iteration,
       success,
     };
+  }
+
+  /** Run the agent with streaming: yields events as they happen. */
+  async *runStream(query: string, conversationHistory: ChatCompletionMessageParam[] = []): AsyncGenerator<AgentStreamEvent> {
+    const sessionId = crypto.randomUUID();
+    logAgentStart(sessionId, query);
+
+    const messages: ChatCompletionMessageParam[] = [
+      { role: "system", content: this.config.systemPrompt },
+      ...conversationHistory,
+      { role: "user", content: query },
+    ];
+    const tools = this.registry.toFunctionDefinitions();
+
+    let iteration = 0;
+
+    try {
+      while (iteration < this.config.maxIterations) {
+        iteration++;
+
+        const response = await this.client.chat.completions.create({
+          model: this.config.model,
+          messages,
+          tools: tools.length > 0 ? tools : undefined,
+        });
+
+        const choice = response.choices[0];
+        if (!choice) break;
+
+        const assistantMessage = choice.message;
+        messages.push(assistantMessage as ChatCompletionMessageParam);
+
+        // No tool calls → final answer
+        if (!assistantMessage.tool_calls || assistantMessage.tool_calls.length === 0) {
+          const answerContent = typeof assistantMessage.content === "string"
+            ? assistantMessage.content
+            : null;
+
+          logAgentStep({
+            iteration,
+            thought: answerContent,
+            action: "final_answer",
+            toolName: null,
+            toolInput: null,
+            result: answerContent,
+            timestamp: new Date().toISOString(),
+          });
+          logAgentEnd(sessionId, answerContent, iteration, true);
+
+          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration } };
+          return;
+        }
+
+        // Process tool calls
+        for (const toolCall of assistantMessage.tool_calls) {
+          if (toolCall.type !== "function") continue;
+          const toolName = toolCall.function.name;
+          let toolInput: unknown;
+          try {
+            toolInput = JSON.parse(toolCall.function.arguments);
+          } catch {
+            toolInput = toolCall.function.arguments;
+          }
+
+          const thought = typeof assistantMessage.content === "string"
+            ? assistantMessage.content
+            : null;
+
+          // Emit step event before tool execution
+          yield { type: "step", data: { iteration, thought, action: "tool_call", toolName, toolInput } };
+
+          const toolResult = await this.executeTool(toolName, toolInput);
+
+          logAgentStep({
+            iteration,
+            thought,
+            action: "tool_call",
+            toolName,
+            toolInput,
+            result: toolResult.output,
+            timestamp: new Date().toISOString(),
+          });
+
+          // Emit tool result
+          yield { type: "tool_result", data: { iteration, toolName, result: toolResult } };
+
+          messages.push({
+            role: "tool",
+            tool_call_id: toolCall.id,
+            content: typeof toolResult.output === "string"
+              ? toolResult.output
+              : JSON.stringify(toolResult.output),
+          });
+        }
+      }
+
+      // Max iterations reached without final answer
+      logAgentEnd(sessionId, null, iteration, false);
+      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration } };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      yield { type: "error", data: { message } };
+    }
   }
 
   /** Execute a single tool with timeout and safety checks. */
