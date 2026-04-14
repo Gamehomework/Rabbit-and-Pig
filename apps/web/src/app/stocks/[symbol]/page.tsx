@@ -36,6 +36,14 @@ type ChatMessage =
   | { role: "step"; toolName: string; thought: string | null }
   | { role: "agent_card"; agentRole: string; displayName: string; status: "thinking" | "done" | "error"; summary?: string; confidence?: number; latencyMs?: number };
 
+type PageCommand =
+  | { type: "set_chart_range"; range: string }
+  | { type: "add_price_level"; price: number; label: string; color?: string }
+  | { type: "filter_news"; keywords: string[]; mode?: "filter" | "highlight" }
+  | { type: "scroll_to_section"; section: "chart" | "news" | "notes" | "chat" }
+  | { type: "prefill_note"; title: string; content: string }
+  | { type: "navigate_to"; path: string };
+
 export default function StockDetailPage() {
   const params = useParams<{ symbol: string }>();
   const router = useRouter();
@@ -73,6 +81,21 @@ export default function StockDetailPage() {
   const [quote, setQuote] = useState<StockQuote | null>(null);
   const [quoteLoading, setQuoteLoading] = useState(false);
   const [quoteError, setQuoteError] = useState(false);
+
+  // News filter (controlled by AI commands)
+  const [newsFilter, setNewsFilter] = useState<{ keywords: string[]; mode: "filter" | "highlight" } | null>(null);
+
+  // Section refs for scroll_to_section command
+  const chartSectionRef = useRef<HTMLElement>(null);
+  const newsSectionRef = useRef<HTMLElement>(null);
+  const notesSectionRef = useRef<HTMLElement>(null);
+  const chatSectionRef = useRef<HTMLDivElement>(null);
+  const sectionRefs: Record<string, React.RefObject<HTMLElement | HTMLDivElement | null>> = {
+    chart: chartSectionRef,
+    news: newsSectionRef,
+    notes: notesSectionRef,
+    chat: chatSectionRef,
+  };
 
   // Send Alert modal
   const [alertOpen, setAlertOpen] = useState(false);
@@ -145,6 +168,47 @@ export default function StockDetailPage() {
     return () => clearInterval(timer);
   }, [chartRange, loadChart]);
 
+  // --- Page Command Bus ---
+  function dispatchPageCommand(command: PageCommand) {
+    switch (command.type) {
+      case "set_chart_range":
+        setChartRange(command.range);
+        loadChart(command.range);
+        break;
+      case "add_price_level": {
+        const firstTime = chartData[0]?.date;
+        const lastTime = chartData[chartData.length - 1]?.date;
+        const lineData = firstTime && lastTime
+          ? [
+              { time: firstTime, value: command.price },
+              { time: lastTime, value: command.price },
+            ]
+          : [];
+        setChartLines(prev => [...prev, {
+          title: command.label,
+          color: command.color ?? "#2196f3",
+          data: lineData,
+        }]);
+        break;
+      }
+      case "filter_news":
+        setNewsFilter({ keywords: command.keywords, mode: command.mode ?? "highlight" });
+        break;
+      case "scroll_to_section":
+        sectionRefs[command.section]?.current?.scrollIntoView({ behavior: "smooth" });
+        break;
+      case "prefill_note":
+        setNoteTitle(command.title);
+        setNoteContent(command.content);
+        sectionRefs.notes?.current?.scrollIntoView({ behavior: "smooth" });
+        break;
+      case "navigate_to":
+        if (command.path === "deep-analysis")
+          router.push(`/stocks/${symbol}/deep-analysis`);
+        break;
+    }
+  }
+
   async function handleCreateNote(e: React.FormEvent) {
     e.preventDefault();
     if (!noteTitle.trim()) return;
@@ -193,6 +257,10 @@ export default function StockDetailPage() {
             thought: step.thought,
           });
         }
+        // Extract and dispatch page commands from tool results
+        const cmd = (step.toolResult as Record<string, unknown> | null)?.output;
+        const pageCmd = (cmd as Record<string, unknown> | undefined)?.command as PageCommand | undefined;
+        if (pageCmd) dispatchPageCommand(pageCmd);
       }
       const finalAnswer = parseAnnotations(res.answer ?? "No answer returned.");
       newMsgs.push({
@@ -229,6 +297,12 @@ export default function StockDetailPage() {
             ...prev,
             { role: "step", toolName: event.toolName!, thought: event.thought ?? null },
           ]);
+          // Extract and dispatch page commands from streaming tool results
+          if (event.toolResult) {
+            const output = event.toolResult as Record<string, unknown> | undefined;
+            const cmd = output?.command as PageCommand | undefined;
+            if (cmd) dispatchPageCommand(cmd);
+          }
         } else if (event.type === "answer" && event.answer) {
           const finalAnswer = parseAnnotations(event.answer!);
           setChatMessages((prev) => [
@@ -415,7 +489,7 @@ export default function StockDetailPage() {
       )}
 
       {/* Price Chart */}
-      <section className="rounded-lg border bg-white p-4 shadow-sm">
+      <section ref={chartSectionRef} className="rounded-lg border bg-white p-4 shadow-sm">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-semibold">Price Chart</h2>
           <div className="flex gap-1">
@@ -449,30 +523,53 @@ export default function StockDetailPage() {
       </section>
 
       {/* News Feed */}
-      <section className="rounded-lg border bg-white p-4 shadow-sm">
-        <h2 className="mb-4 text-lg font-semibold">Recent News</h2>
+      <section ref={newsSectionRef} className="rounded-lg border bg-white p-4 shadow-sm">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">Recent News</h2>
+          {newsFilter && (
+            <button
+              onClick={() => setNewsFilter(null)}
+              className="flex items-center gap-1 rounded bg-yellow-100 px-2 py-1 text-xs font-medium text-yellow-800 hover:bg-yellow-200"
+            >
+              Filter: {newsFilter.keywords.join(", ")} <span className="ml-1">✕</span>
+            </button>
+          )}
+        </div>
         {newsLoading && <p className="text-gray-500">Loading news…</p>}
         {newsError && <p className="text-red-600">{newsError}</p>}
         {!newsLoading && !newsError && news.length === 0 && (
           <p className="text-gray-400">No news available</p>
         )}
         <ul className="divide-y">
-          {news.map((item, i) => (
-            <li key={i} className="py-3">
-              <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-600 hover:underline">
-                {item.title}
-              </a>
-              <p className="mt-1 text-xs text-gray-500">
-                {item.source} · {new Date(item.publishedAt).toLocaleDateString()}
-              </p>
-              {item.summary && <p className="mt-1 text-sm text-gray-600">{item.summary}</p>}
-            </li>
-          ))}
+          {(newsFilter?.mode === "filter"
+            ? news.filter(item =>
+                newsFilter.keywords.some(kw =>
+                  item.title.toLowerCase().includes(kw.toLowerCase())
+                )
+              )
+            : news
+          ).map((item, i) => {
+            const isHighlighted = newsFilter?.mode === "highlight" &&
+              newsFilter.keywords.some(kw =>
+                item.title.toLowerCase().includes(kw.toLowerCase())
+              );
+            return (
+              <li key={i} className={`py-3${isHighlighted ? " bg-yellow-50 -mx-4 px-4" : ""}`}>
+                <a href={item.url} target="_blank" rel="noopener noreferrer" className="font-medium text-blue-600 hover:underline">
+                  {item.title}
+                </a>
+                <p className="mt-1 text-xs text-gray-500">
+                  {item.source} · {new Date(item.publishedAt).toLocaleDateString()}
+                </p>
+                {item.summary && <p className="mt-1 text-sm text-gray-600">{item.summary}</p>}
+              </li>
+            );
+          })}
         </ul>
       </section>
 
       {/* Notes */}
-      <section className="rounded-lg border bg-white p-4 shadow-sm">
+      <section ref={notesSectionRef} className="rounded-lg border bg-white p-4 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold">Notes</h2>
         {notesLoading && <p className="text-gray-500">Loading notes…</p>}
         {notes.length > 0 && (
@@ -516,7 +613,7 @@ export default function StockDetailPage() {
       </div>{/* end left column */}
 
       {/* ── Right: sticky AI chat sidebar ── */}
-      <div className="w-96 shrink-0 sticky top-6">
+      <div ref={chatSectionRef} className="w-96 shrink-0 sticky top-6">
         <div className="flex h-[calc(100vh-7rem)] flex-col rounded-lg border bg-white shadow-sm">
           {/* Header */}
           <div className="border-b px-4 py-3">
