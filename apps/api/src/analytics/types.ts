@@ -66,3 +66,11 @@ export interface NotificationStats {
   rateLimited: number;
 }
 
+export interface NotesAnalytics {
+  totalNotes: number;
+  notesByStock: { stockSymbol: string; count: number }[];
+  notesTrend: { timestamp: string; count: number }[];
+  topNotedStocks: string[];
+  notedButNeverQueried: string[];
+}
+

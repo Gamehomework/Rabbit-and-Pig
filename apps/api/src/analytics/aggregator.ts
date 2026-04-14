@@ -3,13 +3,14 @@
  */
 
 import { db, schema } from "../db/index.js";
-import { sql, count, eq, and, gte, lte } from "drizzle-orm";
+import { sql, count, eq, and, gte, lte, isNotNull } from "drizzle-orm";
 import type {
   DateRange,
   OverviewStats,
   QueryVolume,
   ToolUsage,
   NotificationStats,
+  NotesAnalytics,
 } from "./types.js";
 
 function defaultDateRange(): DateRange {
@@ -136,5 +137,65 @@ export async function notificationStats(dateRange?: DateRange): Promise<Notifica
     failed: r.failed,
     rateLimited: r.rateLimited,
   }));
+}
+
+export async function notesAnalytics(dateRange?: DateRange): Promise<NotesAnalytics> {
+  const range = dateRange ?? defaultDateRange();
+
+  // Total notes in range
+  const [totalRow] = await db
+    .select({ total: count() })
+    .from(schema.notes)
+    .where(dateFilters(schema.notes, range));
+
+  // Notes grouped by stock symbol (exclude null stockSymbol)
+  const notesByStockRows = await db
+    .select({
+      stockSymbol: schema.notes.stockSymbol,
+      count: count(),
+    })
+    .from(schema.notes)
+    .where(and(dateFilters(schema.notes, range), isNotNull(schema.notes.stockSymbol)))
+    .groupBy(schema.notes.stockSymbol)
+    .orderBy(sql`count(*) DESC`);
+
+  const notesByStock = notesByStockRows.map((r) => ({
+    stockSymbol: r.stockSymbol!,
+    count: r.count,
+  }));
+
+  // Daily note creation trend
+  const trendRows = await db
+    .select({
+      timestamp: sql<string>`strftime('%Y-%m-%d', ${schema.notes.createdAt})`,
+      count: count(),
+    })
+    .from(schema.notes)
+    .where(dateFilters(schema.notes, range))
+    .groupBy(sql`strftime('%Y-%m-%d', ${schema.notes.createdAt})`)
+    .orderBy(sql`strftime('%Y-%m-%d', ${schema.notes.createdAt})`);
+
+  const notesTrend = trendRows.map((r) => ({ timestamp: r.timestamp, count: r.count }));
+
+  // Top 10 most-noted symbols
+  const topNotedStocks = notesByStock.slice(0, 10).map((r) => r.stockSymbol);
+
+  // Stocks with notes but no query_logs entries mentioning them
+  const allNotedSymbols = notesByStockRows.map((r) => r.stockSymbol!);
+  const queryTexts = await db
+    .select({ queryText: schema.queryLogs.queryText })
+    .from(schema.queryLogs);
+
+  const notedButNeverQueried = allNotedSymbols.filter(
+    (symbol) => !queryTexts.some((q) => q.queryText.toUpperCase().includes(symbol.toUpperCase())),
+  );
+
+  return {
+    totalNotes: totalRow.total,
+    notesByStock,
+    notesTrend,
+    topNotedStocks,
+    notedButNeverQueried,
+  };
 }
 

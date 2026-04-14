@@ -3,14 +3,15 @@
 import React, { useEffect, useState, useCallback, useMemo } from "react";
 import {
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, BarChart, Bar, Legend,
+  PieChart, Pie, Cell, BarChart, Bar, Legend, LineChart, Line,
 } from "recharts";
 import {
   getAnalyticsOverview, getAnalyticsQueries, getAnalyticsTools,
   getAnalyticsSessions, getAnalyticsSessionDetail, getAnalyticsNotifications,
-  getAnalyticsExportUrl,
+  getAnalyticsExportUrl, getNotesAnalytics,
   type AnalyticsOverview, type QueryDataPoint, type ToolStats,
   type SessionSummary, type SessionDetail, type NotificationStats,
+  type NotesAnalytics,
 } from "@/lib/api";
 
 // --- Helpers ---
@@ -34,6 +35,7 @@ export default function AnalyticsPage() {
   const [tools, setTools] = useState<ToolStats[]>([]);
   const [sessions, setSessions] = useState<SessionSummary[]>([]);
   const [notifications, setNotifications] = useState<NotificationStats[]>([]);
+  const [notesAnalytics, setNotesAnalytics] = useState<NotesAnalytics | null>(null);
 
   // UI state
   const [loading, setLoading] = useState(true);
@@ -48,18 +50,20 @@ export default function AnalyticsPage() {
   const fetchAll = useCallback(async () => {
     setLoading(true);
     try {
-      const [ov, q, t, s, n] = await Promise.allSettled([
+      const [ov, q, t, s, n, na] = await Promise.allSettled([
         getAnalyticsOverview(from, to),
         getAnalyticsQueries(period, from, to),
         getAnalyticsTools(from, to),
         getAnalyticsSessions(),
         getAnalyticsNotifications(from, to),
+        getNotesAnalytics(from, to),
       ]);
       if (ov.status === "fulfilled") setOverview(ov.value);
       if (q.status === "fulfilled") setQueries(q.value);
       if (t.status === "fulfilled") setTools(t.value);
       if (s.status === "fulfilled") setSessions(s.value);
       if (n.status === "fulfilled") setNotifications(n.value);
+      if (na.status === "fulfilled") setNotesAnalytics(na.value);
     } catch { /* ignore */ }
     setLoading(false);
   }, [from, to, period]);
@@ -261,6 +265,82 @@ export default function AnalyticsPage() {
         )}
       </div>
 
+
+      {/* Notes Analytics */}
+      <div className="rounded-lg bg-white p-4 shadow-sm">
+        <h2 className="mb-3 text-lg font-semibold">Notes Analytics</h2>
+        {!notesAnalytics ? (
+          loading ? <Skeleton className="h-64" /> : <div className="flex h-64 items-center justify-center text-gray-400">No data yet</div>
+        ) : (
+          <div className="space-y-6">
+            {/* Notes count + Research Focus badges */}
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="rounded-lg border border-indigo-200 bg-indigo-50 px-4 py-3">
+                <span className="text-2xl font-bold text-indigo-700">{notesAnalytics.totalNotes}</span>
+                <p className="text-sm text-indigo-500">Total Notes</p>
+              </div>
+              {notesAnalytics.topNotedStocks.length > 0 && (
+                <div>
+                  <p className="mb-1 text-sm font-medium text-gray-500">Research Focus</p>
+                  <div className="flex flex-wrap gap-1">
+                    {notesAnalytics.topNotedStocks.map((s) => (
+                      <span key={s} className="rounded-full bg-indigo-100 px-3 py-1 text-xs font-semibold text-indigo-700">{s}</span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Notes Trend + Top Stocks charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div>
+                <h3 className="mb-2 text-sm font-semibold text-gray-500">Notes Trend (Daily)</h3>
+                {notesAnalytics.notesTrend.length === 0 ? (
+                  <div className="flex h-52 items-center justify-center text-gray-400">No trend data</div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={220}>
+                    <LineChart data={notesAnalytics.notesTrend}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="timestamp" tick={{ fontSize: 12 }} tickFormatter={(v) => new Date(v).toLocaleDateString()} />
+                      <YAxis tick={{ fontSize: 12 }} allowDecimals={false} />
+                      <Tooltip labelFormatter={(v) => new Date(v as string).toLocaleDateString()} />
+                      <Line type="monotone" dataKey="count" stroke="#6366f1" strokeWidth={2} dot={{ r: 3 }} />
+                    </LineChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+              <div>
+                <h3 className="mb-2 text-sm font-semibold text-gray-500">Top Stocks by Notes</h3>
+                {notesAnalytics.notesByStock.length === 0 ? (
+                  <div className="flex h-52 items-center justify-center text-gray-400">No stock data</div>
+                ) : (
+                  <ResponsiveContainer width="100%" height={220}>
+                    <BarChart data={notesAnalytics.notesByStock.slice(0, 10)} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" tick={{ fontSize: 12 }} allowDecimals={false} />
+                      <YAxis dataKey="stockSymbol" type="category" tick={{ fontSize: 12 }} width={60} />
+                      <Tooltip />
+                      <Bar dataKey="count" fill="#8b5cf6" name="Notes" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                )}
+              </div>
+            </div>
+
+            {/* Noted but never queried */}
+            {notesAnalytics.notedButNeverQueried.length > 0 && (
+              <div>
+                <h3 className="mb-2 text-sm font-semibold text-gray-500">Researched but Never Queried</h3>
+                <div className="flex flex-wrap gap-1">
+                  {notesAnalytics.notedButNeverQueried.map((s) => (
+                    <span key={s} className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">{s}</span>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {/* Session List */}
       <div className="rounded-lg bg-white p-4 shadow-sm overflow-x-auto">

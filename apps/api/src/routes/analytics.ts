@@ -8,6 +8,7 @@ import {
   queryVolumeByPeriod,
   toolUsageBreakdown,
   notificationStats,
+  notesAnalytics,
   listSessions,
   getSessionTrace,
 } from "../analytics/index.js";
@@ -79,6 +80,15 @@ export async function analyticsRoutes(app: FastifyInstance) {
     async (request) => {
       const range = parseDateRange(request.query.from, request.query.to);
       return notificationStats(range);
+    },
+  );
+
+  // GET /api/analytics/notes
+  app.get<{ Querystring: { from?: string; to?: string } }>(
+    "/api/analytics/notes",
+    async (request) => {
+      const range = parseDateRange(request.query.from, request.query.to);
+      return notesAnalytics(range);
     },
   );
 

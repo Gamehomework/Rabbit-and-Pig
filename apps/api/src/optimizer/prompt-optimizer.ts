@@ -4,7 +4,8 @@
 
 import OpenAI from "openai";
 import { db, schema } from "../db/index.js";
-import { desc, eq } from "drizzle-orm";
+import { desc, eq, isNotNull, count } from "drizzle-orm";
+import { sql } from "drizzle-orm";
 import type { PromptSuggestion } from "./types.js";
 
 /**
@@ -77,6 +78,27 @@ export async function analyzeAndSuggest(): Promise<PromptSuggestion[]> {
     };
   });
 
+  // Gather notes context for the optimizer
+  const [notesCountRow] = await db
+    .select({ total: count() })
+    .from(schema.notes);
+
+  const topNotedStocksRows = await db
+    .select({
+      stockSymbol: schema.notes.stockSymbol,
+      noteCount: count(),
+    })
+    .from(schema.notes)
+    .where(isNotNull(schema.notes.stockSymbol))
+    .groupBy(schema.notes.stockSymbol)
+    .orderBy(sql`count(*) DESC`)
+    .limit(10);
+
+  const notesContext = {
+    totalNotes: notesCountRow.total,
+    topNotedStocks: topNotedStocksRows.map((r) => `${r.stockSymbol} (${r.noteCount} notes)`),
+  };
+
   const client = new OpenAI({
     apiKey,
     baseURL: "https://api.deepseek.com",
@@ -86,6 +108,10 @@ export async function analyzeAndSuggest(): Promise<PromptSuggestion[]> {
 
 Session traces:
 ${JSON.stringify(traces, null, 2)}
+
+User research notes summary:
+- Total notes: ${notesContext.totalNotes}
+- Top researched stocks: ${notesContext.topNotedStocks.length > 0 ? notesContext.topNotedStocks.join(", ") : "none yet"}
 
 For each suggestion, provide:
 - area: which part of the prompt to improve (e.g., "tool selection", "response format", "error handling")

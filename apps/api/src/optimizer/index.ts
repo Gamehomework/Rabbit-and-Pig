@@ -18,5 +18,6 @@ export {
   getAllPreferences,
   trackQueryPattern,
   getPersonalizationContext,
+  extractWatchedFromNotes,
 } from "./user-personalizer.js";
 

@@ -324,6 +324,22 @@ export interface NotificationStats {
   rateLimited: number;
 }
 
+export interface NotesAnalytics {
+  totalNotes: number;
+  notesByStock: { stockSymbol: string; count: number }[];
+  notesTrend: { timestamp: string; count: number }[];
+  topNotedStocks: string[];
+  notedButNeverQueried: string[];
+}
+
+export async function getNotesAnalytics(from?: string, to?: string): Promise<NotesAnalytics> {
+  const params = new URLSearchParams();
+  if (from) params.set("from", from);
+  if (to) params.set("to", to);
+  const qs = params.toString();
+  return fetchApi<NotesAnalytics>(`/api/analytics/notes${qs ? `?${qs}` : ""}`);
+}
+
 export async function getAnalyticsOverview(from: string, to: string): Promise<AnalyticsOverview> {
   return fetchApi<AnalyticsOverview>(`/api/analytics/overview?from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`);
 }
