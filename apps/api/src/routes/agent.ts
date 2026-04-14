@@ -200,12 +200,18 @@ export async function agentRoutes(app: FastifyInstance) {
 
         const agent = new Agent(registry, { systemPrompt });
 
-        // Set SSE headers
+        // Set SSE headers (must include CORS since reply.raw bypasses Fastify hooks)
+        const origin = request.headers.origin;
+        const allowedOrigins = ["http://localhost:3002", "http://127.0.0.1:3002"];
+        const corsOrigin = origin && allowedOrigins.includes(origin) ? origin : allowedOrigins[0];
+
         reply.raw.writeHead(200, {
           "Content-Type": "text/event-stream",
           "Cache-Control": "no-cache",
           "Connection": "keep-alive",
           "X-Accel-Buffering": "no",
+          "Access-Control-Allow-Origin": corsOrigin,
+          "Access-Control-Allow-Credentials": "true",
         });
 
         // Helper to write a flat SSE data-only event that the frontend can parse.
