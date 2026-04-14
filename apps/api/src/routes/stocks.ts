@@ -4,8 +4,11 @@
  */
 
 import type { FastifyInstance } from "fastify";
+import YahooFinance from "yahoo-finance2";
 
 import type { Tool } from "../agent/tools/types.js";
+
+const yf = new YahooFinance();
 
 /** Lazy-load a tool by name, returning undefined if not available */
 async function loadTool(name: string): Promise<Tool | undefined> {
@@ -30,6 +33,36 @@ async function loadTool(name: string): Promise<Tool | undefined> {
 }
 
 export async function stockRoutes(app: FastifyInstance) {
+  // GET /api/stocks/search?q=...
+  app.get<{ Querystring: { q: string } }>("/api/stocks/search", async (request, reply) => {
+    const q = (request.query.q ?? "").trim();
+    if (!q) return reply.status(400).send({ error: "q is required", statusCode: 400 });
+
+    try {
+      const result = await yf.search(q, { quotesCount: 15, newsCount: 0 }, { validateResult: false });
+      const quotes = (result.quotes ?? [])
+        .filter((item) => {
+          const typed = item as { quoteType?: string; symbol?: string; shortname?: string; longname?: string; exchDisp?: string };
+          return typed.quoteType === "EQUITY" && typed.symbol;
+        })
+        .slice(0, 10)
+        .map((item) => {
+          const typed = item as { quoteType?: string; symbol?: string; shortname?: string; longname?: string; exchDisp?: string };
+          return {
+            symbol: typed.symbol!,
+            name: typed.shortname ?? typed.longname ?? typed.symbol!,
+            exchange: typed.exchDisp ?? "",
+            type: typed.quoteType ?? "EQUITY",
+          };
+        });
+      return quotes;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Search failed";
+      request.log.error(err, "Stock search error");
+      return reply.status(500).send({ error: message, statusCode: 500 });
+    }
+  });
+
   // GET /api/stocks/screen
   app.get<{
     Querystring: {

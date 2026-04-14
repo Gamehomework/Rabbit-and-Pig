@@ -85,6 +85,17 @@ export interface LogEntry {
 
 // --- API Functions ---
 
+export interface SearchResult {
+  symbol: string;
+  name: string;
+  exchange: string;
+  type: string;
+}
+
+export async function searchStocks(q: string): Promise<SearchResult[]> {
+  return fetchApi<SearchResult[]>(`/api/stocks/search?q=${encodeURIComponent(q)}`);
+}
+
 export async function screenStocks(params: StockScreenParams = {}): Promise<Stock[]> {
   const query = new URLSearchParams();
   if (params.sector) query.set("sector", params.sector);
