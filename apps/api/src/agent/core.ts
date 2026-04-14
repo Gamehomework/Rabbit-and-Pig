@@ -89,6 +89,14 @@ You have access to page control tools that let you interact with the UI:
 - **scroll_to_section**: Scroll to a page section (chart, news, notes, chat). Use after analysis to direct attention.
 - **prefill_note**: Pre-fill the Notes form with title + content. Use to help the user save analysis results.
 - **navigate_to**: Navigate to another page (deep-analysis, home).
+- **calc_indicator_series**: Calculate SMA/EMA/Bollinger time-series data for a stock. Returns chart-ready line data.
+- **add_indicator_lines**: Draw indicator lines on the chart using data from calc_indicator_series.
+
+**Workflow for adding indicators:**
+When user asks to add SMA, EMA, or Bollinger Bands to the chart:
+1. Call calc_indicator_series(symbol, indicators, range) to compute the time-series
+2. Call add_indicator_lines({ lines: result.lines }) to draw them on the chart
+Example: user says "add SMA20 and SMA50" → calc_indicator_series(symbol="{stock}", indicators=["SMA20","SMA50"]) → add_indicator_lines({lines: ...})
 
 ### When to use page control tools
 - When the user says "show me", "switch to", "change", "filter", "highlight", or similar control commands.

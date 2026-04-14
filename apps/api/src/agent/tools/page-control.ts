@@ -156,6 +156,56 @@ export const navigateToTool: Tool = {
   },
 };
 
+// ── 7. add_indicator_lines ──────────────────────────────────────────
+
+export const addIndicatorLinesTool: Tool = {
+  name: "add_indicator_lines",
+  description:
+    "Draw technical indicator lines on the chart. Call after calc_indicator_series.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      lines: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            title: { type: "string" },
+            color: { type: "string" },
+            data: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  time: { type: "string" },
+                  value: { type: "number" },
+                },
+                required: ["time", "value"],
+              },
+            },
+          },
+          required: ["title", "color", "data"],
+        },
+        description: "Array of line series to draw on the chart.",
+      },
+    },
+    required: ["lines"],
+  },
+  async execute(input: {
+    lines: Array<{
+      title: string;
+      color: string;
+      data: Array<{ time: string; value: number }>;
+    }>;
+  }) {
+    return {
+      success: true,
+      command: { type: "add_indicator_lines", lines: input.lines },
+      message: `Added ${input.lines.length} indicator line(s): ${input.lines.map((l) => l.title).join(", ")}`,
+    };
+  },
+};
+
 // ── Export all page control tools as an array ────────────────────────
 
 export const pageControlTools: Tool[] = [
@@ -165,5 +215,6 @@ export const pageControlTools: Tool[] = [
   scrollToSectionTool,
   prefillNoteTool,
   navigateToTool,
+  addIndicatorLinesTool,
 ];
 

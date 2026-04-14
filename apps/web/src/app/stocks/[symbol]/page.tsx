@@ -42,7 +42,8 @@ type PageCommand =
   | { type: "filter_news"; keywords: string[]; mode?: "filter" | "highlight" }
   | { type: "scroll_to_section"; section: "chart" | "news" | "notes" | "chat" }
   | { type: "prefill_note"; title: string; content: string }
-  | { type: "navigate_to"; path: string };
+  | { type: "navigate_to"; path: string }
+  | { type: "add_indicator_lines"; lines: ChartLine[] };
 
 export default function StockDetailPage() {
   const params = useParams<{ symbol: string }>();
@@ -215,6 +216,9 @@ export default function StockDetailPage() {
       case "navigate_to":
         if (command.path === "deep-analysis")
           router.push(`/stocks/${symbol}/deep-analysis`);
+        break;
+      case "add_indicator_lines":
+        setChartLines(prev => [...prev, ...command.lines]);
         break;
     }
   }

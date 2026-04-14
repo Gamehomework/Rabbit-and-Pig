@@ -89,6 +89,10 @@ export async function agentRoutes(app: FastifyInstance) {
             registry.register(tool);
           }
         } catch { /* tool not available yet */ }
+        try {
+          const { calcIndicatorSeriesTool } = await import("../agent/tools/calc-indicator-series.js");
+          registry.register(calcIndicatorSeriesTool);
+        } catch { /* tool not available yet */ }
 
         // Pre-load stock context if a symbol was provided (Option A: context stuffing).
         // Fetch quote + 30-day chart summary + news headlines in parallel, then inject
@@ -203,6 +207,10 @@ export async function agentRoutes(app: FastifyInstance) {
           for (const tool of pageControlTools) {
             registry.register(tool);
           }
+        } catch { /* tool not available yet */ }
+        try {
+          const { calcIndicatorSeriesTool } = await import("../agent/tools/calc-indicator-series.js");
+          registry.register(calcIndicatorSeriesTool);
         } catch { /* tool not available yet */ }
 
         // Register multi-agent specific tools in the shared pool for specialist agents
