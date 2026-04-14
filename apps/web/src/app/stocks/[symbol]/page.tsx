@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState, useCallback, useRef } from "react";
 import TradingViewChart, { type ChartMarker, type ChartLine } from "@/components/TradingViewChart";
+import ReactMarkdown from "react-markdown";
 import {
   getStockChart, getStockNews, getNotes, createNote, queryAgent,
   getNotificationChannels, sendNotification, streamAgentAnalysis,
@@ -427,15 +428,15 @@ export default function StockDetailPage() {
                   key={i}
                   className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
-                  <div
-                    className={`max-w-[85%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap ${
-                      msg.role === "user"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-800"
-                    }`}
-                  >
-                    {msg.content}
-                  </div>
+                  {msg.role === "user" ? (
+                    <div className="max-w-[85%] rounded-lg px-3 py-2 text-sm whitespace-pre-wrap bg-blue-600 text-white">
+                      {msg.content}
+                    </div>
+                  ) : (
+                    <div className="max-w-[85%] rounded-lg px-3 py-2 text-sm bg-gray-100 text-gray-800 prose prose-sm prose-gray max-w-none">
+                      <ReactMarkdown>{msg.content}</ReactMarkdown>
+                    </div>
+                  )}
                 </div>
               );
             })}

@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { useState, useRef, useCallback } from "react";
+import ReactMarkdown from "react-markdown";
 import { streamMultiAgentAnalysis, type MultiAgentEvent } from "@/lib/api";
 
 /** Agent role display info */
@@ -221,7 +222,9 @@ export default function DeepAnalysisPage() {
       {finalReport && (
         <section className="rounded-lg border-2 border-purple-300 bg-purple-50 p-6 shadow-sm">
           <h2 className="text-lg font-bold mb-3">📋 Final Report</h2>
-          <div className="text-sm text-gray-800 whitespace-pre-wrap">{finalReport}</div>
+          <div className="text-sm text-gray-800 prose prose-sm prose-gray max-w-none">
+            <ReactMarkdown>{finalReport}</ReactMarkdown>
+          </div>
         </section>
       )}
     </div>
