@@ -220,6 +220,5 @@ export const pageControlTools: Tool[] = [
   scrollToSectionTool,
   prefillNoteTool,
   navigateToTool,
-  addIndicatorLinesTool,
 ];
 

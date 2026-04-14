@@ -90,8 +90,8 @@ export async function agentRoutes(app: FastifyInstance) {
           }
         } catch { /* tool not available yet */ }
         try {
-          const { calcIndicatorSeriesTool } = await import("../agent/tools/calc-indicator-series.js");
-          registry.register(calcIndicatorSeriesTool);
+          const { drawIndicatorsTool } = await import("../agent/tools/draw-indicators.js");
+          registry.register(drawIndicatorsTool);
         } catch { /* tool not available yet */ }
 
         // Pre-load stock context if a symbol was provided (Option A: context stuffing).
@@ -209,8 +209,8 @@ export async function agentRoutes(app: FastifyInstance) {
           }
         } catch { /* tool not available yet */ }
         try {
-          const { calcIndicatorSeriesTool } = await import("../agent/tools/calc-indicator-series.js");
-          registry.register(calcIndicatorSeriesTool);
+          const { drawIndicatorsTool } = await import("../agent/tools/draw-indicators.js");
+          registry.register(drawIndicatorsTool);
         } catch { /* tool not available yet */ }
 
         // Register multi-agent specific tools in the shared pool for specialist agents
