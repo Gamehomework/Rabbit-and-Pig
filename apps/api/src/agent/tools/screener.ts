@@ -72,10 +72,13 @@ export const screenerTool: Tool<ScreenerInput, ScreenerOutputItem[]> = {
 
     try {
       // Fetch a broad set from the "most_actives" screener to get a good pool
-      const result = await yf.screener({
-        scrIds: "most_actives",
-        count: 100,
-      });
+      // validateResult: false — Yahoo Finance API occasionally returns fields
+      // that don't match the library's strict schema; skip validation to avoid crashes.
+      const result = await yf.screener(
+        { scrIds: "most_actives", count: 100 },
+        {},
+        { validateResult: false },
+      );
 
       let quotes = result.quotes;
 
