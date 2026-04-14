@@ -10,6 +10,7 @@ import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { API_PORT, APP_NAME } from "@rabbit-and-pig/shared";
 import { registerRoutes } from "./routes/index.js";
+import { startStockMonitor } from "./services/stockMonitor.js";
 // Importing db module initializes SQLite connection + WAL mode
 import "./db/index.js";
 
@@ -32,6 +33,9 @@ await registerRoutes(app);
 try {
   await app.listen({ port: API_PORT, host: "0.0.0.0" });
   console.log(`${APP_NAME} API running on port ${API_PORT}`);
+
+  // Start the background stock monitor
+  startStockMonitor(["AAPL", "NVDA", "TSLA", "MSFT", "META"]);
 } catch (err) {
   app.log.error(err);
   process.exit(1);
