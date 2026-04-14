@@ -141,7 +141,7 @@ export default function StockDetailPage() {
     if (chartRange !== "1d") return;
     const timer = setInterval(() => {
       loadChart("1d");
-    }, 60_000);
+    }, 5_000);
     return () => clearInterval(timer);
   }, [chartRange, loadChart]);
 
