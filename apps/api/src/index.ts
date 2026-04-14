@@ -1,3 +1,11 @@
+// Load .env from repo root (Node 20.12+). No-op if file is missing.
+try {
+  const { resolve, dirname } = await import("path");
+  const { fileURLToPath } = await import("url");
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), "../../..");
+  process.loadEnvFile(`${root}/.env`);
+} catch { /* .env not present or Node < 20.12 */ }
+
 import Fastify from "fastify";
 import cors from "@fastify/cors";
 import { API_PORT, APP_NAME } from "@rabbit-and-pig/shared";

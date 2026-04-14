@@ -17,7 +17,9 @@
     "@rabbit-and-pig/shared": "workspace:*",
     "better-sqlite3": "^12.9.0",
     "drizzle-orm": "^0.45.2",
-    "fastify": "^5.3.0"
+    "fastify": "^5.3.0",
+    "openai": "^6.34.0",
+    "yahoo-finance2": "^3.14.0"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.13",
