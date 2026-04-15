@@ -73,6 +73,10 @@ export function createInvokeAgentTool(onEvent?: OnAgentEvent): Tool<InvokeAgentI
 
       // Run the specialist agent, forwarding step events for real-time progress
       const result = await runSpecialistAgent(role, query, context, urls, onEvent);
+      // Run the specialist agent.
+      // P1 fix: pass onEvent as the step callback so agent_step / agent_tool_result
+      // events are forwarded to the coordinator's streaming pipeline in real time.
+      const result = await runSpecialistAgent(role, query, context, urls, onEvent);
 
       // Emit agent_result event
       onEvent?.({

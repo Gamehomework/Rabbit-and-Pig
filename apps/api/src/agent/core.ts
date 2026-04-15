@@ -8,7 +8,6 @@ import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.js";
 import { ToolRegistry } from "./tools/registry.js";
 import type { ToolResult } from "./tools/types.js";
-import { validateToolInput } from "./tools/validate.js";
 import {
   logAgentStep,
   logToolExecution,
@@ -26,18 +25,6 @@ export interface AgentConfig {
   model?: string;
   /** System prompt override */
   systemPrompt?: string;
-  /**
-   * Optional step callback fired during run() for each tool call and result.
-   * Lets callers stream progress without switching to runStream().
-   */
-  onStep?: (event: AgentStreamEvent) => void;
-}
-
-/** Accumulated token usage across all LLM calls in a run */
-export interface TokenUsage {
-  promptTokens: number;
-  completionTokens: number;
-  totalTokens: number;
 }
 
 /** A single step in the agent execution trace */
@@ -56,15 +43,13 @@ export interface AgentRunResult {
   steps: AgentStep[];
   totalIterations: number;
   success: boolean;
-  /** Accumulated token usage across all LLM calls in this run */
-  tokenUsage: TokenUsage;
 }
 
 /** Events emitted during streaming agent execution */
 export type AgentStreamEvent =
   | { type: "step"; data: { iteration: number; thought: string | null; action: "thought" | "tool_call"; toolName?: string; toolInput?: unknown } }
   | { type: "tool_result"; data: { iteration: number; toolName: string; result: ToolResult } }
-  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number; tokenUsage: TokenUsage } }
+  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number } }
   | { type: "error"; data: { message: string } };
 
 export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant with access to real-time and historical market data.
@@ -126,7 +111,7 @@ const DEFAULT_MODEL = "deepseek-chat";
 export class Agent {
   private client: OpenAI;
   private registry: ToolRegistry;
-  private config: Required<Omit<AgentConfig, "onStep">> & Pick<AgentConfig, "onStep">;
+  private config: Required<AgentConfig>;
 
   constructor(registry: ToolRegistry, config: AgentConfig = {}) {
     const apiKey = process.env.DEEPSEEK_API_KEY;
@@ -145,7 +130,6 @@ export class Agent {
       toolTimeoutMs: config.toolTimeoutMs ?? DEFAULT_TOOL_TIMEOUT_MS,
       model: config.model ?? DEFAULT_MODEL,
       systemPrompt: config.systemPrompt ?? DEFAULT_SYSTEM_PROMPT,
-      onStep: config.onStep,
     };
   }
 
@@ -164,7 +148,6 @@ export class Agent {
 
     let finalAnswer: string | null = null;
     let iteration = 0;
-    const tokenUsage: TokenUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 
     while (iteration < this.config.maxIterations) {
       iteration++;
@@ -174,13 +157,6 @@ export class Agent {
         messages,
         tools: tools.length > 0 ? tools : undefined,
       });
-
-      // Accumulate token usage across all LLM calls
-      if (response.usage) {
-        tokenUsage.promptTokens += response.usage.prompt_tokens;
-        tokenUsage.completionTokens += response.usage.completion_tokens;
-        tokenUsage.totalTokens += response.usage.total_tokens;
-      }
 
       const choice = response.choices[0];
       if (!choice) {
@@ -230,17 +206,11 @@ export class Agent {
           try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
         }
 
+        const toolResult = await this.executeTool(toolName, toolInput);
+
         const thought = typeof assistantMessage.content === "string"
           ? assistantMessage.content
           : null;
-
-        // Notify onStep listeners before execution
-        this.config.onStep?.({ type: "step", data: { iteration, thought, action: "tool_call", toolName, toolInput } });
-
-        const toolResult = await this.executeTool(toolName, toolInput);
-
-        // Notify onStep listeners after execution
-        this.config.onStep?.({ type: "tool_result", data: { iteration, toolName, result: toolResult } });
 
         const step: AgentStep = {
           iteration,
@@ -281,7 +251,6 @@ export class Agent {
       steps,
       totalIterations: iteration,
       success,
-      tokenUsage,
     };
   }
 
@@ -298,7 +267,6 @@ export class Agent {
     const tools = this.registry.toFunctionDefinitions();
 
     let iteration = 0;
-    const tokenUsage: TokenUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 
     try {
       while (iteration < this.config.maxIterations) {
@@ -309,13 +277,6 @@ export class Agent {
           messages,
           tools: tools.length > 0 ? tools : undefined,
         });
-
-        // Accumulate token usage across all LLM calls
-        if (response.usage) {
-          tokenUsage.promptTokens += response.usage.prompt_tokens;
-          tokenUsage.completionTokens += response.usage.completion_tokens;
-          tokenUsage.totalTokens += response.usage.total_tokens;
-        }
 
         const choice = response.choices[0];
         if (!choice) break;
@@ -340,7 +301,7 @@ export class Agent {
           });
           logAgentEnd(sessionId, answerContent, iteration, true);
 
-          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration, tokenUsage } };
+          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration } };
           return;
         }
 
@@ -393,7 +354,7 @@ export class Agent {
 
       // Max iterations reached without final answer
       logAgentEnd(sessionId, null, iteration, false);
-      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration, tokenUsage } };
+      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration } };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       yield { type: "error", data: { message } };
@@ -419,76 +380,36 @@ export class Agent {
       return result;
     }
 
-    // Validate input against the tool's JSON Schema before execution
-    const validation = validateToolInput(input, tool.inputSchema);
-    if (!validation.valid) {
+    try {
+      // Execute with timeout
+      const output = await Promise.race([
+        tool.execute(input),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error(`Tool "${name}" timed out after ${this.config.toolTimeoutMs}ms`)), this.config.toolTimeoutMs)
+        ),
+      ]);
+
+      const result: ToolResult = {
+        toolName: name,
+        input,
+        output,
+        latencyMs: performance.now() - start,
+        success: true,
+      };
+      logToolExecution(result);
+      return result;
+    } catch (err) {
+      const error = err instanceof Error ? err.message : String(err);
       const result: ToolResult = {
         toolName: name,
         input,
         output: null,
         latencyMs: performance.now() - start,
         success: false,
-        error: `Invalid input for tool "${name}": ${validation.errors.join("; ")}`,
+        error,
       };
       logToolExecution(result);
       return result;
     }
-
-    // Execute with timeout + retry for transient network errors
-    const MAX_RETRIES = 2;
-    const BACKOFF_MS = [300, 600] as const;
-    let lastError = "unknown error";
-
-    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-      if (attempt > 0) {
-        // Exponential backoff before retry
-        await new Promise<void>((resolve) => setTimeout(resolve, BACKOFF_MS[attempt - 1]));
-      }
-
-      try {
-        const output = await Promise.race([
-          tool.execute(input),
-          new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error(`Tool "${name}" timed out after ${this.config.toolTimeoutMs}ms`)), this.config.toolTimeoutMs)
-          ),
-        ]);
-
-        const result: ToolResult = {
-          toolName: name,
-          input,
-          output,
-          latencyMs: performance.now() - start,
-          success: true,
-        };
-        logToolExecution(result);
-        return result;
-      } catch (err) {
-        lastError = err instanceof Error ? err.message : String(err);
-        // Only retry on transient network errors; never retry our own timeout or permanent failures
-        if (!this.isTransientError(lastError) || attempt === MAX_RETRIES) {
-          break;
-        }
-      }
-    }
-
-    const result: ToolResult = {
-      toolName: name,
-      input,
-      output: null,
-      latencyMs: performance.now() - start,
-      success: false,
-      error: lastError,
-    };
-    logToolExecution(result);
-    return result;
-  }
-
-  /**
-   * Returns true for transient network errors that are safe to retry.
-   * Never retries our own tool timeout or permanent failures (validation, not-found).
-   */
-  private isTransientError(message: string): boolean {
-    if (message.includes("timed out after") && message.includes("ms")) return false;
-    return /ECONNRESET|ETIMEDOUT|ENOTFOUND|ECONNREFUSED|fetch failed|socket hang up|getaddrinfo/i.test(message);
   }
 }

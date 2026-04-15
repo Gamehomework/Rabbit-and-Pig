@@ -9,7 +9,7 @@ import { ToolRegistry } from "../agent/tools/registry.js";
 import { createInvokeAgentTool, type OnAgentEvent } from "./invoke-agent-tool.js";
 import { registerSharedTool, getSharedTool } from "./pool.js";
 import { COORDINATOR_SYSTEM_PROMPT } from "./roles.js";
-import type { MultiAgentStreamEvent } from "./types.js";
+import type { MultiAgentStreamEvent, AgentOutput } from "./types.js";
 
 // Import existing tools to register them in the shared pool
 import { quoteTool } from "../agent/tools/quote.js";
@@ -104,8 +104,13 @@ export async function* runCoordinatorStream(
 
   // Collect agent events from invoke_agent calls
   const pendingEvents: MultiAgentStreamEvent[] = [];
+  const collectedOutputs: AgentOutput[] = [];
   const onAgentEvent: OnAgentEvent = (event) => {
     pendingEvents.push(event);
+    // P0 fix: accumulate agent outputs so final_report can reference them
+    if (event.type === "agent_result") {
+      collectedOutputs.push(event.data);
+    }
   };
 
   // Build coordinator registry
@@ -163,7 +168,7 @@ export async function* runCoordinatorStream(
           type: "final_report",
           data: {
             summary: event.data.answer ?? "Analysis complete.",
-            agentOutputs: [], // Outputs already emitted as agent_result events
+            agentOutputs: collectedOutputs, // P0 fix: populated from agent_result events
             totalLatencyMs: Math.round(performance.now() - startTime),
           },
         };
