@@ -5,6 +5,7 @@
 export type { Tool, ToolResult, FunctionDefinition, JsonSchema } from "./types.js";
 export { ToolRegistry } from "./registry.js";
 export { echoTool } from "./echo.js";
+export { quoteTool } from "./quote.js";
 export { screenerTool } from "./screener.js";
 export { chartTool } from "./chart.js";
 export { newsTool } from "./news.js";
@@ -17,8 +18,10 @@ export { backtestTool } from "./backtest.js";
 
 import { ToolRegistry } from "./registry.js";
 import { echoTool } from "./echo.js";
+import { quoteTool } from "./quote.js";
 import { screenerTool } from "./screener.js";
 import { chartTool } from "./chart.js";
+import { newsTool } from "./news.js";
 import { getPluginManager } from "../../plugins/instance.js";
 import { createInstallTool } from "./install-tool.js";
 import { createListPluginsTool } from "./list-plugins.js";
@@ -30,6 +33,10 @@ import { backtestTool } from "./backtest.js";
 export function createToolRegistry(): ToolRegistry {
   const registry = new ToolRegistry();
   registry.register(echoTool);
+
+  // Register market data tools
+  registry.register(quoteTool);
+  registry.register(newsTool);
   registry.register(screenerTool);
   registry.register(chartTool);
 

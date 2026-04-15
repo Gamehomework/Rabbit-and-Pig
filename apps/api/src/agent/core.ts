@@ -8,6 +8,7 @@ import OpenAI from "openai";
 import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.js";
 import { ToolRegistry } from "./tools/registry.js";
 import type { ToolResult } from "./tools/types.js";
+import { validateToolInput } from "./tools/validate.js";
 import {
   logAgentStep,
   logToolExecution,
@@ -25,6 +26,18 @@ export interface AgentConfig {
   model?: string;
   /** System prompt override */
   systemPrompt?: string;
+  /**
+   * Optional step callback fired during run() for each tool call and result.
+   * Lets callers stream progress without switching to runStream().
+   */
+  onStep?: (event: AgentStreamEvent) => void;
+}
+
+/** Accumulated token usage across all LLM calls in a run */
+export interface TokenUsage {
+  promptTokens: number;
+  completionTokens: number;
+  totalTokens: number;
 }
 
 /** A single step in the agent execution trace */
@@ -43,13 +56,15 @@ export interface AgentRunResult {
   steps: AgentStep[];
   totalIterations: number;
   success: boolean;
+  /** Accumulated token usage across all LLM calls in this run */
+  tokenUsage: TokenUsage;
 }
 
 /** Events emitted during streaming agent execution */
 export type AgentStreamEvent =
   | { type: "step"; data: { iteration: number; thought: string | null; action: "thought" | "tool_call"; toolName?: string; toolInput?: unknown } }
   | { type: "tool_result"; data: { iteration: number; toolName: string; result: ToolResult } }
-  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number } }
+  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number; tokenUsage: TokenUsage } }
   | { type: "error"; data: { message: string } };
 
 export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant with access to real-time and historical market data.
@@ -148,6 +163,7 @@ export class Agent {
 
     let finalAnswer: string | null = null;
     let iteration = 0;
+    const tokenUsage: TokenUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 
     while (iteration < this.config.maxIterations) {
       iteration++;
@@ -157,6 +173,13 @@ export class Agent {
         messages,
         tools: tools.length > 0 ? tools : undefined,
       });
+
+      // Accumulate token usage across all LLM calls
+      if (response.usage) {
+        tokenUsage.promptTokens += response.usage.prompt_tokens;
+        tokenUsage.completionTokens += response.usage.completion_tokens;
+        tokenUsage.totalTokens += response.usage.total_tokens;
+      }
 
       const choice = response.choices[0];
       if (!choice) {
@@ -206,11 +229,17 @@ export class Agent {
           try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
         }
 
-        const toolResult = await this.executeTool(toolName, toolInput);
-
         const thought = typeof assistantMessage.content === "string"
           ? assistantMessage.content
           : null;
+
+        // Notify onStep listeners before execution
+        this.config.onStep?.({ type: "step", data: { iteration, thought, action: "tool_call", toolName, toolInput } });
+
+        const toolResult = await this.executeTool(toolName, toolInput);
+
+        // Notify onStep listeners after execution
+        this.config.onStep?.({ type: "tool_result", data: { iteration, toolName, result: toolResult } });
 
         const step: AgentStep = {
           iteration,
@@ -251,6 +280,7 @@ export class Agent {
       steps,
       totalIterations: iteration,
       success,
+      tokenUsage,
     };
   }
 
@@ -267,6 +297,7 @@ export class Agent {
     const tools = this.registry.toFunctionDefinitions();
 
     let iteration = 0;
+    const tokenUsage: TokenUsage = { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
 
     try {
       while (iteration < this.config.maxIterations) {
@@ -277,6 +308,13 @@ export class Agent {
           messages,
           tools: tools.length > 0 ? tools : undefined,
         });
+
+        // Accumulate token usage across all LLM calls
+        if (response.usage) {
+          tokenUsage.promptTokens += response.usage.prompt_tokens;
+          tokenUsage.completionTokens += response.usage.completion_tokens;
+          tokenUsage.totalTokens += response.usage.total_tokens;
+        }
 
         const choice = response.choices[0];
         if (!choice) break;
@@ -301,7 +339,7 @@ export class Agent {
           });
           logAgentEnd(sessionId, answerContent, iteration, true);
 
-          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration } };
+          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration, tokenUsage } };
           return;
         }
 
@@ -354,7 +392,7 @@ export class Agent {
 
       // Max iterations reached without final answer
       logAgentEnd(sessionId, null, iteration, false);
-      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration } };
+      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration, tokenUsage } };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       yield { type: "error", data: { message } };
@@ -375,6 +413,21 @@ export class Agent {
         latencyMs: performance.now() - start,
         success: false,
         error: `Tool "${name}" is not registered.`,
+      };
+      logToolExecution(result);
+      return result;
+    }
+
+    // Validate input against the tool's JSON Schema before execution
+    const validation = validateToolInput(input, tool.inputSchema);
+    if (!validation.valid) {
+      const result: ToolResult = {
+        toolName: name,
+        input,
+        output: null,
+        latencyMs: performance.now() - start,
+        success: false,
+        error: `Invalid input for tool "${name}": ${validation.errors.join("; ")}`,
       };
       logToolExecution(result);
       return result;
