@@ -46,5 +46,15 @@ export class ToolRegistry {
       },
     }));
   }
+
+  /**
+   * Generate a human-readable tool description block for inclusion in system prompts.
+   * Each tool is listed as `- **name**: description`.
+   */
+  generateToolDescriptions(): string {
+    return this.list()
+      .map((tool) => `- **${tool.name}**: ${tool.description}`)
+      .join("\n");
+  }
 }
 

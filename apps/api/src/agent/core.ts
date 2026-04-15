@@ -5,7 +5,10 @@
  */
 
 import OpenAI from "openai";
-import type { ChatCompletionMessageParam } from "openai/resources/chat/completions.js";
+import type {
+  ChatCompletionMessageParam,
+  ChatCompletionMessageToolCall,
+} from "openai/resources/chat/completions.js";
 import { ToolRegistry } from "./tools/registry.js";
 import type { ToolResult } from "./tools/types.js";
 import {
@@ -14,6 +17,8 @@ import {
   logAgentStart,
   logAgentEnd,
 } from "./logger.js";
+import { callWithRetry } from "./llm-client.js";
+import { DEFAULT_SYSTEM_PROMPT } from "./prompts/system.js";
 
 /** Configuration for the agent */
 export interface AgentConfig {
@@ -35,6 +40,9 @@ export interface AgentStep {
   toolResult: ToolResult | null;
 }
 
+/** Reason why the agent stopped executing */
+export type StoppedReason = "complete" | "max_iterations" | "no_response";
+
 /** Result of a complete agent run */
 export interface AgentRunResult {
   sessionId: string;
@@ -43,66 +51,31 @@ export interface AgentRunResult {
   steps: AgentStep[];
   totalIterations: number;
   success: boolean;
+  stoppedReason: StoppedReason;
+}
+
+/** Processed tool call with parsed input */
+interface ParsedToolCall {
+  id: string;
+  name: string;
+  input: unknown;
+}
+
+/** Result of processing a batch of tool calls */
+interface ProcessedToolResult {
+  steps: AgentStep[];
+  messages: ChatCompletionMessageParam[];
 }
 
 /** Events emitted during streaming agent execution */
 export type AgentStreamEvent =
   | { type: "step"; data: { iteration: number; thought: string | null; action: "thought" | "tool_call"; toolName?: string; toolInput?: unknown } }
   | { type: "tool_result"; data: { iteration: number; toolName: string; result: ToolResult } }
-  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number } }
+  | { type: "answer"; data: { sessionId: string; answer: string | null; totalIterations: number; stoppedReason: StoppedReason } }
   | { type: "error"; data: { message: string } };
 
-export const DEFAULT_SYSTEM_PROMPT = `You are an expert stock research assistant with access to real-time and historical market data.
-
-## Available Tools
-- **get_quote**: Real-time quote for a single stock — current price, daily change %, day high/low, 52-week range, market cap, P/E ratio, volume. USE THIS FIRST for any question about current price or today's performance.
-- **chart_data**: Historical OHLCV price data for any stock over a chosen range (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y). Use for trend analysis and price history.
-- **get_news**: Recent news headlines for a stock from Yahoo Finance RSS. Use for sentiment, events, and company news.
-- **stock_screener**: Screen/filter a broad list of actively traded stocks by sector, market cap range, P/E range, or volume. Use for discovery, not single-stock lookup.
-
-## How to Answer Common Questions
-- "What is X's current price / today's performance?" → call get_quote(symbol)
-- "Analyze X's recent performance" → call get_quote + chart_data(range="1mo") + get_news
-- "What's happening with X?" → call get_quote + get_news
-- "Find tech stocks with low P/E" → call stock_screener
-
-## Rules
-1. ALWAYS call tools to get actual data — never invent or guess prices, percentages, or metrics.
-2. If pre-loaded market data is provided above the conversation, use it first and only call tools for additional depth.
-3. Format numbers clearly: "$10.37", "▲2.3% today", "$57.9B market cap".
-4. Be concise and data-driven. Structure your answer with the key numbers first, then interpretation.
-5. Respond in the same language as the user's question.
-6. If the user asks you to draw on the chart, output a JSON block wrapped in \`\`\`chart_annotations ... \`\`\` with "markers" and/or "lines" arrays. Example:
-\`\`\`chart_annotations
-{
-  "markers": [{ "time": "2024-03-15", "position": "aboveBar", "color": "#e91e63", "shape": "arrowDown", "text": "Sell" }],
-  "lines": [{ "title": "SMA", "color": "blue", "data": [{ "time": "2024-03-14", "value": 150.5 }] }]
-}
-\`\`\`
-Use dates in YYYY-MM-DD format.
-
-## Page Control Tools
-You have access to page control tools that let you interact with the UI:
-- **set_chart_range**: Switch chart timeframe (1d, 1mo, 3mo, 6mo, 1y). Use after analysis to show the most relevant range.
-- **add_price_level**: Draw a horizontal line on the chart at a price (support/resistance). Use when you identify key levels.
-- **filter_news**: Filter or highlight news by keywords. Use when the user wants to focus on specific topics.
-- **scroll_to_section**: Scroll to a page section (chart, news, notes, chat). Use after analysis to direct attention.
-- **prefill_note**: Pre-fill the Notes form with title + content. Use to help the user save analysis results.
-- **navigate_to**: Navigate to another page (deep-analysis, home).
-- **calc_indicator_series**: Calculate SMA/EMA/Bollinger time-series data for a stock. Returns chart-ready line data.
-- **add_indicator_lines**: Draw indicator lines on the chart using data from calc_indicator_series.
-
-**Workflow for adding indicators:**
-When user asks to add SMA, EMA, or Bollinger Bands to the chart:
-1. Call calc_indicator_series(symbol, indicators, range) to compute the time-series
-2. Call add_indicator_lines({ lines: result.lines }) to draw them on the chart
-Example: user says "add SMA20 and SMA50" → calc_indicator_series(symbol="{stock}", indicators=["SMA20","SMA50"]) → add_indicator_lines({lines: ...})
-
-### When to use page control tools
-- When the user says "show me", "switch to", "change", "filter", "highlight", or similar control commands.
-- After completing analysis, use set_chart_range to switch to the most meaningful timeframe.
-- When you find support/resistance levels, use add_price_level to mark them on the chart.
-- After analysis, use scroll_to_section("chart") to direct the user to see the results.`;
+// Re-export for backward compatibility
+export { DEFAULT_SYSTEM_PROMPT } from "./prompts/system.js";
 
 const DEFAULT_MAX_ITERATIONS = 10;
 const DEFAULT_TOOL_TIMEOUT_MS = 30_000;
@@ -133,6 +106,97 @@ export class Agent {
     };
   }
 
+  // ── Shared helpers (Task 1: eliminate duplication) ──────────────────
+
+  /** Parse tool call arguments, handling double-encoded JSON from LLMs. */
+  private parseToolInput(rawArguments: string): unknown {
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(rawArguments);
+    } catch {
+      parsed = rawArguments;
+    }
+    // Handle double-encoded JSON (LLM sometimes wraps large payloads in a string)
+    if (typeof parsed === "string") {
+      try { parsed = JSON.parse(parsed); } catch { /* keep as-is */ }
+    }
+    return parsed;
+  }
+
+  /** Parse raw tool_calls into a normalized array. */
+  private parseToolCalls(toolCalls: ChatCompletionMessageToolCall[]): ParsedToolCall[] {
+    return toolCalls
+      .filter((tc) => tc.type === "function")
+      .map((tc) => ({
+        id: tc.id,
+        name: tc.function.name,
+        input: this.parseToolInput(tc.function.arguments),
+      }));
+  }
+
+  /** Execute all tool calls in parallel and return steps + messages. */
+  private async processToolCalls(
+    parsed: ParsedToolCall[],
+    iteration: number,
+    thought: string | null,
+  ): Promise<ProcessedToolResult> {
+    // Execute all tools in parallel (Task 4)
+    const results = await Promise.all(
+      parsed.map((tc) => this.executeTool(tc.name, tc.input)),
+    );
+
+    const steps: AgentStep[] = [];
+    const messages: ChatCompletionMessageParam[] = [];
+
+    for (let i = 0; i < parsed.length; i++) {
+      const tc = parsed[i];
+      const toolResult = results[i];
+
+      steps.push({
+        iteration,
+        thought,
+        toolCall: { name: tc.name, input: tc.input },
+        toolResult,
+      });
+
+      logAgentStep({
+        iteration,
+        thought,
+        action: "tool_call",
+        toolName: tc.name,
+        toolInput: tc.input,
+        result: toolResult.output,
+        timestamp: new Date().toISOString(),
+      });
+
+      messages.push({
+        role: "tool",
+        tool_call_id: tc.id,
+        content: typeof toolResult.output === "string"
+          ? toolResult.output
+          : JSON.stringify(toolResult.output),
+      });
+    }
+
+    return { steps, messages };
+  }
+
+  /** Call the LLM with retry logic. */
+  private async callLLM(
+    messages: ChatCompletionMessageParam[],
+    tools: ReturnType<ToolRegistry["toFunctionDefinitions"]>,
+  ) {
+    return callWithRetry(() =>
+      this.client.chat.completions.create({
+        model: this.config.model,
+        messages,
+        tools: tools.length > 0 ? tools : undefined,
+      }),
+    );
+  }
+
+  // ── Public API ─────────────────────────────────────────────────────
+
   /** Run the agent with a query. Returns structured result with trace. */
   async run(query: string, conversationHistory: ChatCompletionMessageParam[] = []): Promise<AgentRunResult> {
     const sessionId = crypto.randomUUID();
@@ -147,19 +211,16 @@ export class Agent {
     const tools = this.registry.toFunctionDefinitions();
 
     let finalAnswer: string | null = null;
+    let stoppedReason: StoppedReason = "max_iterations";
     let iteration = 0;
 
     while (iteration < this.config.maxIterations) {
       iteration++;
 
-      const response = await this.client.chat.completions.create({
-        model: this.config.model,
-        messages,
-        tools: tools.length > 0 ? tools : undefined,
-      });
-
+      const response = await this.callLLM(messages, tools);
       const choice = response.choices[0];
       if (!choice) {
+        stoppedReason = "no_response";
         break;
       }
 
@@ -168,80 +229,39 @@ export class Agent {
 
       // If no tool calls, the LLM has produced a final answer
       if (!assistantMessage.tool_calls || assistantMessage.tool_calls.length === 0) {
-        const answerContent = typeof assistantMessage.content === "string"
+        finalAnswer = typeof assistantMessage.content === "string"
           ? assistantMessage.content
           : null;
-        finalAnswer = answerContent;
-        const step: AgentStep = {
+        stoppedReason = "complete";
+        steps.push({
           iteration,
-          thought: answerContent,
+          thought: finalAnswer,
           toolCall: null,
           toolResult: null,
-        };
-        steps.push(step);
+        });
         logAgentStep({
           iteration,
-          thought: answerContent,
+          thought: finalAnswer,
           action: "final_answer",
           toolName: null,
           toolInput: null,
-          result: answerContent,
+          result: finalAnswer,
           timestamp: new Date().toISOString(),
         });
         break;
       }
 
-      // Process each tool call
-      for (const toolCall of assistantMessage.tool_calls) {
-        if (toolCall.type !== "function") continue;
-        const toolName = toolCall.function.name;
-        let toolInput: unknown;
-        try {
-          toolInput = JSON.parse(toolCall.function.arguments);
-        } catch {
-          toolInput = toolCall.function.arguments;
-        }
-        // Handle double-encoded JSON (LLM sometimes wraps large payloads in a string)
-        if (typeof toolInput === 'string') {
-          try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
-        }
-
-        const toolResult = await this.executeTool(toolName, toolInput);
-
-        const thought = typeof assistantMessage.content === "string"
-          ? assistantMessage.content
-          : null;
-
-        const step: AgentStep = {
-          iteration,
-          thought,
-          toolCall: { name: toolName, input: toolInput },
-          toolResult,
-        };
-        steps.push(step);
-
-        logAgentStep({
-          iteration,
-          thought,
-          action: "tool_call",
-          toolName,
-          toolInput,
-          result: toolResult.output,
-          timestamp: new Date().toISOString(),
-        });
-
-        // Add tool result as a message for the next iteration
-        messages.push({
-          role: "tool",
-          tool_call_id: toolCall.id,
-          content: typeof toolResult.output === "string"
-            ? toolResult.output
-            : JSON.stringify(toolResult.output),
-        });
-      }
+      // Process tool calls via shared helper
+      const thought = typeof assistantMessage.content === "string"
+        ? assistantMessage.content
+        : null;
+      const parsed = this.parseToolCalls(assistantMessage.tool_calls);
+      const processed = await this.processToolCalls(parsed, iteration, thought);
+      steps.push(...processed.steps);
+      messages.push(...processed.messages);
     }
 
-    const success = finalAnswer !== null;
+    const success = stoppedReason === "complete" && finalAnswer !== null;
     logAgentEnd(sessionId, finalAnswer, iteration, success);
 
     return {
@@ -251,6 +271,7 @@ export class Agent {
       steps,
       totalIterations: iteration,
       success,
+      stoppedReason,
     };
   }
 
@@ -272,14 +293,13 @@ export class Agent {
       while (iteration < this.config.maxIterations) {
         iteration++;
 
-        const response = await this.client.chat.completions.create({
-          model: this.config.model,
-          messages,
-          tools: tools.length > 0 ? tools : undefined,
-        });
-
+        const response = await this.callLLM(messages, tools);
         const choice = response.choices[0];
-        if (!choice) break;
+        if (!choice) {
+          logAgentEnd(sessionId, null, iteration, false);
+          yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration, stoppedReason: "no_response" } };
+          return;
+        }
 
         const assistantMessage = choice.message;
         messages.push(assistantMessage as ChatCompletionMessageParam);
@@ -301,60 +321,34 @@ export class Agent {
           });
           logAgentEnd(sessionId, answerContent, iteration, true);
 
-          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration } };
+          yield { type: "answer", data: { sessionId, answer: answerContent, totalIterations: iteration, stoppedReason: "complete" } };
           return;
         }
 
-        // Process tool calls
-        for (const toolCall of assistantMessage.tool_calls) {
-          if (toolCall.type !== "function") continue;
-          const toolName = toolCall.function.name;
-          let toolInput: unknown;
-          try {
-            toolInput = JSON.parse(toolCall.function.arguments);
-          } catch {
-            toolInput = toolCall.function.arguments;
-          }
-          // Handle double-encoded JSON (LLM sometimes wraps large payloads in a string)
-          if (typeof toolInput === 'string') {
-            try { toolInput = JSON.parse(toolInput as string); } catch { /* keep as-is */ }
-          }
+        // Process tool calls via shared helpers
+        const thought = typeof assistantMessage.content === "string"
+          ? assistantMessage.content
+          : null;
+        const parsed = this.parseToolCalls(assistantMessage.tool_calls);
 
-          const thought = typeof assistantMessage.content === "string"
-            ? assistantMessage.content
-            : null;
-
-          // Emit step event before tool execution
-          yield { type: "step", data: { iteration, thought, action: "tool_call", toolName, toolInput } };
-
-          const toolResult = await this.executeTool(toolName, toolInput);
-
-          logAgentStep({
-            iteration,
-            thought,
-            action: "tool_call",
-            toolName,
-            toolInput,
-            result: toolResult.output,
-            timestamp: new Date().toISOString(),
-          });
-
-          // Emit tool result
-          yield { type: "tool_result", data: { iteration, toolName, result: toolResult } };
-
-          messages.push({
-            role: "tool",
-            tool_call_id: toolCall.id,
-            content: typeof toolResult.output === "string"
-              ? toolResult.output
-              : JSON.stringify(toolResult.output),
-          });
+        // Emit step events before execution
+        for (const tc of parsed) {
+          yield { type: "step", data: { iteration, thought, action: "tool_call", toolName: tc.name, toolInput: tc.input } };
         }
+
+        const processed = await this.processToolCalls(parsed, iteration, thought);
+
+        // Emit tool results
+        for (let i = 0; i < parsed.length; i++) {
+          yield { type: "tool_result", data: { iteration, toolName: parsed[i].name, result: processed.steps[i].toolResult! } };
+        }
+
+        messages.push(...processed.messages);
       }
 
       // Max iterations reached without final answer
       logAgentEnd(sessionId, null, iteration, false);
-      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration } };
+      yield { type: "answer", data: { sessionId, answer: null, totalIterations: iteration, stoppedReason: "max_iterations" } };
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
       yield { type: "error", data: { message } };
