@@ -81,6 +81,12 @@ const DEFAULT_MAX_ITERATIONS = 10;
 const DEFAULT_TOOL_TIMEOUT_MS = 30_000;
 const DEFAULT_MODEL = "deepseek-chat";
 
+// Memory compression: triggered when the message list exceeds this size.
+// Keeps the system prompt + first user query + a notice + the N most recent messages.
+// This prevents context-window overflow in long multi-tool runs without an extra LLM call.
+const COMPRESSION_THRESHOLD = 20;   // compress once messages exceed this count
+const KEEP_RECENT_MESSAGES  = 10;   // how many recent messages to retain after compression
+
 export class Agent {
   private client: OpenAI;
   private registry: ToolRegistry;
@@ -195,6 +201,53 @@ export class Agent {
     );
   }
 
+  /**
+   * Sliding-window memory compression.
+   *
+   * Keeps:
+   *   [0] system prompt  (always)
+   *   [1] first user message  (preserves the original query)
+   *   [compression notice]
+   *   [...last KEEP_RECENT_MESSAGES messages]
+   *
+   * Safety rule: never start the retained window on a `tool` role message,
+   * because that would orphan it from the `assistant` message that issued the
+   * tool_call — which the DeepSeek / OpenAI API requires to be paired.
+   * We advance the cut-point forward until we land on an `assistant` or `user`
+   * message.
+   */
+  private compressMessages(messages: ChatCompletionMessageParam[]): ChatCompletionMessageParam[] {
+    if (messages.length <= COMPRESSION_THRESHOLD) return messages;
+
+    let cutPoint = messages.length - KEEP_RECENT_MESSAGES;
+    if (cutPoint < 2) return messages; // nothing safe to cut
+
+    // Advance past any `tool` messages to avoid orphaned tool results
+    while (cutPoint < messages.length && messages[cutPoint].role === "tool") {
+      cutPoint++;
+    }
+
+    // If we advanced all the way to the end nothing was gained
+    if (cutPoint >= messages.length) return messages;
+
+    const droppedCount = cutPoint - 2; // exclude system (0) and first user (1)
+    const recentMessages = messages.slice(cutPoint);
+
+    const compressionNotice: ChatCompletionMessageParam = {
+      role: "system",
+      content:
+        `[Context compressed: ${droppedCount} intermediate messages omitted to stay within context limits. ` +
+        `The original query and most recent ${recentMessages.length} messages are retained below.]`,
+    };
+
+    return [
+      messages[0],  // system prompt
+      messages[1],  // first user message (original query)
+      compressionNotice,
+      ...recentMessages,
+    ];
+  }
+
   // ── Public API ─────────────────────────────────────────────────────
 
   /** Run the agent with a query. Returns structured result with trace. */
@@ -203,7 +256,8 @@ export class Agent {
     logAgentStart(sessionId, query);
 
     const steps: AgentStep[] = [];
-    const messages: ChatCompletionMessageParam[] = [
+    // `let` so compressMessages() can replace the array in-place each iteration
+    let messages: ChatCompletionMessageParam[] = [
       { role: "system", content: this.config.systemPrompt },
       ...conversationHistory,
       { role: "user", content: query },
@@ -216,6 +270,9 @@ export class Agent {
 
     while (iteration < this.config.maxIterations) {
       iteration++;
+
+      // P1 fix: compress context before each LLM call to avoid context-window overflow
+      messages = this.compressMessages(messages);
 
       const response = await this.callLLM(messages, tools);
       const choice = response.choices[0];
@@ -280,7 +337,8 @@ export class Agent {
     const sessionId = crypto.randomUUID();
     logAgentStart(sessionId, query);
 
-    const messages: ChatCompletionMessageParam[] = [
+    // `let` so compressMessages() can replace the array in-place each iteration
+    let messages: ChatCompletionMessageParam[] = [
       { role: "system", content: this.config.systemPrompt },
       ...conversationHistory,
       { role: "user", content: query },
@@ -292,6 +350,9 @@ export class Agent {
     try {
       while (iteration < this.config.maxIterations) {
         iteration++;
+
+        // P1 fix: compress context before each LLM call to avoid context-window overflow
+        messages = this.compressMessages(messages);
 
         const response = await this.callLLM(messages, tools);
         const choice = response.choices[0];
