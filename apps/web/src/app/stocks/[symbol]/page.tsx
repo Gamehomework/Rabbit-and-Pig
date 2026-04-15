@@ -10,7 +10,9 @@ import {
   getStockQuote,
   type OHLCVData, type NewsItem, type Note, type NotificationChannel,
   type StockQuote,
+  type BacktestResult,
 } from "@/lib/api";
+import BacktestPanel from "@/components/BacktestPanel";
 
 const RANGES = ["1d", "1mo", "3mo", "6mo", "1y"] as const;
 
@@ -43,7 +45,8 @@ type PageCommand =
   | { type: "scroll_to_section"; section: "chart" | "news" | "notes" | "chat" }
   | { type: "prefill_note"; title: string; content: string }
   | { type: "navigate_to"; path: string }
-  | { type: "add_indicator_lines"; lines: ChartLine[] };
+  | { type: "add_indicator_lines"; lines: ChartLine[] }
+  | { type: "show_backtest_result"; result: BacktestResult };
 
 export default function StockDetailPage() {
   const params = useParams<{ symbol: string }>();
@@ -58,6 +61,10 @@ export default function StockDetailPage() {
   const [chartError, setChartError] = useState<string | null>(null);
   const [chartMarkers, setChartMarkers] = useState<ChartMarker[]>([]);
   const [chartLines, setChartLines] = useState<ChartLine[]>([]);
+
+  // Backtest
+  const [backtestOpen, setBacktestOpen] = useState(false);
+  const [backtestResult, setBacktestResult] = useState<BacktestResult | null>(null);
 
   // News
   const [news, setNews] = useState<NewsItem[]>([]);
@@ -219,6 +226,11 @@ export default function StockDetailPage() {
         break;
       case "add_indicator_lines":
         setChartLines(prev => [...prev, ...command.lines]);
+        break;
+      case "show_backtest_result":
+        setBacktestOpen(true);
+        setBacktestResult(command.result);
+        setChartMarkers(command.result.markers as ChartMarker[]);
         break;
     }
   }
@@ -543,6 +555,16 @@ export default function StockDetailPage() {
           <p className="py-8 text-center text-gray-400">No chart data available</p>
         )}
       </section>
+
+      {/* Backtest Panel */}
+      <BacktestPanel
+        symbol={symbol}
+        externalResult={backtestResult}
+        isOpen={backtestOpen}
+        onToggle={setBacktestOpen}
+        onMarkersChange={setChartMarkers}
+        onClear={() => setBacktestResult(null)}
+      />
 
       {/* News Feed */}
       <section ref={newsSectionRef} className="rounded-lg border bg-white p-4 shadow-sm">

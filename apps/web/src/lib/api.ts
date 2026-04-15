@@ -391,6 +391,57 @@ export function getAnalyticsExportUrl(format: "csv" | "json", type: "queries" | 
   return `${BASE_URL}/api/analytics/export?format=${format}&type=${type}&from=${encodeURIComponent(from)}&to=${encodeURIComponent(to)}`;
 }
 
+// --- Backtest Types & API ---
+
+export interface BacktestTrade {
+  date: string;
+  action: "BUY" | "SELL";
+  price: number;
+  shares: number;
+  pnl: number;
+}
+
+export interface BacktestStats {
+  totalReturn: number;
+  winRate: number;
+  maxDrawdown: number;
+  sharpeRatio: number;
+  totalTrades: number;
+}
+
+export interface BacktestMarker {
+  time: string;
+  position: "belowBar" | "aboveBar";
+  color: string;
+  shape: "arrowUp" | "arrowDown";
+  text: string;
+}
+
+export interface BacktestResult {
+  trades: BacktestTrade[];
+  stats: BacktestStats;
+  markers: BacktestMarker[];
+}
+
+export interface BacktestParams {
+  strategy: "ma_crossover" | "rsi" | "bollinger_breakout";
+  range?: "1y" | "2y" | "3y";
+  initialCapital?: number;
+  fastPeriod?: number;
+  slowPeriod?: number;
+  overbought?: number;
+  oversold?: number;
+  bbPeriod?: number;
+  bbStdDev?: number;
+}
+
+export async function runBacktest(symbol: string, params: BacktestParams): Promise<BacktestResult> {
+  return fetchApi<BacktestResult>(`/api/stocks/${encodeURIComponent(symbol)}/backtest`, {
+    method: "POST",
+    body: JSON.stringify(params),
+  });
+}
+
 // --- Agent Streaming ---
 
 export interface AgentStreamEvent {
