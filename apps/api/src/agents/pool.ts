@@ -4,9 +4,10 @@
  */
 
 import { Agent } from "../agent/core.js";
+import type { AgentStreamEvent } from "../agent/core.js";
 import { ToolRegistry } from "../agent/tools/registry.js";
 import type { Tool } from "../agent/tools/types.js";
-import type { AgentRoleConfig, AgentOutput, AgentRole } from "./types.js";
+import type { AgentRoleConfig, AgentOutput, AgentRole, MultiAgentStreamEvent } from "./types.js";
 import { AGENT_ROLES } from "./roles.js";
 
 /** Registry of all available tools across agents */
@@ -31,12 +32,16 @@ export function clearSharedTools(): void {
  * Execute a specialist agent by role.
  * Creates a ReAct Agent with the role-specific system prompt and tools,
  * runs it, and returns a structured AgentOutput.
+ *
+ * @param onStepEvent - Optional callback fired for each tool call / result so the
+ *   coordinator can stream `agent_step` and `agent_tool_result` events in real-time.
  */
 export async function runSpecialistAgent(
   role: AgentRole,
   query: string,
   context?: Record<string, unknown>,
   urls?: string[],
+  onStepEvent?: (event: MultiAgentStreamEvent) => void,
 ): Promise<AgentOutput> {
   const config = AGENT_ROLES[role];
   if (!config) {
@@ -75,10 +80,40 @@ export async function runSpecialistAgent(
       systemPrompt += `\n\n## URLs to crawl\n${urls.map(u => `- ${u}`).join("\n")}`;
     }
 
+    // Build onStep callback to forward specialist progress to the coordinator stream
+    const onStep = onStepEvent
+      ? (event: AgentStreamEvent) => {
+          if (event.type === "step" && event.data.action === "tool_call") {
+            onStepEvent({
+              type: "agent_step",
+              data: {
+                role,
+                iteration: event.data.iteration,
+                thought: event.data.thought,
+                toolName: event.data.toolName,
+                toolInput: event.data.toolInput,
+              },
+            });
+          } else if (event.type === "tool_result") {
+            onStepEvent({
+              type: "agent_tool_result",
+              data: {
+                role,
+                iteration: event.data.iteration,
+                toolName: event.data.toolName,
+                success: event.data.result.success,
+                output: event.data.result.output,
+              },
+            });
+          }
+        }
+      : undefined;
+
     // Create and run a ReAct agent with role-specific config
     const agent = new Agent(registry, {
       systemPrompt,
       maxIterations: config.maxIterations,
+      onStep,
     });
 
     const result = await agent.run(query);

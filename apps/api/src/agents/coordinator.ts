@@ -23,8 +23,14 @@ import { getFinancialsTool } from "./tools/get-financials.js";
 import { calcIndicatorsTool } from "./tools/calc-indicators.js";
 import { calcRiskTool } from "./tools/calc-risk.js";
 
-/** Initialize shared tools that specialist agents can use */
+/** Guards against redundant re-initialization on concurrent requests */
+let sharedToolsReady = false;
+
+/** Initialize shared tools that specialist agents can use (runs once per process) */
 function initSharedTools(): void {
+  if (sharedToolsReady) return;
+  sharedToolsReady = true;
+
   // Register existing tools so specialists can access them by name
   registerSharedTool(quoteTool);
   registerSharedTool(newsTool);

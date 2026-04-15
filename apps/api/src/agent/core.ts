@@ -126,7 +126,7 @@ const DEFAULT_MODEL = "deepseek-chat";
 export class Agent {
   private client: OpenAI;
   private registry: ToolRegistry;
-  private config: Required<AgentConfig>;
+  private config: Required<Omit<AgentConfig, "onStep">> & Pick<AgentConfig, "onStep">;
 
   constructor(registry: ToolRegistry, config: AgentConfig = {}) {
     const apiKey = process.env.DEEPSEEK_API_KEY;
@@ -145,6 +145,7 @@ export class Agent {
       toolTimeoutMs: config.toolTimeoutMs ?? DEFAULT_TOOL_TIMEOUT_MS,
       model: config.model ?? DEFAULT_MODEL,
       systemPrompt: config.systemPrompt ?? DEFAULT_SYSTEM_PROMPT,
+      onStep: config.onStep,
     };
   }
 
@@ -433,36 +434,61 @@ export class Agent {
       return result;
     }
 
-    try {
-      // Execute with timeout
-      const output = await Promise.race([
-        tool.execute(input),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error(`Tool "${name}" timed out after ${this.config.toolTimeoutMs}ms`)), this.config.toolTimeoutMs)
-        ),
-      ]);
+    // Execute with timeout + retry for transient network errors
+    const MAX_RETRIES = 2;
+    const BACKOFF_MS = [300, 600] as const;
+    let lastError = "unknown error";
 
-      const result: ToolResult = {
-        toolName: name,
-        input,
-        output,
-        latencyMs: performance.now() - start,
-        success: true,
-      };
-      logToolExecution(result);
-      return result;
-    } catch (err) {
-      const error = err instanceof Error ? err.message : String(err);
-      const result: ToolResult = {
-        toolName: name,
-        input,
-        output: null,
-        latencyMs: performance.now() - start,
-        success: false,
-        error,
-      };
-      logToolExecution(result);
-      return result;
+    for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+      if (attempt > 0) {
+        // Exponential backoff before retry
+        await new Promise<void>((resolve) => setTimeout(resolve, BACKOFF_MS[attempt - 1]));
+      }
+
+      try {
+        const output = await Promise.race([
+          tool.execute(input),
+          new Promise<never>((_, reject) =>
+            setTimeout(() => reject(new Error(`Tool "${name}" timed out after ${this.config.toolTimeoutMs}ms`)), this.config.toolTimeoutMs)
+          ),
+        ]);
+
+        const result: ToolResult = {
+          toolName: name,
+          input,
+          output,
+          latencyMs: performance.now() - start,
+          success: true,
+        };
+        logToolExecution(result);
+        return result;
+      } catch (err) {
+        lastError = err instanceof Error ? err.message : String(err);
+        // Only retry on transient network errors; never retry our own timeout or permanent failures
+        if (!this.isTransientError(lastError) || attempt === MAX_RETRIES) {
+          break;
+        }
+      }
     }
+
+    const result: ToolResult = {
+      toolName: name,
+      input,
+      output: null,
+      latencyMs: performance.now() - start,
+      success: false,
+      error: lastError,
+    };
+    logToolExecution(result);
+    return result;
+  }
+
+  /**
+   * Returns true for transient network errors that are safe to retry.
+   * Never retries our own tool timeout or permanent failures (validation, not-found).
+   */
+  private isTransientError(message: string): boolean {
+    if (message.includes("timed out after") && message.includes("ms")) return false;
+    return /ECONNRESET|ETIMEDOUT|ENOTFOUND|ECONNREFUSED|fetch failed|socket hang up|getaddrinfo/i.test(message);
   }
 }

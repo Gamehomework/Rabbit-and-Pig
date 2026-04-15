@@ -71,8 +71,8 @@ export function createInvokeAgentTool(onEvent?: OnAgentEvent): Tool<InvokeAgentI
         data: { role: config.role, displayName: config.displayName, query },
       });
 
-      // Run the specialist agent
-      const result = await runSpecialistAgent(role, query, context, urls);
+      // Run the specialist agent, forwarding step events for real-time progress
+      const result = await runSpecialistAgent(role, query, context, urls, onEvent);
 
       // Emit agent_result event
       onEvent?.({

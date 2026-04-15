@@ -10,6 +10,11 @@ import { buildStockContext } from "../agent/context/stockContextLoader.js";
 import { createInvokeAgentTool } from "../agents/invoke-agent-tool.js";
 import { registerSharedTool } from "../agents/pool.js";
 import type { MultiAgentStreamEvent } from "../agents/types.js";
+import {
+  saveMessages,
+  loadHistory,
+  trimToTokenBudget,
+} from "../agent/memory.js";
 
 export async function agentRoutes(app: FastifyInstance) {
   app.post<{
@@ -112,16 +117,29 @@ export async function agentRoutes(app: FastifyInstance) {
           ? `${stockContextBlock}\n\n${DEFAULT_SYSTEM_PROMPT}`
           : DEFAULT_SYSTEM_PROMPT;
 
+        // Load prior conversation history and trim to token budget
+        const rawHistory = await loadHistory(sessionId);
+        const conversationHistory = trimToTokenBudget(systemPrompt, rawHistory);
+
         const agent = new Agent(registry, { systemPrompt });
-        const result = await agent.run(query);
+        const result = await agent.run(query, conversationHistory);
 
         const totalLatencyMs = Math.round(performance.now() - startTime);
+
+        // Persist this turn (user query + assistant answer) for future context
+        const messagesToSave: import("../agent/memory.js").MemoryMessage[] = [{ role: "user", content: query }];
+        if (result.finalAnswer) {
+          messagesToSave.push({ role: "assistant" as const, content: result.finalAnswer });
+        }
+        // Fire-and-forget: memory persistence must never block the response
+        saveMessages(sessionId, messagesToSave).catch(() => {});
 
         return {
           sessionId,
           answer: result.finalAnswer,
           steps: result.steps,
           totalLatencyMs,
+          tokenUsage: result.tokenUsage,
         };
       } catch (err) {
         const message = err instanceof Error ? err.message : "Agent query failed";
@@ -254,6 +272,7 @@ export async function agentRoutes(app: FastifyInstance) {
           } catch { /* context loading is best-effort */ }
         }
 
+        // Build the full system prompt first so we can use it for token budget calculation
         const UPGRADED_SYSTEM_PROMPT = `${DEFAULT_SYSTEM_PROMPT}
 
 ## Autonomous Agent Orchestration
@@ -286,6 +305,10 @@ You can run agents in any order and pass context between them. Always use invoke
           ? `${stockContextBlock}\n\n${UPGRADED_SYSTEM_PROMPT}`
           : UPGRADED_SYSTEM_PROMPT;
 
+        // Load prior conversation history and trim to token budget
+        const rawHistory = await loadHistory(sessionId);
+        const conversationHistory = trimToTokenBudget(systemPrompt, rawHistory);
+
         const agent = new Agent(registry, {
           systemPrompt,
           maxIterations: 15,
@@ -316,8 +339,11 @@ You can run agents in any order and pass context between them. Always use invoke
         // Send initial session info
         sendSSE({ type: "session", sessionId });
 
+        // Capture final answer during streaming so we can persist it afterwards
+        let streamedAnswer: string | null = null;
+
         // Stream agent events, flushing pending agent events before each core event
-        for await (const event of agent.runStream(query)) {
+        for await (const event of agent.runStream(query, conversationHistory)) {
           // Flush any pending agent events (agent_start / agent_result) to SSE
           while (pendingAgentEvents.length > 0) {
             const agentEvent = pendingAgentEvents.shift()!;
@@ -381,9 +407,11 @@ You can run agents in any order and pass context between them. Always use invoke
                 });
               }
             }
+            streamedAnswer = event.data.answer;
             sendSSE({
               type: "answer",
               answer: event.data.answer,
+              tokenUsage: event.data.tokenUsage,
             });
           } else if (event.type === "error") {
             sendSSE({
@@ -396,6 +424,13 @@ You can run agents in any order and pass context between them. Always use invoke
         // Send done sentinel so frontend onDone fires
         reply.raw.write(`data: [DONE]\n\n`);
         reply.raw.end();
+
+        // Persist this turn after the stream closes (fire-and-forget)
+        const messagesToSave: import("../agent/memory.js").MemoryMessage[] = [{ role: "user", content: query }];
+        if (streamedAnswer) {
+          messagesToSave.push({ role: "assistant" as const, content: streamedAnswer });
+        }
+        saveMessages(sessionId, messagesToSave).catch(() => {});
       } catch (err) {
         const message = err instanceof Error ? err.message : "Agent stream failed";
         request.log.error(err, "Agent stream error");
