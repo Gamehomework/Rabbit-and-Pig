@@ -30,6 +30,10 @@ async function loadTool(name: string): Promise<Tool | undefined> {
         const m = await import("../agent/tools/quote.js");
         return m.quoteTool as Tool;
       }
+      case "backtest": {
+        const m = await import("../agent/tools/backtest.js");
+        return m.backtestTool as Tool;
+      }
     }
   } catch {
     return undefined;
@@ -172,6 +176,41 @@ export async function stockRoutes(app: FastifyInstance) {
     } catch (err) {
       const message = err instanceof Error ? err.message : "News fetch failed";
       request.log.error(err, "News error");
+      return reply.status(500).send({ error: message, statusCode: 500 });
+    }
+  });
+
+  // POST /api/stocks/:symbol/backtest
+  app.post<{
+    Params: { symbol: string };
+    Body: {
+      strategy: string;
+      range?: string;
+      initialCapital?: number;
+      fastPeriod?: number;
+      slowPeriod?: number;
+      overbought?: number;
+      oversold?: number;
+      bbPeriod?: number;
+      bbStdDev?: number;
+    };
+  }>("/api/stocks/:symbol/backtest", async (request, reply) => {
+    const tool = await loadTool("backtest");
+    if (!tool) {
+      return reply.status(503).send({
+        error: "Backtest tool is not available yet",
+        statusCode: 503,
+      });
+    }
+
+    try {
+      const { symbol } = request.params;
+      const body = request.body ?? {};
+      const result = await tool.execute({ symbol, ...body });
+      return result;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Backtest failed";
+      request.log.error(err, "Backtest error");
       return reply.status(500).send({ error: message, statusCode: 500 });
     }
   });

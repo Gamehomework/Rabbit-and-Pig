@@ -93,6 +93,10 @@ export async function agentRoutes(app: FastifyInstance) {
           const { drawIndicatorsTool } = await import("../agent/tools/draw-indicators.js");
           registry.register(drawIndicatorsTool);
         } catch { /* tool not available yet */ }
+        try {
+          const { backtestTool } = await import("../agent/tools/backtest.js");
+          registry.register(backtestTool);
+        } catch { /* tool not available yet */ }
 
         // Pre-load stock context if a symbol was provided (Option A: context stuffing).
         // Fetch quote + 30-day chart summary + news headlines in parallel, then inject
@@ -211,6 +215,10 @@ export async function agentRoutes(app: FastifyInstance) {
         try {
           const { drawIndicatorsTool } = await import("../agent/tools/draw-indicators.js");
           registry.register(drawIndicatorsTool);
+        } catch { /* tool not available yet */ }
+        try {
+          const { backtestTool } = await import("../agent/tools/backtest.js");
+          registry.register(backtestTool);
         } catch { /* tool not available yet */ }
 
         // Register multi-agent specific tools in the shared pool for specialist agents

@@ -211,6 +211,72 @@ export const addIndicatorLinesTool: Tool = {
   },
 };
 
+// ── 8. show_backtest_result ──────────────────────────────────────────
+
+export const showBacktestResultTool: Tool = {
+  name: "show_backtest_result",
+  description:
+    "Display backtest results on the UI including trade markers on the chart and a stats summary. " +
+    "Call this after run_backtest to visualize the results.",
+  inputSchema: {
+    type: "object",
+    properties: {
+      trades: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            date: { type: "string" },
+            action: { type: "string" },
+            price: { type: "number" },
+            shares: { type: "number" },
+            pnl: { type: "number" },
+          },
+        },
+        description: "Array of trade objects from run_backtest.",
+      },
+      stats: {
+        type: "object",
+        properties: {
+          totalReturn: { type: "number" },
+          winRate: { type: "number" },
+          maxDrawdown: { type: "number" },
+          sharpeRatio: { type: "number" },
+          totalTrades: { type: "number" },
+        },
+        description: "Backtest performance statistics.",
+      },
+      markers: {
+        type: "array",
+        items: {
+          type: "object",
+          properties: {
+            time: { type: "string" },
+            position: { type: "string" },
+            color: { type: "string" },
+            shape: { type: "string" },
+            text: { type: "string" },
+          },
+        },
+        description: "Chart markers for buy/sell signals.",
+      },
+    },
+    required: ["trades", "stats", "markers"],
+  },
+  async execute(input: { trades: unknown[]; stats: Record<string, number>; markers: unknown[] }) {
+    return {
+      success: true,
+      command: {
+        type: "show_backtest_result",
+        trades: input.trades,
+        stats: input.stats,
+        markers: input.markers,
+      },
+      message: `Backtest results: ${input.stats.totalReturn}% return, ${input.stats.winRate}% win rate, ${input.stats.totalTrades} trades.`,
+    };
+  },
+};
+
 // ── Export all page control tools as an array ────────────────────────
 
 export const pageControlTools: Tool[] = [
@@ -220,5 +286,6 @@ export const pageControlTools: Tool[] = [
   scrollToSectionTool,
   prefillNoteTool,
   navigateToTool,
+  showBacktestResultTool,
 ];
 

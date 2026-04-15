@@ -13,6 +13,7 @@ export { createInstallTool } from "./install-tool.js";
 export { createListPluginsTool } from "./list-plugins.js";
 export { createTogglePluginTool } from "./toggle-plugin.js";
 export { sendMessageTool } from "./send-message.js";
+export { backtestTool } from "./backtest.js";
 
 import { ToolRegistry } from "./registry.js";
 import { echoTool } from "./echo.js";
@@ -23,6 +24,7 @@ import { createInstallTool } from "./install-tool.js";
 import { createListPluginsTool } from "./list-plugins.js";
 import { createTogglePluginTool } from "./toggle-plugin.js";
 import { sendMessageTool } from "./send-message.js";
+import { backtestTool } from "./backtest.js";
 
 /** Create a ToolRegistry with all built-in tools pre-registered. */
 export function createToolRegistry(): ToolRegistry {
@@ -39,6 +41,9 @@ export function createToolRegistry(): ToolRegistry {
 
   // Register messaging tool
   registry.register(sendMessageTool);
+
+  // Register backtest tool
+  registry.register(backtestTool);
 
   return registry;
 }
