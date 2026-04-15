@@ -1,0 +1,243 @@
+- generic [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "3690.HK" [level=1] [ref=e17]
+            - generic [ref=e18]:
+              - paragraph [ref=e76]: MEITUAN-W
+              - generic [ref=e77]: "85.60"
+              - generic [ref=e78]: +0.50 (+0.59%)
+          - generic [ref=e22]:
+            - button "🧠 Deep Analysis" [ref=e23]
+            - button "▶ Run Autonomous Analysis" [ref=e24]
+            - button "🔔 Send Alert" [ref=e25]
+        - generic [ref=e79]:
+          - generic [ref=e80]:
+            - paragraph [ref=e81]: Market Cap
+            - paragraph [ref=e82]: $528.5B
+          - generic [ref=e83]:
+            - paragraph [ref=e84]: P/E Ratio
+            - paragraph [ref=e85]: —
+          - generic [ref=e86]:
+            - paragraph [ref=e87]: Day Range
+            - paragraph [ref=e88]: 85.30 – 88.20
+          - generic [ref=e89]:
+            - paragraph [ref=e90]: 52W Range
+            - paragraph [ref=e91]: 73.60 – 149.80
+          - generic [ref=e92]:
+            - paragraph [ref=e93]: Volume
+            - paragraph [ref=e94]: 23.25M
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Price Chart" [level=2] [ref=e44]
+            - generic [ref=e45]:
+              - button "1d" [ref=e46]
+              - button "1mo" [ref=e47]
+              - button "3mo" [ref=e48]
+              - button "6mo" [ref=e49]
+              - button "1y" [ref=e50]
+          - table [ref=e98]:
+            - row [ref=e99]:
+              - cell
+              - cell [ref=e100]:
+                - link "Charting by TradingView" [ref=e104] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/3690.HK
+                  - img [ref=e105]
+              - cell [ref=e109]
+            - row [ref=e113]:
+              - cell
+              - cell [ref=e114]
+              - cell [ref=e118]
+        - generic [ref=e52]:
+          - button "📊 Backtest -28.25% ▲" [ref=e165]:
+            - heading "📊 Backtest -28.25%" [level=2] [ref=e166]:
+              - text: 📊 Backtest
+              - generic [ref=e167]: "-28.25%"
+            - generic [ref=e55]: ▲
+          - generic [ref=e168]:
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - generic [ref=e171]: Strategy
+                - combobox [ref=e172]:
+                  - option "MA Crossover" [selected]
+                  - option "RSI"
+                  - option "Bollinger Breakout"
+              - generic [ref=e173]:
+                - generic [ref=e174]: Period
+                - generic [ref=e175]:
+                  - button "1Y" [ref=e176]
+                  - button "2Y" [ref=e177]
+                  - button "3Y" [ref=e178]
+              - generic [ref=e179]:
+                - generic [ref=e180]: Fast MA
+                - spinbutton [ref=e181]: "10"
+              - generic [ref=e182]:
+                - generic [ref=e183]: Slow MA
+                - spinbutton [ref=e184]: "30"
+              - generic [ref=e185]:
+                - generic [ref=e186]: Capital ($)
+                - spinbutton [ref=e187]: "10000"
+              - button "Run Backtest" [ref=e188]
+              - button "Clear" [ref=e189]
+            - generic [ref=e190]:
+              - generic [ref=e191]:
+                - generic [ref=e192]:
+                  - generic [ref=e193]: Total Return
+                  - generic [ref=e194]: "-28.25%"
+                - generic [ref=e195]:
+                  - generic [ref=e196]: Win Rate
+                  - generic [ref=e197]: 0%
+                - generic [ref=e198]:
+                  - generic [ref=e199]: Max Drawdown
+                  - generic [ref=e200]: 28.25%
+                - generic [ref=e201]:
+                  - generic [ref=e202]: Sharpe
+                  - generic [ref=e203]: "0.00"
+                - generic [ref=e204]:
+                  - generic [ref=e205]: Trades
+                  - generic [ref=e206]: "3"
+              - button "Show trade history (3 trades)" [ref=e207]
+        - generic [ref=e56]:
+          - heading "Recent News" [level=2] [ref=e58]
+          - list [ref=e121]:
+            - listitem [ref=e122]:
+              - link "Alibaba Stock Is Getting Hit Again, but Qwen and Cloud Growth Are Surging" [ref=e123] [cursor=pointer]:
+                - /url: https://www.marketbeat.com/originals/alibaba-stock-is-getting-hit-again-but-qwen-and-cloud-growth-are-surging/?utm_source=yahoofinance&amp;utm_medium=yahoofinance&amp;.tsrc=rss
+              - paragraph [ref=e124]: Yahoo Finance · 3/21/2026
+            - listitem [ref=e125]:
+              - link "JD.com Stock Falls as Profits Dive Despite Rising Revenue" [ref=e126] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/m/87a16bbc-b3c3-3a69-990a-23512521155a/jd.com-stock-falls-as-profits.html?.tsrc=rss
+              - paragraph [ref=e127]: Yahoo Finance · 3/5/2026
+            - listitem [ref=e128]:
+              - link "Is It Time To Reassess Meituan (SEHK:3690) After Its Prolonged Share Price Slide?" [ref=e129] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/time-reassess-meituan-sehk-3690-011357037.html?.tsrc=rss
+              - paragraph [ref=e130]: Yahoo Finance · 2/27/2026
+            - listitem [ref=e131]:
+              - 'link "Tech, Media &amp; Telecom Roundup: Market Talk" [ref=e132] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/m/81791f08-b964-3ce4-8b84-e28554faa160/tech%2C-media-%26-telecom.html?.tsrc=rss
+              - paragraph [ref=e133]: Yahoo Finance · 2/24/2026
+            - listitem [ref=e134]:
+              - link "Dingdong Announces Intention to Utilize Substantial Majority of Proceeds from Sale of China Operations for Share Repurchase Plans and/or Dividends upon Closing of Transaction" [ref=e135] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/dingdong-announces-intention-utilize-substantial-130000338.html?.tsrc=rss
+              - paragraph [ref=e136]: Yahoo Finance · 2/10/2026
+            - listitem [ref=e137]:
+              - link "Dingdong to sell China operations for $717m" [ref=e138] [cursor=pointer]:
+                - /url: https://www.retail-insight-network.com/news/dingdong-sell-china-operations-717m/?.tsrc=rss
+              - paragraph [ref=e139]: Yahoo Finance · 2/6/2026
+            - listitem [ref=e140]:
+              - link "Dingdong Announces Entry into Definitive Agreement to Sell its China Business to Meituan" [ref=e141] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/dingdong-announces-entry-definitive-agreement-090800634.html?.tsrc=rss
+              - paragraph [ref=e142]: Yahoo Finance · 2/5/2026
+            - listitem [ref=e143]:
+              - link "Assessing Meituan (SEHK:3690) Valuation After Prolonged Share Price Weakness" [ref=e144] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/assessing-meituan-sehk-3690-valuation-141018036.html?.tsrc=rss
+              - paragraph [ref=e145]: Yahoo Finance · 2/1/2026
+            - listitem [ref=e146]:
+              - link "Baidu’s AI Models Continue to Expand with Ernie Assistant Surpassing 200 million Monthly Active Users" [ref=e147] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/baidu-ai-models-continue-expand-202334075.html?.tsrc=rss
+              - paragraph [ref=e148]: Yahoo Finance · 1/31/2026
+            - listitem [ref=e149]:
+              - link "China AI Hardware Earnings Pull Further Ahead of Internet Giants" [ref=e150] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/china-ai-hardware-earnings-pull-130832076.html?.tsrc=rss
+              - paragraph [ref=e151]: Yahoo Finance · 1/27/2026
+        - generic [ref=e60]:
+          - heading "Notes" [level=2] [ref=e61]
+          - generic [ref=e62]:
+            - textbox "Note title" [ref=e63]
+            - textbox "Note content…" [ref=e64]
+            - button "Add Note" [disabled] [ref=e65]
+      - generic [ref=e67]:
+        - heading "Ask AI about 3690.HK" [level=2] [ref=e69]
+        - generic [ref=e70]:
+          - generic [ref=e153]: Backtest RSI strategy on 3690.HK for 2 years
+          - generic [ref=e208]:
+            - generic [ref=e209]: ⚙
+            - generic [ref=e210]:
+              - text: run_backtest
+              - generic [ref=e211]: — I'll run a backtest of the RSI strategy on MEITUAN-W (3690.HK) for a 2-year period. Let me execute the backtest and then display the results.
+          - generic [ref=e212]:
+            - generic [ref=e213]: ⚙
+            - generic [ref=e214]:
+              - text: show_backtest_result
+              - generic [ref=e215]: "— Now I'll display the backtest results on the UI:"
+          - generic [ref=e217]:
+            - heading "RSI Strategy Backtest Results for MEITUAN-W (3690.HK) - 2 Years" [level=2] [ref=e218]
+            - paragraph [ref=e219]:
+              - strong [ref=e220]: "Performance Summary:"
+            - list [ref=e221]:
+              - listitem [ref=e222]:
+                - strong [ref=e223]: "Total Return:"
+                - text: "-28.25% (loss)"
+              - listitem [ref=e224]:
+                - strong [ref=e225]: "Win Rate:"
+                - text: 0% (no winning trades)
+              - listitem [ref=e226]:
+                - strong [ref=e227]: "Total Trades:"
+                - text: "3"
+              - listitem [ref=e228]:
+                - strong [ref=e229]: "Maximum Drawdown:"
+                - text: 28.25%
+              - listitem [ref=e230]:
+                - strong [ref=e231]: "Sharpe Ratio:"
+                - text: "0"
+            - paragraph [ref=e232]:
+              - strong [ref=e233]: "Trade History:"
+            - list [ref=e234]:
+              - listitem [ref=e235]:
+                - strong [ref=e236]: BUY
+                - text: "- Sep 22, 2023: 82 shares @ 120.8 HKD"
+              - listitem [ref=e237]:
+                - strong [ref=e238]: SELL
+                - text: "- Mar 5, 2024: 82 shares @ 86.35 HKD →"
+                - strong [ref=e239]: "Loss: -2,824.9 HKD"
+                - text: (-28.5% on position)
+              - listitem [ref=e240]:
+                - strong [ref=e241]: BUY
+                - text: "- Jan 14, 2025: 49 shares @ 144.3 HKD (still open position)"
+            - paragraph [ref=e242]:
+              - strong [ref=e243]: "Analysis:"
+              - text: The RSI strategy (using default 70/30 overbought/oversold thresholds) performed poorly on MEITUAN-W over the 2-year period. The strategy generated only 3 trades, with one completed trade resulting in a significant loss of 28.5%. The current position (bought at 144.3 HKD) is still open.
+            - paragraph [ref=e244]:
+              - strong [ref=e245]: "Key Observations:"
+            - list [ref=e246]:
+              - listitem [ref=e247]:
+                - strong [ref=e248]: "Low Trade Frequency:"
+                - text: Only 3 signals in 2 years suggests MEITUAN-W didn't frequently reach extreme RSI levels
+              - listitem [ref=e249]:
+                - strong [ref=e250]: "Poor Timing:"
+                - text: The buy signal in September 2023 occurred near local highs, followed by a sharp decline
+              - listitem [ref=e251]:
+                - strong [ref=e252]: "Current Position:"
+                - text: "The open position from January 2025 is currently underwater (current price: 85.60 HKD vs. purchase: 144.3 HKD)"
+            - paragraph [ref=e253]:
+              - strong [ref=e254]: "Strategy Limitations:"
+            - list [ref=e255]:
+              - listitem [ref=e256]: RSI strategies work best in ranging markets, not strong trending markets
+              - listitem [ref=e257]: MEITUAN-W experienced significant downtrend pressure during this period
+              - listitem [ref=e258]: The stock's volatility may require adjusted RSI thresholds (e.g., 80/20 instead of 70/30)
+            - paragraph [ref=e259]: The backtest results are now displayed on your chart with buy/sell markers. You can see the trade timing relative to the price action.
+        - generic [ref=e72]:
+          - textbox "Ask about 3690.HK…" [active] [ref=e73]
+          - button "Send" [disabled] [ref=e74]
+  - button "Open Next.js Dev Tools" [ref=e161] [cursor=pointer]:
+    - img [ref=e162]
+  - alert [ref=e75]

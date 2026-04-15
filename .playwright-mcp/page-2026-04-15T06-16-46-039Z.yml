@@ -1,0 +1,57 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - heading "3690.HK" [level=1] [ref=e17]
+          - generic [ref=e22]:
+            - button "🧠 Deep Analysis" [ref=e23]
+            - button "▶ Run Autonomous Analysis" [ref=e24]
+            - button "🔔 Send Alert" [ref=e25]
+        - generic [ref=e42]:
+          - generic [ref=e43]:
+            - heading "Price Chart" [level=2] [ref=e44]
+            - generic [ref=e45]:
+              - button "1d" [ref=e46]
+              - button "1mo" [ref=e47]
+              - button "3mo" [ref=e48]
+              - button "6mo" [ref=e49]
+              - button "1y" [ref=e50]
+          - paragraph [ref=e51]: Loading chart…
+        - button "📊 Backtest ▼" [ref=e53]:
+          - heading "📊 Backtest" [level=2] [ref=e54]
+          - generic [ref=e55]: ▼
+        - generic [ref=e56]:
+          - heading "Recent News" [level=2] [ref=e58]
+          - paragraph [ref=e59]: Loading news…
+          - list
+        - generic [ref=e60]:
+          - heading "Notes" [level=2] [ref=e61]
+          - generic [ref=e62]:
+            - textbox "Note title" [ref=e63]
+            - textbox "Note content…" [ref=e64]
+            - button "Add Note" [disabled] [ref=e65]
+      - generic [ref=e67]:
+        - heading "Ask AI about 3690.HK" [level=2] [ref=e69]
+        - paragraph [ref=e71]: Ask anything about 3690.HK…
+        - generic [ref=e72]:
+          - textbox "Ask about 3690.HK…" [ref=e73]
+          - button "Send" [disabled] [ref=e74]
+  - alert [ref=e75]

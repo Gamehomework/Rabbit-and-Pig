@@ -1,0 +1,268 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - heading "Analytics Dashboard" [level=1] [ref=e15]
+        - generic [ref=e17] [cursor=pointer]:
+          - generic [ref=e18]: Auto-refresh
+          - button "Auto-refresh" [ref=e19]
+      - generic [ref=e21]:
+        - generic [ref=e22]: From
+        - textbox [ref=e23]: 2026-04-07
+        - generic [ref=e24]: To
+        - textbox [ref=e25]: 2026-04-14
+        - button "Today" [ref=e26]
+        - button "7 Days" [ref=e27]
+        - button "30 Days" [ref=e28]
+        - button "90 Days" [ref=e29]
+      - generic [ref=e30]:
+        - generic [ref=e31]:
+          - generic [ref=e32]:
+            - generic [ref=e33]: 📊
+            - generic [ref=e34]: "0"
+          - paragraph [ref=e35]: Total Queries
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - generic [ref=e38]: ⚡
+            - generic [ref=e39]: 0ms
+          - paragraph [ref=e40]: Avg Latency
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]: ✅
+            - generic [ref=e44]: 0.0%
+          - paragraph [ref=e45]: Success Rate
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - generic [ref=e48]: 👥
+            - generic [ref=e49]: "0"
+          - paragraph [ref=e50]: Active Sessions
+        - generic [ref=e51]:
+          - generic [ref=e52]:
+            - generic [ref=e53]: 🔔
+            - generic [ref=e54]: "0"
+          - paragraph [ref=e55]: Notifications
+      - generic [ref=e56]:
+        - generic [ref=e57]:
+          - heading "Query Volume" [level=2] [ref=e58]
+          - generic [ref=e59]:
+            - button "Hour" [ref=e60]
+            - button "Day" [ref=e61]
+            - button "Week" [ref=e62]
+        - generic [ref=e63]: No data yet
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - heading "Tool Usage Distribution" [level=2] [ref=e66]
+          - generic [ref=e67]: No data yet
+        - generic [ref=e68]:
+          - heading "Avg Latency by Tool" [level=2] [ref=e69]
+          - generic [ref=e70]: No data yet
+      - generic [ref=e71]:
+        - heading "Tool Performance" [level=2] [ref=e72]
+        - paragraph [ref=e73]: No data yet
+      - generic [ref=e74]:
+        - heading "Notes Analytics" [level=2] [ref=e75]
+        - generic [ref=e76]:
+          - generic [ref=e78]:
+            - text: "0"
+            - paragraph [ref=e79]: Total Notes
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - heading "Notes Trend (Daily)" [level=3] [ref=e82]
+              - generic [ref=e83]: No trend data
+            - generic [ref=e84]:
+              - heading "Top Stocks by Notes" [level=3] [ref=e85]
+              - generic [ref=e86]: No stock data
+      - generic [ref=e87]:
+        - heading "Recent Sessions" [level=2] [ref=e88]
+        - table [ref=e89]:
+          - rowgroup [ref=e90]:
+            - row "ID Date Status Queries Tool Calls Avg Latency" [ref=e91]:
+              - columnheader "ID" [ref=e92]
+              - columnheader "Date" [ref=e93]
+              - columnheader "Status" [ref=e94]
+              - columnheader "Queries" [ref=e95]
+              - columnheader "Tool Calls" [ref=e96]
+              - columnheader "Avg Latency" [ref=e97]
+          - rowgroup [ref=e98]:
+            - row "#86 4/14/2026, 4:36:57 PM active 1 0 0ms" [ref=e99] [cursor=pointer]:
+              - cell "#86" [ref=e100]
+              - cell "4/14/2026, 4:36:57 PM" [ref=e101]
+              - cell "active" [ref=e102]:
+                - generic [ref=e103]: active
+              - cell "1" [ref=e104]
+              - cell "0" [ref=e105]
+              - cell "0ms" [ref=e106]
+            - row "#85 4/14/2026, 4:34:56 PM active 1 0 0ms" [ref=e107] [cursor=pointer]:
+              - cell "#85" [ref=e108]
+              - cell "4/14/2026, 4:34:56 PM" [ref=e109]
+              - cell "active" [ref=e110]:
+                - generic [ref=e111]: active
+              - cell "1" [ref=e112]
+              - cell "0" [ref=e113]
+              - cell "0ms" [ref=e114]
+            - row "#84 4/14/2026, 4:27:23 PM active 1 0 0ms" [ref=e115] [cursor=pointer]:
+              - cell "#84" [ref=e116]
+              - cell "4/14/2026, 4:27:23 PM" [ref=e117]
+              - cell "active" [ref=e118]:
+                - generic [ref=e119]: active
+              - cell "1" [ref=e120]
+              - cell "0" [ref=e121]
+              - cell "0ms" [ref=e122]
+            - row "#83 4/14/2026, 4:27:00 PM active 1 0 0ms" [ref=e123] [cursor=pointer]:
+              - cell "#83" [ref=e124]
+              - cell "4/14/2026, 4:27:00 PM" [ref=e125]
+              - cell "active" [ref=e126]:
+                - generic [ref=e127]: active
+              - cell "1" [ref=e128]
+              - cell "0" [ref=e129]
+              - cell "0ms" [ref=e130]
+            - row "#82 4/14/2026, 4:25:45 PM active 1 0 0ms" [ref=e131] [cursor=pointer]:
+              - cell "#82" [ref=e132]
+              - cell "4/14/2026, 4:25:45 PM" [ref=e133]
+              - cell "active" [ref=e134]:
+                - generic [ref=e135]: active
+              - cell "1" [ref=e136]
+              - cell "0" [ref=e137]
+              - cell "0ms" [ref=e138]
+            - row "#81 4/14/2026, 4:19:22 PM active 1 0 0ms" [ref=e139] [cursor=pointer]:
+              - cell "#81" [ref=e140]
+              - cell "4/14/2026, 4:19:22 PM" [ref=e141]
+              - cell "active" [ref=e142]:
+                - generic [ref=e143]: active
+              - cell "1" [ref=e144]
+              - cell "0" [ref=e145]
+              - cell "0ms" [ref=e146]
+            - row "#80 4/14/2026, 4:14:58 PM active 1 0 0ms" [ref=e147] [cursor=pointer]:
+              - cell "#80" [ref=e148]
+              - cell "4/14/2026, 4:14:58 PM" [ref=e149]
+              - cell "active" [ref=e150]:
+                - generic [ref=e151]: active
+              - cell "1" [ref=e152]
+              - cell "0" [ref=e153]
+              - cell "0ms" [ref=e154]
+            - row "#79 4/14/2026, 4:14:26 PM active 1 0 0ms" [ref=e155] [cursor=pointer]:
+              - cell "#79" [ref=e156]
+              - cell "4/14/2026, 4:14:26 PM" [ref=e157]
+              - cell "active" [ref=e158]:
+                - generic [ref=e159]: active
+              - cell "1" [ref=e160]
+              - cell "0" [ref=e161]
+              - cell "0ms" [ref=e162]
+            - row "#78 4/14/2026, 4:09:28 PM active 1 0 0ms" [ref=e163] [cursor=pointer]:
+              - cell "#78" [ref=e164]
+              - cell "4/14/2026, 4:09:28 PM" [ref=e165]
+              - cell "active" [ref=e166]:
+                - generic [ref=e167]: active
+              - cell "1" [ref=e168]
+              - cell "0" [ref=e169]
+              - cell "0ms" [ref=e170]
+            - row "#77 4/14/2026, 3:55:23 PM active 1 0 0ms" [ref=e171] [cursor=pointer]:
+              - cell "#77" [ref=e172]
+              - cell "4/14/2026, 3:55:23 PM" [ref=e173]
+              - cell "active" [ref=e174]:
+                - generic [ref=e175]: active
+              - cell "1" [ref=e176]
+              - cell "0" [ref=e177]
+              - cell "0ms" [ref=e178]
+            - row "#76 4/14/2026, 3:52:47 PM active 1 0 0ms" [ref=e179] [cursor=pointer]:
+              - cell "#76" [ref=e180]
+              - cell "4/14/2026, 3:52:47 PM" [ref=e181]
+              - cell "active" [ref=e182]:
+                - generic [ref=e183]: active
+              - cell "1" [ref=e184]
+              - cell "0" [ref=e185]
+              - cell "0ms" [ref=e186]
+            - row "#75 4/14/2026, 3:49:08 PM active 1 0 0ms" [ref=e187] [cursor=pointer]:
+              - cell "#75" [ref=e188]
+              - cell "4/14/2026, 3:49:08 PM" [ref=e189]
+              - cell "active" [ref=e190]:
+                - generic [ref=e191]: active
+              - cell "1" [ref=e192]
+              - cell "0" [ref=e193]
+              - cell "0ms" [ref=e194]
+            - row "#74 4/14/2026, 3:43:12 PM active 1 0 0ms" [ref=e195] [cursor=pointer]:
+              - cell "#74" [ref=e196]
+              - cell "4/14/2026, 3:43:12 PM" [ref=e197]
+              - cell "active" [ref=e198]:
+                - generic [ref=e199]: active
+              - cell "1" [ref=e200]
+              - cell "0" [ref=e201]
+              - cell "0ms" [ref=e202]
+            - row "#73 4/14/2026, 3:40:13 PM active 1 0 0ms" [ref=e203] [cursor=pointer]:
+              - cell "#73" [ref=e204]
+              - cell "4/14/2026, 3:40:13 PM" [ref=e205]
+              - cell "active" [ref=e206]:
+                - generic [ref=e207]: active
+              - cell "1" [ref=e208]
+              - cell "0" [ref=e209]
+              - cell "0ms" [ref=e210]
+            - row "#72 4/14/2026, 3:31:09 PM active 1 0 0ms" [ref=e211] [cursor=pointer]:
+              - cell "#72" [ref=e212]
+              - cell "4/14/2026, 3:31:09 PM" [ref=e213]
+              - cell "active" [ref=e214]:
+                - generic [ref=e215]: active
+              - cell "1" [ref=e216]
+              - cell "0" [ref=e217]
+              - cell "0ms" [ref=e218]
+            - row "#71 4/14/2026, 3:29:29 PM active 1 0 0ms" [ref=e219] [cursor=pointer]:
+              - cell "#71" [ref=e220]
+              - cell "4/14/2026, 3:29:29 PM" [ref=e221]
+              - cell "active" [ref=e222]:
+                - generic [ref=e223]: active
+              - cell "1" [ref=e224]
+              - cell "0" [ref=e225]
+              - cell "0ms" [ref=e226]
+            - row "#70 4/14/2026, 2:57:44 PM active 1 0 0ms" [ref=e227] [cursor=pointer]:
+              - cell "#70" [ref=e228]
+              - cell "4/14/2026, 2:57:44 PM" [ref=e229]
+              - cell "active" [ref=e230]:
+                - generic [ref=e231]: active
+              - cell "1" [ref=e232]
+              - cell "0" [ref=e233]
+              - cell "0ms" [ref=e234]
+            - row "#69 4/14/2026, 2:48:21 PM active 1 0 0ms" [ref=e235] [cursor=pointer]:
+              - cell "#69" [ref=e236]
+              - cell "4/14/2026, 2:48:21 PM" [ref=e237]
+              - cell "active" [ref=e238]:
+                - generic [ref=e239]: active
+              - cell "1" [ref=e240]
+              - cell "0" [ref=e241]
+              - cell "0ms" [ref=e242]
+            - row "#68 4/14/2026, 2:47:27 PM active 1 0 0ms" [ref=e243] [cursor=pointer]:
+              - cell "#68" [ref=e244]
+              - cell "4/14/2026, 2:47:27 PM" [ref=e245]
+              - cell "active" [ref=e246]:
+                - generic [ref=e247]: active
+              - cell "1" [ref=e248]
+              - cell "0" [ref=e249]
+              - cell "0ms" [ref=e250]
+            - row "#67 4/14/2026, 2:45:25 PM active 1 0 0ms" [ref=e251] [cursor=pointer]:
+              - cell "#67" [ref=e252]
+              - cell "4/14/2026, 2:45:25 PM" [ref=e253]
+              - cell "active" [ref=e254]:
+                - generic [ref=e255]: active
+              - cell "1" [ref=e256]
+              - cell "0" [ref=e257]
+              - cell "0ms" [ref=e258]
+      - generic [ref=e259]:
+        - heading "Notification Analytics" [level=2] [ref=e260]
+        - generic [ref=e261]: No data yet
+      - button "Export Data ▾" [ref=e263]
+  - alert [ref=e264]

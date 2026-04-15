@@ -1,0 +1,176 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "Stock Research Agent" [ref=e4] [cursor=pointer]:
+        - /url: /
+      - navigation [ref=e5]:
+        - link "Discovery" [ref=e6] [cursor=pointer]:
+          - /url: /
+        - link "Notes" [ref=e7] [cursor=pointer]:
+          - /url: /notes
+        - link "Alerts" [ref=e8] [cursor=pointer]:
+          - /url: /alerts
+        - link "Plugins" [ref=e9] [cursor=pointer]:
+          - /url: /plugins
+        - link "Optimizer" [ref=e10] [cursor=pointer]:
+          - /url: /optimizer
+        - link "Analytics" [ref=e11] [cursor=pointer]:
+          - /url: /analytics
+  - main [ref=e12]:
+    - generic [ref=e13]:
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - generic [ref=e16]:
+            - heading "3690.HK" [level=1] [ref=e17]
+            - generic [ref=e56]:
+              - paragraph [ref=e57]: MEITUAN-W
+              - generic [ref=e58]: "86.45"
+              - generic [ref=e59]: +1.35 (+1.59%)
+          - generic [ref=e19]:
+            - button "🧠 Deep Analysis" [ref=e20]
+            - button "▶ Run Autonomous Analysis" [ref=e21]
+            - button "🔔 Send Alert" [ref=e22]
+        - generic [ref=e60]:
+          - generic [ref=e61]:
+            - paragraph [ref=e62]: Market Cap
+            - paragraph [ref=e63]: $533.8B
+          - generic [ref=e64]:
+            - paragraph [ref=e65]: P/E Ratio
+            - paragraph [ref=e66]: —
+          - generic [ref=e67]:
+            - paragraph [ref=e68]: Day Range
+            - paragraph [ref=e69]: 86.00 – 88.20
+          - generic [ref=e70]:
+            - paragraph [ref=e71]: 52W Range
+            - paragraph [ref=e72]: 73.60 – 149.80
+          - generic [ref=e73]:
+            - paragraph [ref=e74]: Volume
+            - paragraph [ref=e75]: 17.08M
+        - generic [ref=e23]:
+          - generic [ref=e24]:
+            - heading "Price Chart" [level=2] [ref=e25]
+            - generic [ref=e26]:
+              - button "1d" [ref=e27]
+              - button "1mo" [ref=e28]
+              - button "3mo" [ref=e29]
+              - button "6mo" [ref=e30]
+              - button "1y" [ref=e31]
+          - table [ref=e79]:
+            - row [ref=e80]:
+              - cell
+              - cell [ref=e81]:
+                - link "Charting by TradingView" [ref=e85] [cursor=pointer]:
+                  - /url: https://www.tradingview.com/?utm_medium=lwc-link&utm_campaign=lwc-chart&utm_source=localhost/stocks/3690.HK
+                  - img [ref=e86]
+              - cell [ref=e90]
+            - row [ref=e94]:
+              - cell
+              - cell [ref=e95]
+              - cell [ref=e99]
+        - generic [ref=e33]:
+          - button "📊 Backtest -18.77% ▲" [ref=e165]:
+            - heading "📊 Backtest -18.77%" [level=2] [ref=e166]:
+              - text: 📊 Backtest
+              - generic [ref=e167]: "-18.77%"
+            - generic [ref=e36]: ▲
+          - generic [ref=e144]:
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic [ref=e147]: Strategy
+                - combobox [ref=e148]:
+                  - option "MA Crossover" [selected]
+                  - option "RSI"
+                  - option "Bollinger Breakout"
+              - generic [ref=e149]:
+                - generic [ref=e150]: Period
+                - generic [ref=e151]:
+                  - button "1Y" [ref=e152]
+                  - button "2Y" [ref=e153]
+                  - button "3Y" [ref=e154]
+              - generic [ref=e155]:
+                - generic [ref=e156]: Fast MA
+                - spinbutton [ref=e157]: "10"
+              - generic [ref=e158]:
+                - generic [ref=e159]: Slow MA
+                - spinbutton [ref=e160]: "30"
+              - generic [ref=e161]:
+                - generic [ref=e162]: Capital ($)
+                - spinbutton [ref=e163]: "10000"
+              - button "Run Backtest" [ref=e164]
+              - button "Clear" [ref=e168]
+            - generic [ref=e169]:
+              - generic [ref=e170]:
+                - generic [ref=e171]:
+                  - generic [ref=e172]: Total Return
+                  - generic [ref=e173]: "-18.77%"
+                - generic [ref=e174]:
+                  - generic [ref=e175]: Win Rate
+                  - generic [ref=e176]: 14.29%
+                - generic [ref=e177]:
+                  - generic [ref=e178]: Max Drawdown
+                  - generic [ref=e179]: 99.94%
+                - generic [ref=e180]:
+                  - generic [ref=e181]: Sharpe
+                  - generic [ref=e182]: "-7.98"
+                - generic [ref=e183]:
+                  - generic [ref=e184]: Trades
+                  - generic [ref=e185]: "15"
+              - button "Show trade history (15 trades)" [ref=e186]
+        - generic [ref=e37]:
+          - heading "Recent News" [level=2] [ref=e39]
+          - list [ref=e102]:
+            - listitem [ref=e103]:
+              - link "Alibaba Stock Is Getting Hit Again, but Qwen and Cloud Growth Are Surging" [ref=e104] [cursor=pointer]:
+                - /url: https://www.marketbeat.com/originals/alibaba-stock-is-getting-hit-again-but-qwen-and-cloud-growth-are-surging/?utm_source=yahoofinance&amp;utm_medium=yahoofinance&amp;.tsrc=rss
+              - paragraph [ref=e105]: Yahoo Finance · 3/21/2026
+            - listitem [ref=e106]:
+              - link "JD.com Stock Falls as Profits Dive Despite Rising Revenue" [ref=e107] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/m/87a16bbc-b3c3-3a69-990a-23512521155a/jd.com-stock-falls-as-profits.html?.tsrc=rss
+              - paragraph [ref=e108]: Yahoo Finance · 3/5/2026
+            - listitem [ref=e109]:
+              - link "Is It Time To Reassess Meituan (SEHK:3690) After Its Prolonged Share Price Slide?" [ref=e110] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/time-reassess-meituan-sehk-3690-011357037.html?.tsrc=rss
+              - paragraph [ref=e111]: Yahoo Finance · 2/27/2026
+            - listitem [ref=e112]:
+              - 'link "Tech, Media &amp; Telecom Roundup: Market Talk" [ref=e113] [cursor=pointer]':
+                - /url: https://finance.yahoo.com/m/81791f08-b964-3ce4-8b84-e28554faa160/tech%2C-media-%26-telecom.html?.tsrc=rss
+              - paragraph [ref=e114]: Yahoo Finance · 2/24/2026
+            - listitem [ref=e115]:
+              - link "Dingdong Announces Intention to Utilize Substantial Majority of Proceeds from Sale of China Operations for Share Repurchase Plans and/or Dividends upon Closing of Transaction" [ref=e116] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/dingdong-announces-intention-utilize-substantial-130000338.html?.tsrc=rss
+              - paragraph [ref=e117]: Yahoo Finance · 2/10/2026
+            - listitem [ref=e118]:
+              - link "Dingdong to sell China operations for $717m" [ref=e119] [cursor=pointer]:
+                - /url: https://www.retail-insight-network.com/news/dingdong-sell-china-operations-717m/?.tsrc=rss
+              - paragraph [ref=e120]: Yahoo Finance · 2/6/2026
+            - listitem [ref=e121]:
+              - link "Dingdong Announces Entry into Definitive Agreement to Sell its China Business to Meituan" [ref=e122] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/dingdong-announces-entry-definitive-agreement-090800634.html?.tsrc=rss
+              - paragraph [ref=e123]: Yahoo Finance · 2/5/2026
+            - listitem [ref=e124]:
+              - link "Assessing Meituan (SEHK:3690) Valuation After Prolonged Share Price Weakness" [ref=e125] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/assessing-meituan-sehk-3690-valuation-141018036.html?.tsrc=rss
+              - paragraph [ref=e126]: Yahoo Finance · 2/1/2026
+            - listitem [ref=e127]:
+              - link "Baidu’s AI Models Continue to Expand with Ernie Assistant Surpassing 200 million Monthly Active Users" [ref=e128] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/baidu-ai-models-continue-expand-202334075.html?.tsrc=rss
+              - paragraph [ref=e129]: Yahoo Finance · 1/31/2026
+            - listitem [ref=e130]:
+              - link "China AI Hardware Earnings Pull Further Ahead of Internet Giants" [ref=e131] [cursor=pointer]:
+                - /url: https://finance.yahoo.com/news/china-ai-hardware-earnings-pull-130832076.html?.tsrc=rss
+              - paragraph [ref=e132]: Yahoo Finance · 1/27/2026
+        - generic [ref=e41]:
+          - heading "Notes" [level=2] [ref=e42]
+          - generic [ref=e43]:
+            - textbox "Note title" [ref=e44]
+            - textbox "Note content…" [ref=e45]
+            - button "Add Note" [disabled] [ref=e46]
+      - generic [ref=e48]:
+        - heading "Ask AI about 3690.HK" [level=2] [ref=e50]
+        - paragraph [ref=e52]: Ask anything about 3690.HK…
+        - generic [ref=e53]:
+          - textbox "Ask about 3690.HK…" [ref=e54]
+          - button "Send" [disabled] [ref=e55]
+  - button "Open Next.js Dev Tools" [ref=e138] [cursor=pointer]:
+    - img [ref=e139]
+  - alert [ref=e142]
