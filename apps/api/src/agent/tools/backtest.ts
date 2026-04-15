@@ -192,11 +192,12 @@ function calcStats(trades: Trade[], initialCapital: number): BacktestStats {
   const wins = sells.filter(t => t.pnl > 0).length;
   let peak = initialCapital, maxDD = 0, equity = initialCapital;
   for (const t of trades) {
-    if (t.action === "BUY") equity -= t.shares * t.price;
-    else equity += t.shares * t.price;
+    if (t.action === "SELL") equity += t.pnl;
     if (equity > peak) peak = equity;
-    const dd = (peak - equity) / peak;
-    if (dd > maxDD) maxDD = dd;
+    if (peak > 0) {
+      const dd = (peak - equity) / peak;
+      if (dd > maxDD) maxDD = dd;
+    }
   }
   const returns = sells.map(t => t.pnl / initialCapital);
   const mean = returns.length ? returns.reduce((a, b) => a + b, 0) / returns.length : 0;
