@@ -89,7 +89,6 @@ export async function runSpecialistAgent(
   urls?: string[],
   onStepEvent?: (event: MultiAgentStreamEvent) => void,
   toolTimeoutMs?: number,
-  onStepEvent?: (event: MultiAgentStreamEvent) => void,
 ): Promise<AgentOutput> {
   const config = AGENT_ROLES[role];
   if (!config) {
@@ -147,35 +146,6 @@ export async function runSpecialistAgent(
       systemPrompt += `\n\n## URLs to crawl\n${urls.map(u => `- ${u}`).join("\n")}`;
     }
 
-    // Build onStep callback to forward specialist progress to the coordinator stream
-    const onStep = onStepEvent
-      ? (event: AgentStreamEvent) => {
-          if (event.type === "step" && event.data.action === "tool_call") {
-            onStepEvent({
-              type: "agent_step",
-              data: {
-                role,
-                iteration: event.data.iteration,
-                thought: event.data.thought,
-                toolName: event.data.toolName,
-                toolInput: event.data.toolInput,
-              },
-            });
-          } else if (event.type === "tool_result") {
-            onStepEvent({
-              type: "agent_tool_result",
-              data: {
-                role,
-                iteration: event.data.iteration,
-                toolName: event.data.toolName,
-                success: event.data.result.success,
-                output: event.data.result.output,
-              },
-            });
-          }
-        }
-      : undefined;
-
     // Create and run a ReAct agent with role-specific config
     // P1 fix: forward toolTimeoutMs so slow tools (e.g. crawl_url) don't hit the 30 s default
     const agent = new Agent(registry, {
@@ -228,7 +198,7 @@ export async function runSpecialistAgent(
           });
         } else if (event.type === "answer") {
           finalAnswer = event.data.answer;
-          success = event.data.stoppedReason === "complete" && finalAnswer !== null;
+          success = event.data.stoppedReason === "complete";
           if (finalAnswer) {
             steps.push({
               iteration: event.data.totalIterations,
