@@ -268,9 +268,7 @@ export const showBacktestResultTool: Tool = {
       success: true,
       command: {
         type: "show_backtest_result",
-        trades: input.trades,
-        stats: input.stats,
-        markers: input.markers,
+        result: { trades: input.trades, stats: input.stats, markers: input.markers },
       },
       message: `Backtest results: ${input.stats.totalReturn}% return, ${input.stats.winRate}% win rate, ${input.stats.totalTrades} trades.`,
     };
